@@ -8,19 +8,19 @@ interface Lib {
 	 * 武将评级
 	 */
 	rank: {
-		's': string[], 
-		'ap': string[], 
-		'a': string[], 
-		'am': string[], 
-		'bp': string[], 
-		'b': string[], 
-		'bm': string[], 
-		'c': string[], 
-		'd': string[], 
+		's': string[],
+		'ap': string[],
+		'a': string[],
+		'am': string[],
+		'bp': string[],
+		'b': string[],
+		'bm': string[],
+		'c': string[],
+		'd': string[],
 		'rarity': {
-			'legend': string[], 
-			'epic': string[], 
-			'rare': string[], 
+			'legend': string[],
+			'epic': string[],
+			'rare': string[],
 			'junk': string[]
 		}
 	};
@@ -831,78 +831,78 @@ interface LibConfigData {
 
 /** 扩展：界面美化代码重构与事件方法_橙续缘 */
 interface LibApp {
-  /**
-   * 重写方法：
-   * 
-   * 例子：
-   * ```jsx
-   * app.reWriteFunction(lib.element.player, {
-      useCard: [null, function(next) {
-        plugin.playeCardAnimate(this, next.card);
-      }],
-      respond: [null, function(next) {
-        plugin.playeCardAnimate(this, next.card);
-      }],
-      logSkill: [
-        'popup(get.skillTranslation(name,this))',
-        'popup(get.skillTranslation(name,this), "skill")',
-      ],
-      popup: [null, function(res, name, nature) {
-        if (nature === 'skill') {
-          setTimeout(function(player) {
-            player.createSkillAnimate('skill');
-          }, 100, this);
-        }
-      }],
-    });
-	```
-   * 
-   * 
-   * 使用说明：
-   * 
-   * 1.当replace，str都存在时，则replace为将要替代部分，str为替代内容；
-   * 
-   * 2.当replace为function时，前置执行该方法，此时，该方法的参数：(整合成一个数组参数列表args,......当前参数列表)；
-   * 
-   *  若有返回值（非false系），则不执行本身函数，即该replace替换原方法，否则则执行原函数部分；
-   * 
-   *  当str为function时，后置执行该方法，其参数为(原操作方法的返回xxx,......当前参数列表)；
-   *  
-   * 注1：根据观察，需要参数时，大多用于，event事件，创建，操作ui操作（例如：ui.create.xxx）......
-   *      即那些会返回自身操作对象的方法，追加在它们后面操作其返回的操作对象；
-   * 
-   * 注2：上面replace为null，str有值，就表示str为原函数的追加模式；
-   * 
-   * 注3：上面replace有值，str为null，就表示该replace为纯原函数替换模式；
-   *   
-   * @param target 方法所在对象
-   * @param name 通常状态下是target的属性key，简化为一个map结构：key为target的属性，value为[replace,str]参数；
-   * @param replace 看上方，一般指替换部分；
-   * @param str 看上方，一般指替换内容；
-   */
-  reWriteFunction(target: any, name: string | SMap<[ReWriteFunctionParam, ReWriteFunctionParam]>, replace?: ReWriteFunctionParam, str?: ReWriteFunctionParam): Function;
+	/**
+	 * 重写方法：
+	 * 
+	 * 例子：
+	 * ```jsx
+	 * app.reWriteFunction(lib.element.player, {
+		useCard: [null, function(next) {
+		  plugin.playeCardAnimate(this, next.card);
+		}],
+		respond: [null, function(next) {
+		  plugin.playeCardAnimate(this, next.card);
+		}],
+		logSkill: [
+		  'popup(get.skillTranslation(name,this))',
+		  'popup(get.skillTranslation(name,this), "skill")',
+		],
+		popup: [null, function(res, name, nature) {
+		  if (nature === 'skill') {
+			setTimeout(function(player) {
+			  player.createSkillAnimate('skill');
+			}, 100, this);
+		  }
+		}],
+	  });
+	  ```
+	 * 
+	 * 
+	 * 使用说明：
+	 * 
+	 * 1.当replace，str都存在时，则replace为将要替代部分，str为替代内容；
+	 * 
+	 * 2.当replace为function时，前置执行该方法，此时，该方法的参数：(整合成一个数组参数列表args,......当前参数列表)；
+	 * 
+	 *  若有返回值（非false系），则不执行本身函数，即该replace替换原方法，否则则执行原函数部分；
+	 * 
+	 *  当str为function时，后置执行该方法，其参数为(原操作方法的返回xxx,......当前参数列表)；
+	 *  
+	 * 注1：根据观察，需要参数时，大多用于，event事件，创建，操作ui操作（例如：ui.create.xxx）......
+	 *      即那些会返回自身操作对象的方法，追加在它们后面操作其返回的操作对象；
+	 * 
+	 * 注2：上面replace为null，str有值，就表示str为原函数的追加模式；
+	 * 
+	 * 注3：上面replace有值，str为null，就表示该replace为纯原函数替换模式；
+	 *   
+	 * @param target 方法所在对象
+	 * @param name 通常状态下是target的属性key，简化为一个map结构：key为target的属性，value为[replace,str]参数；
+	 * @param replace 看上方，一般指替换部分；
+	 * @param str 看上方，一般指替换内容；
+	 */
+	reWriteFunction(target: any, name: string | SMap<[ReWriteFunctionParam, ReWriteFunctionParam]>, replace?: ReWriteFunctionParam, str?: ReWriteFunctionParam): Function;
 
-  /**
-   * 重写方法2：
-   * 
-   * 在reWriteFunction基础上，增加了个操作类型：append，insert，可追加到替换部分后面，或者插入到前面，不填该类型则完成替换掉替换部分；
-   * 并且统一操作参数的方式为数组类型，即map多操作形式，单属性操作将操作用的参数已数组形式进行；
-   * 
-   * 当replace，str都存在时，
-   * 
-   * 若操作类型为“append”，则str追加到replace后面；
-   * 
-   * 若操作类型为“insert”，则str插入到replace前面；
-   * 
-   * 若为其他，或者没有，则str替换replace部分；
-   * 
-   * 为function时的操作，直接参考上面reWriteFunction即可，是一致的；
-   * 
-   * @param target 方法所在对象
-   * @param name 通常状态下是target的属性key，简化为一个map结构：key为target的属性，value为[replace,str,操作类型]参数；
-   * @param replace 整合被替换，替换，操作类型参数；新增：若是个二维数组，则是同一个方法的多处修改，该方式只针对字符串修改替换；
-   */
-  reWriteFunctionX(target: any, name: string | SMap<SAAType<ReWriteFunctionParam2>>, replace?: SAAType<ReWriteFunctionParam2>): Function;
+	/**
+	 * 重写方法2：
+	 * 
+	 * 在reWriteFunction基础上，增加了个操作类型：append，insert，可追加到替换部分后面，或者插入到前面，不填该类型则完成替换掉替换部分；
+	 * 并且统一操作参数的方式为数组类型，即map多操作形式，单属性操作将操作用的参数已数组形式进行；
+	 * 
+	 * 当replace，str都存在时，
+	 * 
+	 * 若操作类型为“append”，则str追加到replace后面；
+	 * 
+	 * 若操作类型为“insert”，则str插入到replace前面；
+	 * 
+	 * 若为其他，或者没有，则str替换replace部分；
+	 * 
+	 * 为function时的操作，直接参考上面reWriteFunction即可，是一致的；
+	 * 
+	 * @param target 方法所在对象
+	 * @param name 通常状态下是target的属性key，简化为一个map结构：key为target的属性，value为[replace,str,操作类型]参数；
+	 * @param replace 整合被替换，替换，操作类型参数；新增：若是个二维数组，则是同一个方法的多处修改，该方式只针对字符串修改替换；
+	 */
+	reWriteFunctionX(target: any, name: string | SMap<SAAType<ReWriteFunctionParam2>>, replace?: SAAType<ReWriteFunctionParam2>): Function;
 }
 
 /** 重写方法的基本参数 */

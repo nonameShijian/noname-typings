@@ -94,47 +94,47 @@ interface UI {
     /** 手牌区 */
     handcards: HTMLDivElement;
 
-	handcards1: HTMLDivElement;
-	handcards2: HTMLDivElement;
-	handcards1Container: HTMLDivElement;
-	handcards2Container: HTMLDivElement;
+    handcards1: HTMLDivElement;
+    handcards2: HTMLDivElement;
+    handcards1Container: HTMLDivElement;
+    handcards2Container: HTMLDivElement;
 
     arena: HTMLDivElement;
     /** 托管按钮 */
     auto: HTMLDivElement;
 
-	/** 占满整个页面的div。它的第一个子元素就是菜单 */
-	menuContainer: HTMLDivElement;
-	
-	window: HTMLDivElement;
-	/** 正在显示的dialog */
-	dialog: HTMLDivElement;
-	/** 正在显示的选项按钮(使用技能等) */
-	control: HTMLDivElement;
-	/** 导入游戏设置的div */
-	import_data_button: HTMLDivElement;
-	/** 背景div */
-	background: HTMLDivElement;
-	
+    /** 占满整个页面的div。它的第一个子元素就是菜单 */
+    menuContainer: HTMLDivElement;
+
+    window: HTMLDivElement;
+    /** 正在显示的dialog */
+    dialog: HTMLDivElement;
+    /** 正在显示的选项按钮(使用技能等) */
+    control: HTMLDivElement;
+    /** 导入游戏设置的div */
+    import_data_button: HTMLDivElement;
+    /** 背景div */
+    background: HTMLDivElement;
+
     system: HTMLDivElement;
-	system1: HTMLDivElement;
-	system2: HTMLDivElement;
+    system1: HTMLDivElement;
+    system2: HTMLDivElement;
 
-	handcards1Container: HTMLDivElement;
-	handcards2Container: HTMLDivElement;
+    handcards1Container: HTMLDivElement;
+    handcards2Container: HTMLDivElement;
 
-	/** 托管的div */
-	autonode: HTMLDivElement;
-	
-	me: HTMLDivElement;
+    /** 托管的div */
+    autonode: HTMLDivElement;
+
+    me: HTMLDivElement;
 
     historybar: HTMLDivElement;
     sidebar: HTMLDivElement;
     arenalog: HTMLDivElement;
-	/** 挑战模式下显示的正在操控的角色 */
-	fakeme: HTMLDivElement;
-	confirm: HTMLDivElement;
-	skills: HTMLDivElement;
+    /** 挑战模式下显示的正在操控的角色 */
+    fakeme: HTMLDivElement;
+    confirm: HTMLDivElement;
+    skills: HTMLDivElement;
     /** 显示剩余牌 */
     cardPileNumber: HTMLDivElement;
     coin?: HTMLDivElement;

@@ -64,12 +64,12 @@ declare namespace Lib.element {
          */
         setCaption(str: string): Dialog;
 
-        [key:string]:any;
+        [key: string]: any;
     }
 
     interface Dialog {
         /** 当前面板得按钮列表 */
-        buttons:Button[];
+        buttons: Button[];
         bar1: HTMLDivElement;
         bar2: HTMLDivElement;
         contentContainer: HTMLDivElement;

@@ -23,7 +23,7 @@ interface LocalNotification {
 	 * @param scope    The callback function's scope.
 	 */
 	requestPermission: (callback?: Callback, scope?: any) => void;
-	
+
 	/**
 	 * Schedule notifications.
 	 *

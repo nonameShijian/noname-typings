@@ -13,18 +13,18 @@ declare namespace Lib.element {
          */
         close(): Client;
 
-        inited:boolean;
+        inited: boolean;
         /** 是否断连 */
-        closed:boolean;
+        closed: boolean;
 
-        ws:WebSocket;
+        ws: WebSocket;
     }
 }
 
 interface PlayerWs extends Lib.element.Client {
-    avatar:string;
-    id:string;
-    nickname:string;
-    inited:boolean;
-    closed:boolean;
+    avatar: string;
+    id: string;
+    nickname: string;
+    inited: boolean;
+    closed: boolean;
 }

@@ -18,9 +18,9 @@ declare namespace UI {
          */
         div(...args): HTMLDivElement;
         filediv(): any;
-		node(...args): any;
+        node(...args): any;
         /** 创建iframe */
-        iframe(src:string): void;
+        iframe(src: string): void;
         identitycircle(list: string[], target: HTMLDivElement): void;
         //联机相关（联机房间）
         chat(): void;
@@ -35,13 +35,13 @@ declare namespace UI {
          * （内部过于复杂，似乎时8000多行代码的一个方法，暂时UI方面看不懂）
          * @param connectMenu 
          */
-        menu(connectMenu:SelectConfigData | boolean): void;
+        menu(connectMenu: SelectConfigData | boolean): void;
         /** 创建table */
         table(): HTMLTableElement;
         /** 投降的system选项 */
         giveup(): void;
         /** 势力选择控制面板（配合武将选择面板使用） */
-        groupControl(dialog:Lib.element.Dialog): Lib.element.Control;
+        groupControl(dialog: Lib.element.Dialog): Lib.element.Control;
         //卡牌选则面板（stone玩法里面有使用）
         cardDialog(): Lib.element.Dialog;
         //武将选则面板（就是游戏开始的那个选将面板）
@@ -68,7 +68,7 @@ declare namespace UI {
          * @param str 
          * @param position 要添加进去的目标位置
          */
-        caption(str:string, position:HTMLElement): HTMLDivElement;
+        caption(str: string, position: HTMLElement): HTMLDivElement;
         /**
          * 创建控制面板
          * 
@@ -96,13 +96,13 @@ declare namespace UI {
          * @param str 设置按钮：'o'：只有“ok”选项，'oc'/'co'：有“ok”和“cancel”选项，'c'：只有“cancel”选项
          * @param func 设置按钮设置点击后的方法
          */
-        confirm(str:string, func:(link:any,node:Lib.element.Control)=>void): void;
+        confirm(str: string, func: (link: any, node: Lib.element.Control) => void): void;
         /** 创建技能的控制面板 */
-        skills(skills: string[]):  Lib.element.Control;
-		/** 创建技能的控制面板 */
+        skills(skills: string[]): Lib.element.Control;
+        /** 创建技能的控制面板 */
         skills2(skills): Lib.element.Control;
-		/** 创建技能的控制面板 */
-        skills3(skills):  Lib.element.Control;
+        /** 创建技能的控制面板 */
+        skills3(skills): Lib.element.Control;
         /** 创建游戏场景arena （核心UI）*/
         arena(): void;
         /** 创建游戏的system区域 */
@@ -117,7 +117,7 @@ declare namespace UI {
          * @param position 
          * @param noclick 
          */
-        prebutton(item:any, type:string, position:HTMLDivElement, noclick?:boolean): HTMLDivElement;
+        prebutton(item: any, type: string, position: HTMLDivElement, noclick?: boolean): HTMLDivElement;
         /**
          * 创建按钮
          * 
@@ -147,7 +147,7 @@ declare namespace UI {
          * @param noclick 
          * @param node 可以是已经存在的或者创建好的按钮节点（用途不大，有点多余）
          */
-        button(item:any, type:string, position:HTMLElement, noclick?:boolean, node?:HTMLDivElement): Button;
+        button(item: any, type: string, position: HTMLElement, noclick?: boolean, node?: HTMLDivElement): Button;
         /**
          * 创建按钮（多个）
          * @param list 要创建的按钮的信息列表（建议同类型集合，为了对应type）
@@ -156,12 +156,12 @@ declare namespace UI {
          * @param noclick 语button一致
          * @param zoom 没用到，无用参数
          */
-        buttons(list:any[], type:string, position: ParentNode, noclick?:boolean, zoom?:any): Button[];
-		player(position?: any, noclick?: any): Player;
+        buttons(list: any[], type: string, position: ParentNode, noclick?: boolean, zoom?: any): Button[];
+        player(position?: any, noclick?: any): Player;
         connectPlayers(ip): any;
         players(num): any;
         me(hasme): any;
-		card(position?: any, info?: any, noclick?: boolean): Card;
+        card(position?: any, info?: any, noclick?: boolean): Card;
         cardsAsync(): any;
         cards(ordered): any;
 
@@ -187,7 +187,7 @@ declare namespace UI {
          * @param noclick 按钮是否不可点击
          */
         textbuttons(list: (string | [string, string])[], dialog: Dialog, noclick?: boolean): void;
-    
+
         connectRooms(list: initRoomInfo): void;
     }
 
