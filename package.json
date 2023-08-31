@@ -19,12 +19,5 @@
 	"bugs": {
 		"url": "https://github.com/nonameShijian/noname-typings/issues"
 	},
-	"homepage": "https://github.com/nonameShijian/noname-typings#readme",
-	"dependencies": {
-		"cordova": "9",
-		"cordova-plugin-dialogs": "*",
-		"cordova-plugin-file": "*",
-		"cordova-plugin-file-transfer": "*",
-		"electron": "24"
-	}
+	"homepage": "https://github.com/nonameShijian/noname-typings#readme"
 }
