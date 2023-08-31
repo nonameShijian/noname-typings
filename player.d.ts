@@ -2482,6 +2482,9 @@ declare namespace Lib.element {
          * @param force 技能为fixed:true标签时，需要设置为true来移除
          */
         removeInvisibleSkill(skill: string | string[], force?: boolean): void | string;
+
+        /** 发送表情 */
+        emotion(pack, id);
     }
 
     // 核心成员属性（暂时先一部分比较核心常用的）
@@ -2507,7 +2510,6 @@ declare namespace Lib.element {
         singleHp: boolean;
 
         avatar: string;
-        version: string;
 
         /** 扩展名，不知时哪里赋值的，在addCharacter中使用，默认_status.extension */
         extension: string;
@@ -2786,6 +2788,15 @@ declare namespace Lib.element {
 
         /** 【国战】是否首次亮将 */
         _mingzhied: boolean;
+
+        /** 为true时不能悬浮/右键来提示信息 */
+        _nointro?: boolean;
+
+        /** 悬浮/右键时替换提示信息 */
+        _customintro?: (dialog: Dialog, event: PointerEvent) => any | [Function | Node, Function | Node];
+
+        previousSeat: Player;
+        nextSeat: Player;
     }
 
     //由玩法模式自己扩展实现的方法接口：

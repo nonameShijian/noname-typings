@@ -1,8 +1,14 @@
-declare namespace Lib.element {
+declare namespace Lib.element{
     /**
      * 会话弹窗
      */
     interface Dialog extends HTMLDivElement {
+        /** 当前面板得按钮列表 */
+        buttons: Button[];
+        bar1: HTMLDivElement;
+        bar2: HTMLDivElement;
+        contentContainer: HTMLDivElement;
+        content: HTMLDivElement;
         /**
          * 添加信息到会话面板中
          * 
@@ -65,14 +71,5 @@ declare namespace Lib.element {
         setCaption(str: string): Dialog;
 
         [key: string]: any;
-    }
-
-    interface Dialog {
-        /** 当前面板得按钮列表 */
-        buttons: Button[];
-        bar1: HTMLDivElement;
-        bar2: HTMLDivElement;
-        contentContainer: HTMLDivElement;
-        content: HTMLDivElement;
     }
 }

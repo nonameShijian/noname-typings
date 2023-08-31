@@ -81,6 +81,8 @@ type Dialog = Lib.element.Dialog;
 type GameEvent = Lib.element.Event;
 /** nogame的event类型=>主触发事件 */
 type Trigger = Lib.element.Event;
+
+type Dialog = Lib.element.Dialog;
 /** nogame的触发名 */
 type TriggerName = string;
 /** nogame中所使用的技能的名字 */
