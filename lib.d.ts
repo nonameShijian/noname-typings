@@ -63,7 +63,7 @@ interface Lib {
 	/** 武将标题（用于写称号或注释） */
 	characterTitle: SMap<string>;
 	/** 武将包 */
-	characterPack: SMap<HeroData>;
+	characterPack: SMap<SMap<HeroData>>;
 	/** 武将的过滤方法（参数为一个mode，用于过滤玩法模式） */
 	characterFilter: SMap<OneParmFun<string, boolean>>;
 	/** 用于武将分包，就像是神话再临中的风火林山 */

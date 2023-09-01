@@ -381,7 +381,7 @@ interface ExAIData {
         /** 该牌的使用价值 */
         value?: SAAType<number> | FourParmFun<Card, Player, number, any, SAAType<number>>;
 
-        [key: string]: SAAType<number> | string | Function;
+        [key: string]: SAAType<number> | string | Function | undefined;
     };
 
     //ai的tag【可用于标记卡牌的属性】
@@ -426,7 +426,7 @@ interface ExAIData {
         /** 【装备替换价值】 */
         valueswap?: CardTagType;
 
-        [key: string]: CardTagType;
+        [key: string]: CardTagType | undefined;
     }
 
     /**

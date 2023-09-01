@@ -177,7 +177,7 @@ interface Get {
      * 注：排除掉禁用列表，lib.filter.characterDisabled，自定义过滤条件func
      * @param func 自定义过滤条件
      */
-    charactersOL(func?: OneParmFun<any, boolean>): HeroData[];
+    charactersOL(func?: OneParmFun<any, boolean>): string[];
 
     /** 获取ip部分(去掉端口)字符串 */
     trimip(str: string): string;

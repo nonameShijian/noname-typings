@@ -16,20 +16,20 @@ declare namespace UI {
          * 
          *  若为“function”类型，则设置为listen，即设置该div的“点击/触摸”事件的回调方法；
          */
-        div(...args): HTMLDivElement;
+        div(...args: any[]): HTMLDivElement;
         filediv(): any;
-        node(...args): any;
+        node(...args: any[]): any;
         /** 创建iframe */
         iframe(src: string): void;
         identitycircle(list: string[], target: HTMLDivElement): void;
         //联机相关（联机房间）
         chat(): void;
         exit(): void;
-        connecting(bool): void;
+        connecting(bool?: true): void;
         roomInfo(): void;
-        templayer(time): void;
+        templayer(time?: number): void;
         /** 创建select */
-        selectlist(list, init, position, onchange): HTMLSelectElement;
+        selectlist(list: [string, string][][] | string[], init: string, position: HTMLElement, onchange: (this: GlobalEventHandlers, ev: Event) => any): HTMLSelectElement;
         /**
          * 【核心】创建游戏菜单
          * （内部过于复杂，似乎时8000多行代码的一个方法，暂时UI方面看不懂）
@@ -45,7 +45,7 @@ declare namespace UI {
         //卡牌选则面板（stone玩法里面有使用）
         cardDialog(): Lib.element.Dialog;
         //武将选则面板（就是游戏开始的那个选将面板）
-        characterDialog2(filter): Lib.element.Dialog;
+        characterDialog2(filter?: OneParmFun<string, boolean>): Lib.element.Dialog;
         characterDialog(): Lib.element.Dialog;
         /**
          * 创建弹出面板
@@ -58,11 +58,11 @@ declare namespace UI {
          * 
          * 非以上类型，则参考Dialog的add方法的item参数列表：有string，div,cards,players,和自由配置的混合数组生成按钮；
          */
-        dialog(...item): Lib.element.Dialog;
+        dialog(...item: any[]): Lib.element.Dialog;
         //应该是和config配置相关的
         line2(): HTMLDivElement;
         line(): HTMLDivElement;
-        switcher(name, current, current2): HTMLDivElement;
+        switcher(name: string, current: string | any[] | boolean, current2: any): HTMLDivElement;
         /**
          * 生成一个显示html文档的div（html文档格式的说明文本）
          * @param str 
@@ -88,7 +88,7 @@ declare namespace UI {
          * 
          *      使用control.add，设置面板的选项；
          */
-        control(...item): Lib.element.Control;
+        control(...item: any[]): Lib.element.Control;
         /**
          * 创建确认/取消控制面板
          * 
@@ -100,9 +100,9 @@ declare namespace UI {
         /** 创建技能的控制面板 */
         skills(skills: string[]): Lib.element.Control;
         /** 创建技能的控制面板 */
-        skills2(skills): Lib.element.Control;
+        skills2(skills?: string[]): Lib.element.Control;
         /** 创建技能的控制面板 */
-        skills3(skills): Lib.element.Control;
+        skills3(skills?: string[]): Lib.element.Control;
         /** 创建游戏场景arena （核心UI）*/
         arena(): void;
         /** 创建游戏的system区域 */
@@ -158,12 +158,12 @@ declare namespace UI {
          */
         buttons(list: any[], type: string, position: ParentNode, noclick?: boolean, zoom?: any): Button[];
         player(position?: any, noclick?: any): Player;
-        connectPlayers(ip): any;
-        players(num): any;
-        me(hasme): any;
+        connectPlayers(ip: string): any;
+        players(num?: number | string): any;
+        me(hasme?: true): any;
         card(position?: any, info?: any, noclick?: boolean): Card;
         cardsAsync(): any;
-        cards(ordered): any;
+        cards(ordered?: true): any;
 
         //【v1.9.105.9~】增加评级系统：
         /** 为当前显示选项，添加评级相关UI */

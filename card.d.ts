@@ -33,7 +33,7 @@ declare namespace Lib.element {
          * 
          * 注：该复制卡牌节点基础属性：[name,suit,number,node,moveTo(),moveDelete()];
          */
-        copy(...args): Card;
+        copy(...args: any[]): Card;
         copy(isClone?: boolean): Card;
 
         /**
@@ -96,7 +96,7 @@ declare namespace Lib.element {
         /** 卡牌花色 */
         suit: string;
         /** 卡牌数值 */
-        number: number;
+        number: CardBaseNumber;
         /** 伤害属性 */
         nature: string;
 
@@ -172,7 +172,7 @@ declare namespace Lib.element {
             /** 手牌标记【v1.9.108.3】 */
             gaintag: HTMLDivElement;
 
-            [key: string]: HTMLDivElement;
+            [key: string]: HTMLDivElement | undefined;
         };
 
         link: Card;
@@ -186,7 +186,6 @@ declare namespace Lib.element {
 
         storage: SMap<any>;
         vanishtag: any[];
-        gaintag: any[];
         _uncheck: any[];
 
         [key: string]: any;

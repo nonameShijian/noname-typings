@@ -3,7 +3,7 @@ interface ExCommonConfig {
     /** 扩展名 */
     name?: string;
     /** 其余的全部保存到lib中，若有则覆盖，若没有则添加 */
-    [key: string]: any;
+    [key: string]: any | undefined;
 }
 
 /** 
@@ -146,7 +146,7 @@ interface ExtensionMenuConfigData {
     /** 隐藏此扩展(代码内部添加) */
     hide?: SelectConfigData,
     /** 其余配置 */
-    [key: string]: SelectConfigData,
+    [key: string]: SelectConfigData | undefined,
 }
 
 /** 扩展回调方法 */

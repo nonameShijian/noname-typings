@@ -13,18 +13,18 @@ declare namespace UI {
         connectClients(this: HTMLDivElement): void;
         //切换皮肤相关
         autoskin(): any;
-        skin(avatar, name, callback): any;
+        skin(avatar: HTMLElement, name: string, callback: OneParmFun<boolean, void>): any;
         /**
          * 标记自己当前触摸弹出某些面板 的状态
          * @param forced 
          */
         touchpop(forced?: any): any;
         exit(): any;
-        shortcut(show): any;
-        favouriteCharacter(e): any;
+        shortcut(show?: false): any;
+        favouriteCharacter(e: Event): any;
         buttonnameenter(): any;
         buttonnameleave(): any;
-        identity(e): void;
+        identity(e: Event): void;
         identity2(): void;
         roundmenu(): any;
         pausehistory(): any;
@@ -33,16 +33,16 @@ declare namespace UI {
         cardPileButton(): any;
         chat(): any;
         volumn(): any;
-        volumn_background(e): any;
-        volumn_audio(e): any;
+        volumn_background(e: Event): any;
+        volumn_audio(e: Event): any;
         hoverpopped(): any;
         hoverpopped_leave(): any;
         leavehoverpopped(): any;
         dierevive(): any;
         dieswap(): any;
         dieswap2(): any;
-        checkroundtranslate(translate): any;
-        checkdialogtranslate(translate, dialog): any;
+        checkroundtranslate(translate?: number[]): any;
+        checkdialogtranslate(translate: number[] | null, dialog: Dialog): any;
 
         //游戏内的核心触摸/点击事件，有关选牌的逻辑，主要就跟这里相关
         touchconfirm(): void;
@@ -62,9 +62,9 @@ declare namespace UI {
         mouseentercancel(): void;
 
         /** 悬空显示玩家信息 */
-        hoverplayer(e): void;
+        hoverplayer(e: Event): void;
         /** 长按相关 */
-        longpressdown(e): void;
+        longpressdown(e: Event): void;
         longpresscallback(): void;
         longpresscancel(): void;
 
@@ -120,11 +120,11 @@ declare namespace UI {
          * @param node 如果直接使用，则传入一个操作的面板，视为点了确认关闭面板
          */
         cancel(node?: HTMLDivElement | TouchEvent | MouseEvent): void;
-        logv(e): any;
+        logv(e: Event): any;
         logvleave(): any;
-        charactercard(name, sourcenode, noedit, resume, avatar): any;
+        charactercard(name: string, sourcenode: HTMLElement, noedit?: string | true, resume?: true, avatar?: HTMLElement): any;
         /** 打开信息阅览面板 */
-        intro(e): HTMLDivElement;
+        intro(e: Event): HTMLElement;
         intro2(): void;
         /** 自动托管 */
         auto(): void;
@@ -137,24 +137,24 @@ declare namespace UI {
         resume(e: UIEvent): boolean;
         config(): any;
         swap(): any;
-        mousewheel(evt): any;
-        touchStart(e): any;
+        mousewheel(evt: Event): any;
+        touchStart(e: Event): any;
 
         //弹出面板dialog拖动相关事件
-        dialogtouchStart(e): any;
-        touchScroll(e): any;
-        dragtouchdialog(e): any;
+        dialogtouchStart(e: Event): any;
+        touchScroll(e: Event): any;
+        dragtouchdialog(e: Event): any;
 
-        autoskill(bool, node): any;
+        autoskill(bool: boolean, node: HTMLElement): any;
         /** 配置中，技能“自动发动”选项中的操作事件 */
         skillbutton(): any;
-        autoskill2(e): any;
-        rightplayer(e): any;
-        right(e): any;
+        autoskill2(e: Event): any;
+        rightplayer(e: Event): any;
+        right(e: Event): any;
 
         /** 联机模式创建房间 */
         connectMenu(): void;
         /** 联机模式尝试加入房间 */
-        connectroom(e): void;
+        connectroom(e: Event): void;
     }
 }

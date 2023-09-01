@@ -53,12 +53,12 @@ interface Game extends IDownLoadFun {
 	createSkillInfo(skill: string, dialog: Dialog): void;
 
 	/** 【事件】置换手牌 */
-	replaceHandcards(...args): void;
+	replaceHandcards(...args: any[]): void;
 	/** 移除指定名字的卡牌（从lib.card.list和ui.cardPile卡堆中移除） */
 	removeCard(name: string): void;
 
 	/** 联网相关 */
-	randomMapOL(type): void;
+	randomMapOL(type?: 'hidden'): void;
 
 	/** 关闭菜单 */
 	closeMenu(): void;
@@ -72,30 +72,30 @@ interface Game extends IDownLoadFun {
 	 * 
 	 * 只能主机使用；
 	 */
-	broadcast(name: string, ...args): void;
-	broadcast<T>(fun: (...args: T) => void, ...args: T): void;
+	broadcast(name: string, ...args: any[]): void;
+	broadcast<T extends any[]>(fun: (...args: T) => void, ...args: T): void;
 	/** 
 	 * 向所有客户端通信（包括自己，发出通信后，自己执行一次函数和参数） 
 	 * 
 	 * 只能主机使用；
 	 */
-	broadcastAll(name: string, ...args): void;
-	broadcastAll<T>(fun: (...args: T) => void, ...args: T): void;
+	broadcastAll(name: string, ...args: any[]): void;
+	broadcastAll<T extends any[]>(fun: (...args: T) => void, ...args: T): void;
 	/** 同步state状态 */
 	syncState(): void;
 	updateWaiting(): void;
 	/** 等待玩家加入 */
-	waitForPlayer(func): void;
+	waitForPlayer(func: NoneParmFum<void>): void;
 	/** 倒计时 */
 	countDown(time: number, onEnd: Function): void;
 	/** 选择计时 */
-	countChoose(clear?): void;
+	countChoose(clear?: any): void;
 	/** 停止选择计时 */
 	stopCountChoose(): void;
 	/** 连接服务器 */
 	connect(ip: string, callback: OneParmFun<boolean, void>): void;
 	/** 发送信息到服务器中 */
-	send(...args): void;
+	send(...args: any[]): void;
 	/** 发送信息到指定ip */
 	sendTo(id: string, message: any): void;
 	/** 创建服务器（创建房间） */
@@ -140,7 +140,7 @@ interface Game extends IDownLoadFun {
 	 * });
 	 * ```
 	 */
-	playAudio(...paths: string, onerror?: Function): HTMLAudioElement;
+	playAudio(...args: [...string[], Function]): HTMLAudioElement;
 	playAudio(...paths: (string | number)[]): HTMLAudioElement;
 	/**
 	 * 播放技能语音
@@ -250,11 +250,11 @@ interface Game extends IDownLoadFun {
 	 * @param textToWrite 保存的文件内容
 	 * @param name 保存的文件名
 	 */
-	export(textToWrite: string, name = 'noname'): void;
+	export(textToWrite: string, name?: string | 'noname'): void;
 
 	//下载相关  用于更新信息
 	/** 做些处理，调用game.download下载 */
-	multiDownload2(list: string[], onsuccess?: (num: any) => void, onerror?: (num: any) => void, onfinish?: VoidFunction, process?: (current: string) => void, dev: boolean): void;
+	multiDownload2(list: string[], onsuccess?: (num: any) => void, onerror?: (num: any) => void, onfinish?: VoidFunction, process?: (current: string) => void, dev?: 'nodev'): void;
 	/**
 	 * 下载列表内所有文件
 	 * 
@@ -268,13 +268,13 @@ interface Game extends IDownLoadFun {
 	 * @param process 处理将要下载的文件，返回将要使用的路径信息列表(game.download使用)
 	 * @param dev (game.download使用)
 	 */
-	multiDownload(list: string[], onsuccess?: (num: number) => void, onerror?: (num: number) => void, onfinish?: VoidFunction, process?: (current: string) => void, dev: boolean): void;
+	multiDownload(list: string[], onsuccess?: (num: number) => void, onerror?: (num: number) => void, onfinish?: VoidFunction, process?: (current: string) => void, dev?: 'nodev'): void;
 	/**
 	 * 需要当前版本支持：
 	 * 
 	 * 主要分Android/ios的本地版FileTransfer（cordova.js），和pc版的nodejs环境
 	 */
-	download(url, folder, onsuccess, onerror, dev, onprogress?: Function);
+	download(url: string, folder: string, onsuccess: NoneParmFum<void> | null, onerror: NoneParmFum<void>, dev?: 'nodev', onprogress?: Function): void;
 	/**
 	 * 调用download, 下载url文件，读取后删除
 	 */
@@ -297,7 +297,7 @@ interface Game extends IDownLoadFun {
 	 * document.querySelector('.videonode.active').link.video
 	 * ```
 	 */
-	playVideoContent(video): void;
+	playVideoContent(video: VideoContent): void;
 	/** 录像的content方法 */
 	videoContent: VideoContent;
 	/**
@@ -425,7 +425,7 @@ interface Game extends IDownLoadFun {
 	 * 
 	 * 注: 千万不要过多使用此函数！会导致游戏卡顿！
 	 */
-	print(...args): void;
+	print(...args: any[]): void;
 
 	/** 动画相关 */
 	animate: Animate;
@@ -521,7 +521,7 @@ interface Game extends IDownLoadFun {
 	 * 移除全局技能
 	 * @param skill 技能名
 	 */
-	removeGlobalSkill(skill): void;
+	removeGlobalSkill(skill: string): void;
 	/** 
 	 * 重置所有玩家的技能(移除tempSkills，把处于out状态的角色拉回来)
 	 */
@@ -666,7 +666,7 @@ interface Game extends IDownLoadFun {
 	 * 其参数若为空，默认取消所有相关的选中，若有指定的类型，则只取消该类型的选中
 	 * @param types 其类型可以为"card", "target", "button"
 	 */
-	uncheck(...types?: ('card' | 'target' | 'button')[]): void;
+	uncheck(...types: ('card' | 'target' | 'button')[]): void;
 
 	//交换
 	/**
@@ -751,7 +751,7 @@ interface Game extends IDownLoadFun {
 	 * 
 	 * object类型: 赋值config
 	 */
-	chooseCharacterDouble(...args: (number | Function | object | Array)[]): void;
+	chooseCharacterDouble(...args: (number | Function | object | any[])[]): void;
 	/** 更新仁库 */
 	updateRenku(): void;
 	/** 
@@ -870,7 +870,7 @@ interface Game extends IDownLoadFun {
 	 * game.log(player, '摸了两张牌');
 	 * ```
 	 */
-	log(...args): void;
+	log(...args: any[]): void;
 	/**
 	 * 将信息打印至“出牌记录栏”
 	 *
@@ -1005,7 +1005,7 @@ interface Game extends IDownLoadFun {
 	/** 获取扩展配置 */
 	getExtensionConfig(extension: string, key: string): any;
 	/** 清除mode玩法的配置 */
-	clearModeConfig(mode): void;
+	clearModeConfig(mode: string): void;
 
 	/**
 	 * 添加玩家
@@ -1020,7 +1020,7 @@ interface Game extends IDownLoadFun {
 	 * @param character 随从主将名
 	 * @param animation 调用`player.animate`，默认值为'start'(透明度从0到1的动画)
 	 */
-	addFellow(position: number, character?: string, animation?: string = 'start'): Player;
+	addFellow(position: number, character?: string, animation?: string | 'start'): Player;
 	/**
 	 * 【事件】进入游戏事件（触发：enterGame进入游戏阶段触发）
 	 * @param player 触发enterGame时机的玩家
@@ -1465,7 +1465,7 @@ interface VideoContent {
 	 * game.addObstacle?.(pos[0],pos[1]);
 	 * ```
 	 */
-	addObstacle(pos): void;
+	addObstacle(x: string | number, y: false | number): void;
 	/**
 	 * pos类型还没有查清楚
 	 * 
@@ -1556,7 +1556,7 @@ interface VideoContent {
 	 * player.storage.tongshuai.owned = content;
 	 * ```
 	 */
-	chess_tongshuai(player: Player, content): void;
+	chess_tongshuai(player: Player, content: any): void;
 	/**
 	 * 调用如下代码: 
 	 * ```js
@@ -1729,7 +1729,7 @@ interface VideoContent {
 	 * player.$compareMultiple(get.infoCard(info[0]), get.infoTargets(info[1]), get.infoCards(info[2]));
 	 * ```
 	 */
-	compareMultiple(player: Player, info): void;
+	compareMultiple(player: Player, info: any[]): void;
 	/**
 	 * 调用如下代码: 
 	 * ```js
@@ -1744,14 +1744,14 @@ interface VideoContent {
 	 * ```
 	 */
 	giveCard(player: Player, info: [any[][], number]): void;
-	gain(player: Player, info): void;
+	gain(player: Player, info: any): void;
 	/**
 	 * 调用如下代码: 
 	 * ```js
 	 * player.$gain(get.infoCards(info));
 	 * ```
 	 */
-	gainCard(player: Player, info): void;
+	gainCard(player: Player, info: any[]): void;
 	/**
 	 * 调用如下代码: 
 	 * ```js
@@ -1766,7 +1766,7 @@ interface VideoContent {
 	highlightnode(player: Player, cards: Card[]): void;
 	uiClear(): void;
 	judge1(player: Player, content: [any, any, any]): void;
-	centernode(content): void;
+	centernode(content: any[]): void;
 	/** ui.dialogs中寻找videoId相同的关闭 */
 	judge2(videoId: string): void;
 	/**
@@ -1801,7 +1801,7 @@ interface VideoContent {
 	 */
 	throwEmotion(player: Player, content: [string, any]): void;
 	addGaintag(player: Player, content: [any, any]): void;
-	removeGaintag(player: Player, content): void;
+	removeGaintag(player: Player, content: Card[]): void;
 	/**
 	 * 调用如下代码: 
 	 * ```js
@@ -1841,7 +1841,7 @@ interface VideoContent {
 	 * game.addChessPlayer.apply(this,content);
 	 * ```
 	 */
-	addChessPlayer(content): void;
+	addChessPlayer(content: any[]): void;
 	/** 阵亡代码，战旗模式做了特殊处理 */
 	die(player: Player): void;
 	revive(player: Player): void;
@@ -1857,14 +1857,14 @@ interface VideoContent {
 	update(player: Player, info: [any, number, number, number]): void;
 
 	/** 空函数 */
-	phaseJudge(player, card): void;
+	phaseJudge(player: Player, card: any[]): void;
 	/**
 	 * 调用如下代码: 
 	 * ```js
 	 * player.directgain(get.infoCards(cards));
 	 * ```
 	 */
-	directgain(player: Player, cards): void;
+	directgain(player: Player, cards: any[]): void;
 	/**
 	 * 调用如下代码: 
 	 * ```js

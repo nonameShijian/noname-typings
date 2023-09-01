@@ -279,7 +279,7 @@ interface ExCardData {
     /**
      * 应该是在执行该卡牌content之前执行的事件content
      */
-    contentBefore?(player, targets): ContentFunc;
+    contentBefore?(player: Player, targets: Target[]): ContentFunc;
     /**
      * 核心：触发内容
      * 
@@ -444,7 +444,6 @@ interface ExCardData {
      */
     yingbian_prompt?: string | OneParmFun<Card, string>;
 
-    judge?(): number;
     judge2?(result: JudgeResultData): boolean;
 
     //日后还有很多属性要添加的
@@ -571,5 +570,5 @@ interface CardPackConfigInfo {
         [key: string]: ExSkillData;
     },
     /** 其他属性覆盖lib同属性内容 */
-    [key: string]: object;
+    [key: string]: object | undefined;
 }

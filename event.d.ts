@@ -278,7 +278,7 @@ declare namespace Lib.element {
 
         //结果，是记录事件执行过程中产生的某些结果记录，这些结果，需要回馈给父节点事件的，是过程中产生的信息
         //事件的结果，为什么分成两种，后期继续观察代码考究
-        result: any;
+        result: BaseResultData;
         /** 该参数应该时事件记录结果的核心返回值，上面那个，暂待观察 */
         _result: BaseResultData;
 
@@ -626,8 +626,7 @@ declare namespace Lib.element {
         frequentSkill?: boolean;
         /** 在chooseControl里使用，用于存储可选项 */
         controls: string[];
-
-        result: BaseResultData;
+        players: Player[];
 
         /** 当前事件，是否不触发濒死阶段 */
         nodying: boolean;

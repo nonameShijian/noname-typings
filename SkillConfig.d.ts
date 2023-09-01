@@ -1195,7 +1195,7 @@ interface ExModData {
      * 
      * 注：防御距离就是要和别人的距离越远，所以，拉开距离需要增加；
      */
-    globalTo?(from: Player, to: Player, current): number;
+    globalTo?(from: Player, to: Player, current: number): number;
     /** 
      * 在全局的进攻距离 
      * 
@@ -1389,7 +1389,7 @@ interface ExModData {
     //是否能成为技能的目标
 
     /** 其他扩展自定义 */
-    [key: string]: Function;
+    [key: string]: Function | undefined;
 }
 
 /** 

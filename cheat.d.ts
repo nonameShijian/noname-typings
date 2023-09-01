@@ -24,7 +24,7 @@ declare namespace Lib {
          * @param i 
          * @param skin 
          */
-        p(name, i, skin): void;
+        p(name: string, i?: number | true, skin?: true): void;
         /**
          * 添加测试装备，直接装到目标身上
          * 
@@ -32,16 +32,16 @@ declare namespace Lib {
          *  itemtype为“player”，则为添加的目标，默认是自己；
          *  其余则使用于game.createCard，创建的卡牌，默认5个装备；
          */
-        e(...args): void;
+        e(...args: any[]): void;
         /** 检测当前游戏开启的武将数，卡堆的数量分布情况 */
         c(): void;
         /** 显示场上所有的角色的身份 */
         id(): void;
         /** 重新设置当前的选中内容：ui.dialog.buttons[i].link */
-        b(...args): void;
-        uy(me): void;
-        gs(name, act): void;
-        gc(name, act): void;
+        b(...args: any[]): void;
+        uy(me?: true): void;
+        gs(name?: string, act?: false): void;
+        gc(name?: string, act?: false): void;
         /** 进入快速自动测试模式，打开历史记录（应该是用于技能快速测试是否出错） */
         a(bool?: boolean): void;
         /** 临时去掉“自动测试模式”，要关闭，需要再执行一次lib.cheat.a */
@@ -60,7 +60,7 @@ declare namespace Lib {
          *  array对象，设置targets,即卡牌的使用目标，默认是自己game.me;
          */
         u(): void;
-        r(bool): void;
+        r(bool?: false): void;
         /**
          * 打印目标玩家的手牌
          * @param player 
@@ -73,9 +73,9 @@ declare namespace Lib {
          * 1."card名"；
          * 2."card名1",属性1,"card名2",属性2,... （可用过这种方式一次性创建需要的手牌）
          */
-        g(...args): void;
+        g(...args: any[]): void;
         /** 添加指定类型的牌到手牌（尽量不要用，会添加到不属于当前模式的牌） */
-        ga(type): void;
+        ga(type: string): void;
         /** 给所有玩家立刻添加一张指定的牌 */
         gg(...args: string[]): void;
         /**
@@ -85,7 +85,7 @@ declare namespace Lib {
          */
         gx(name: string, target?: Player): void;
         /** 创建一张卡牌（不属于任何地方） */
-        gn(name): void;
+        gn(name: string): void;
         /** 创建5张武器，并且立刻添加到目标手牌 */
         ge(target?: Player): void;
         /** 创建几张延时锦囊判定牌加入手中 */

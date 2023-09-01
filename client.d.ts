@@ -7,7 +7,7 @@ declare namespace Lib.element {
         /**
          * 发送信息
          */
-        send(...args): Client;
+        send(...args: any[]): Client;
         /**
          * 断连
          */
