@@ -296,7 +296,7 @@ declare namespace Lib.element {
          * @param arg1 获取玩家身上牌的类型：h手牌，e装备牌，j判定牌，s木牛流马上盖的牌，x武将牌上的牌。可以多个拼接。
          * @param arg2 获取牌的详细过滤条件（若是字符串则是卡牌名，若是对象是个cardSimpInfo结构）。
          */
-        getCards(arg1?: string = 'h', arg2?: string | CardBaseUIData | OneParmFun<Card, boolean>): Card[];
+        getCards(arg1?: string, arg2?: string | CardBaseUIData | OneParmFun<Card, boolean>): Card[];
         /**
          * 获取指定玩家可以弃置的当前玩家的牌
          * 
@@ -2133,6 +2133,7 @@ declare namespace Lib.element {
          * @returns 若两个参数都没有，则返回当前玩家回合的记录，若有key，则获取指定类型的记录
          */
         getHistory(): ActionHistoryData;
+        getHistory(key: 'useSkill', filter?: OneParmFun<HistoryUseSkillData, boolean>): HistoryUseSkillData[];
         getHistory(key: keyof ActionHistoryData, filter?: OneParmFun<GameEvent, boolean>): GameEvent[];
 
         /**
@@ -2142,7 +2143,8 @@ declare namespace Lib.element {
          * @param filter 同getHistory的filter参数
          * @param last 取last个记录之前的事件
          */
-        hasHistory(key: keyof ActionHistoryData, filter: OneParmFun<GameEvent, boolean>, last: number): void;
+        hasHistory(key: 'useSkill', filter: OneParmFun<HistoryUseSkillData, boolean>, last?: number): boolean;
+        hasHistory(key: keyof ActionHistoryData, filter: OneParmFun<GameEvent, boolean>, last?: number): boolean;
 
         //【v1.9.98.6.1】
         /**
@@ -2153,6 +2155,7 @@ declare namespace Lib.element {
          * 例：Yui喵的【珍宝】判断整局游戏中因【激昂】获得过的牌的数量
          */
         getAllHistory(): ActionHistoryData;
+        getAllHistory(key: 'useSkill', filter?: OneParmFun<HistoryUseSkillData, boolean>): HistoryUseSkillData[];
         getAllHistory(key: keyof ActionHistoryData, filter?: OneParmFun<GameEvent, boolean>): GameEvent[];
 
         //【v1.9.102】
@@ -2160,6 +2163,7 @@ declare namespace Lib.element {
          * 用于获取某个玩家自己最近一个回合的actionHistory
          */
         getLastHistory(): ActionHistoryData;
+        getLastHistory(key: 'useSkill', filter?: OneParmFun<HistoryUseSkillData, boolean>): HistoryUseSkillData[];
         getLastHistory(key: keyof ActionHistoryData, filter?: OneParmFun<GameEvent, boolean>): GameEvent[];
 
         /**
@@ -2484,7 +2488,7 @@ declare namespace Lib.element {
         removeInvisibleSkill(skill: string | string[], force?: boolean): void | string;
 
         /** 发送表情 */
-        emotion(pack, id);
+        emotion(pack: string, id: string): void;
     }
 
     // 核心成员属性（暂时先一部分比较核心常用的）
@@ -2873,8 +2877,7 @@ type PlayerStateInfo = {
     specials: Card[];
     expansions: Card[];
     expansion_gaintag: any[],
-    disableJudge: Card[];
-    disableEquip: Card[];
+    disableJudge: boolean;
     views: string[],
     position: number;
     hujia: number;
@@ -2886,8 +2889,6 @@ type PlayerStateInfo = {
     linked: boolean;
     turnedover: boolean;
     gaintag: string[];
-    disableJudge: boolean;
-    disableEquip: boolean;
     phaseNumber: number;
     unseen: boolean;
     unseen2: boolean;
@@ -2940,23 +2941,23 @@ type PlayerAIInfo = {
  */
 type ActionHistoryData = {
     /** 使用卡牌 */
-    useCard: GameEvent[],
+    useCard: GameEvent[];
     /** 响应 */
-    respond: GameEvent[],
+    respond: GameEvent[];
     /** 跳过 */
-    skipped: GameEvent[],
+    skipped: GameEvent[];
     /** 失去卡牌 */
-    lose: GameEvent[],
+    lose: GameEvent[];
     /** 获得卡牌 */
-    gain: GameEvent[],
+    gain: GameEvent[];
     /** 伤害来源 */
-    sourceDamage: GameEvent[],
+    sourceDamage: GameEvent[];
     /** 造成伤害 */
-    damage: GameEvent[],
+    damage: GameEvent[];
     /** 扩展自定义操作 */
-    custom: any[],
+    custom: any[];
     /** 【v1.9.115】添加 使用技能事件记录 */
-    useSkill: HistoryUseSkillData[]
+    useSkill: HistoryUseSkillData[];
 }
 
 /** 【v1.9.115】添加 ActionHistoryData中useSkill的类型 */

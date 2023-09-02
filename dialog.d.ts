@@ -1,4 +1,4 @@
-declare namespace Lib.element{
+declare namespace Lib.element {
     /**
      * 会话弹窗
      */

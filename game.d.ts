@@ -1751,7 +1751,7 @@ interface VideoContent {
 	 * player.$gain(get.infoCards(info));
 	 * ```
 	 */
-	gainCard(player: Player, info: any[]): void;
+	gainCard(player: Player, info: CardBaseUIData[]): void;
 	/**
 	 * 调用如下代码: 
 	 * ```js
@@ -1857,23 +1857,23 @@ interface VideoContent {
 	update(player: Player, info: [any, number, number, number]): void;
 
 	/** 空函数 */
-	phaseJudge(player: Player, card: any[]): void;
+	phaseJudge(player: Player, card: CardBaseUIData): void;
 	/**
 	 * 调用如下代码: 
 	 * ```js
 	 * player.directgain(get.infoCards(cards));
 	 * ```
 	 */
-	directgain(player: Player, cards: any[]): void;
+	directgain(player: Player, cards: CardBaseUIData[]): void;
 	/**
 	 * 调用如下代码: 
 	 * ```js
 	 * player.directequip(get.infoCards(cards));
 	 * ```
 	 */
-	directequip(player: Player, cards): void;
+	directequip(player: Player, cards: CardBaseUIData[]): void;
 	gain12(player: Player, cards12: [any, any, any]): void;
-	equip(player: Player, card): void;
+	equip(player: Player, card: CardBaseUIData): void;
 	addJudge(player: Player, content: [any, any]): void;
 	markCharacter(player: Player, content: {
 		id: string,
@@ -1907,7 +1907,7 @@ interface VideoContent {
 	unmarkId(player: Player, content: [any, any]): void;
 	lose(player: Player, info: [any, any, any, any]): void;
 	/** 空函数 */
-	loseAfter(player): void;
+	loseAfter(player: Player): void;
 	link(player: Player, bool: boolean): void;
 	turnOver(player: Player, bool: boolean): void;
 	/**
@@ -1919,13 +1919,13 @@ interface VideoContent {
 	 */
 	showCards(player: Player, info: [any, any]): void;
 	cardDialog(content: [any, any, any] | number): void;
-	changeSeat(player: Player, info): void;
+	changeSeat(player: Player, info: number): void;
 	dialogCapt(content: [any, any]): void;
 	swapSeat(content: [number, number]): void;
 	removeTafangPlayer(): void;
-	swapControl(player: Player, hs): void;
+	swapControl(player: Player, hs: CardBaseUIData[]): void;
 	onSwapControl(): void;
-	swapPlayer(player: Player, hs): void;
+	swapPlayer(player: Player, hs: CardBaseUIData[]): void;
 	over(str: string): void;
 }
 
@@ -2009,13 +2009,14 @@ interface IDownLoadFun {
 	 * @param dev url不是一个网址时，执行get.url(dev)作为下载地址的前缀
 	 * @param onprogress 下载进度回调
 	 */
-	download(url: string, folder: string, onsuccess: Function, onerror: Function, dev?= 'nodev', onprogress?: Function): void;
+	download(url: string, folder: string, onsuccess: Function | null, onerror: Function, dev?: 'nodev', onprogress?: Function): void;
 	/**
 	 * 读取本地文件
 	 * @param filename 文件相对于无名杀根目录的地址
 	 * @param callback 回调函数
 	 * @param onerror 失败回调
 	 */
+	/// @ts-ignore
 	readFile(filename: string, callback: (data: Buffer | ArrayBuffer) => void, onerror: (err: Error) => void): void;
 	/**
 	 * 【v1.9.122】以文本格式读取本地文件
@@ -2033,12 +2034,14 @@ interface IDownLoadFun {
 	 * @param name 目标地址的文件名
 	 * @param callback 回调函数
 	 */
+	/// @ts-ignore
 	writeFile(data: string | ArrayBuffer | File, path: string, name: string, callback: (err: NodeJS.ErrnoException | null) => void): void;
 	/**
 	 * 删除本地文件
 	 * @param filename 目标地址相对于无名杀根目录的文件地址
 	 * @param callback 回调函数
 	 */
+	/// @ts-ignore
 	removeFile(filename: string, callback: (err: NodeJS.ErrnoException | null) => void): void;
 	/**
 	 * 获取一个文件夹内所有文件和文件夹

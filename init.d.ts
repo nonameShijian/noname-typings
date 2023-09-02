@@ -24,7 +24,7 @@ declare namespace Lib {
          * 创建<style>元素定义的样式表
          * @param args 样式字符串
          */
-        sheet(...args): HTMLStyleElement;
+        sheet(...args: any[]): HTMLStyleElement;
         /**
          * 创建<link>元素加载的样式表
          * @param path 文件路径

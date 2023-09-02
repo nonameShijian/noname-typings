@@ -44,8 +44,8 @@ interface UI {
     /** 更新手牌列表 */
     updatehl(): void;
     //手牌整理相关，目前updateh，updatehx好像没看见怎么使用
-    updateh(compute): void;
-    updatehx(node): void;
+    updateh(compute?: true): void;
+    updatehx(node: Card): void;
     /** 更新game.deviceZoom，缩放比例 */
     updated(): void;
     /** 更新document.body（根据game.documentZoom） */
@@ -56,7 +56,8 @@ interface UI {
      * 2.更新ui.dialog相关；
      */
     update(): void;
-    recycle(node, key): void;
+    recycle(node: Node, key: string): void;
+    recycle(node: string): Node;
 
     //联机的UI：
     /** 创建服务器 */
@@ -119,9 +120,6 @@ interface UI {
     system: HTMLDivElement;
     system1: HTMLDivElement;
     system2: HTMLDivElement;
-
-    handcards1Container: HTMLDivElement;
-    handcards2Container: HTMLDivElement;
 
     /** 托管的div */
     autonode: HTMLDivElement;

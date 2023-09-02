@@ -91,7 +91,7 @@ interface Get {
 
     /** 指定排序方式排序【当前项目内没有使用，是个冗余方法】 */
     sort(arr: any[], method: string): any[];
-    sortSeat(arr: any[], target): any[];
+    sortSeat(arr: Player[], target: Target): Player[];
 
     /** 生成zip压缩包（回调传入一个JSZip对象） */
     zip(callback: OneParmFun<any, void>): any;
@@ -113,7 +113,7 @@ interface Get {
     /** 在get.prompt基础上拼接“技能名_info”的信息 */
     prompt2(skill: string, target?: Player, player?: Player): string;
     /** 获取更新地址 */
-    url(master): void;
+    url(master?: 'nodev'): void;
     /**
      * 获取四舍五入后放大10的倍数的数值
      * @param num 目标数
@@ -125,7 +125,7 @@ interface Get {
      */
     playerNumber(): number;
 
-    benchmark(func1, func2, iteration, arg): any;
+    benchmark(func1: SMap<Function> | Function, func2: string[] | string | number | Function, iteration: number | any[], arg: any[]): any;
 
     /**
      * 序列化对象（将对象变成字符串）
@@ -210,13 +210,17 @@ interface Get {
     config(item: string, mode?: string): any;
 
     /** 金币的倍数（系数） */
-    coinCoeff(list): number;
+    coinCoeff(list: (string | {
+        name: string
+    })[]): number;
     /**
      * 武将排行（多用于ai，用排行确定优先度）
      * @param name 
      * @param num 
      */
-    rank(name: string | { name: string }, num: boolean | number): number | string;
+    rank(name: string | {
+        name: string
+    }, num: boolean | number): number | string;
     /**
      * 技能排行(多用于ai，获取使用技能准确的优先度)
      * @param skill 
@@ -265,26 +269,26 @@ interface Get {
     //联网模式下的信息获取，稍后统一研究
     //作用：打包信息广播出去;接收信息，解析接收到的信息;
     //基本不需要自己调用，send,onmessage都已经做好做好自己这种编码，解码的操作了；
-    cardInfoOL(card): any;
-    infoCardOL(info): any;
-    cardsInfoOL(cards): any;
-    infoCardsOL(info): any;
-    playerInfoOL(player): any;
-    infoPlayerOL(info): any;
-    playersInfoOL(players): any;
-    infoPlayersOL(info): any;
-    funcInfoOL(func): any;
-    infoFuncOL(info): any;
+    cardInfoOL(card: Card): any;
+    infoCardOL(info: string): any;
+    cardsInfoOL(cards: Card[]): any;
+    infoCardsOL(info: string[]): any;
+    playerInfoOL(player: Player): any;
+    infoPlayerOL(info: string): any;
+    playersInfoOL(players: Player[]): any;
+    infoPlayersOL(info: string[]): any;
+    funcInfoOL(func?: Function): any;
+    infoFuncOL(info: string): any;
     /**
      * 【v1.9.116.2】 将get.stringifiedResult的默认层数由5改为8，并由此解决部分联机模式的bug（如陆凯〖卜筮〗无法在联机模式下正常发动的bug）
      * 【v1.9.120.3】 添加nomore参数，当item为'event'时且nomore为false返回空字符串
      */
-    stringifiedResult(item: Function | Object | Array, level = 8, nomore?: boolean): any;
+    stringifiedResult(item: Function | Object | any[], level?: 8, nomore?: boolean): any;
     /**
      * 当且仅当item的值为Infinity时才能使用这个重载
      */
-    stringifiedResult(item: Number = Infinity, level = 8): '_noname_infinity';
-    parsedResult(item: string | Array | Object): any;
+    stringifiedResult(item: number): '_noname_infinity';
+    parsedResult(item: string | any[] | Object): any;
 
     /** 输出垂直显示字符串 */
     verticalStr(str: string, sp?: boolean): string;
@@ -335,7 +339,7 @@ interface Get {
      *      若class列表有“dialog”，则返回类型：dialog（对话框，包括提示，弹出框...）；
      * @param obj 
      */
-    itemtype(obj: any): string | void;
+    itemtype(obj: any): 'player' | 'dialog' | 'event' | 'card' | 'cards' | 'position' | 'nature' | 'players' | 'select' | 'divposition' | 'button' | void;
     /**
      * 获取装备的类型（1-5）
      * 逻辑和get.equiptype基本一致（算是冗余的方法）
@@ -456,7 +460,8 @@ interface Get {
      * 获取（牌堆顶的）牌
      * @param num 获取指定数量的牌，填了就返回数组
      */
-    cards(num: number = 1): Card[];
+    cards(num: 0): Card;
+    cards(num?: 1): Card[];
     /**
      * 获取卡牌的judge（判定牌的判断条件）
      * 若该卡牌有viewAs（视为牌），则返回视为牌的judge；
@@ -701,11 +706,11 @@ interface Get {
     /** 获取指定武将的信息描述 */
     intro(name: string): string;
     /** 获取缓存的信息 */
-    storageintro(type, content, player, dialog, skill): any;
+    storageintro(type: 'mark' | 'turn' | 'time' | 'limited' | 'info' | 'cardCount' | 'expansion' | 'card' | 'cards' | 'player' | 'players' | 'character' | 'characters' | string | ThreeParmFun<GameStorageItem, Player, string, string>, content: GameStorageItem, player: Player, dialog: Dialog, skill: Skill): any;
     /** 获取设置node节点的信息 */
-    nodeintro(node, simple, evt): Dialog;
+    nodeintro(node: Player, simple?: false, evt?: GameEvent): Dialog;
     /** 获取横置（连环）的信息 */
-    linkintro(dialog, content, player): void;
+    linkintro(dialog: Dialog, content: GameStorageItem, player: Player): void;
 
     /** 获取游戏中的势力标记列表 */
     groups(): string[];
@@ -950,8 +955,8 @@ interface Is {
     /** 判断这些牌中，有没有不在h，e，j区域中，若都不在，则为true */
     freePosition(cards: Card[]): boolean;
     /** 判断是否有菜单 */
-    nomenu(name: string, item): boolean;
-    altered(skill): boolean;//无用，无能，这里，就此消失！
+    nomenu(name: string, item: boolean | string): boolean;
+    altered(skill: Skill): boolean;//无用，无能，这里，就此消失！
 
     /** 判断当前对象是html文档节点 */
     node(obj: Object): boolean;
@@ -971,7 +976,7 @@ interface Is {
     /** 是否是对决模式 */
     versus(): boolean;
     /** 判断自己当前是否是mobile（手机） */
-    mobileMe(player): boolean;
+    mobileMe(player: Player): boolean;
     /** 判断game.layout不是“default” */
     newLayout(): boolean;
     /** 判断当前是手机布局 */
@@ -990,8 +995,8 @@ interface Is {
     isLuckyStar(): boolean;
 
     //新增的国战专用函数：(直接查阅苏大佬的文档，到时候给各个不同model的玩法，另外分开新的描述文档......)
-    guozhanRank();
-    guozhanReverse(xxx, yyy);
+    guozhanRank(name: string, player: Player): number;
+    guozhanReverse(name1: string, name2: string): boolean;
 
     /** 是否有表情【v1.9.106.4】 */
     emoji(substring: string): boolean;

@@ -719,7 +719,7 @@ declare interface ExSkillData {
      * 
      * 在chooseToRespond中使用
      */
-    prerespond?(result, player: Player): void;
+    prerespond?(result: BaseCommonResultData, player: Player): void;
     /** 
      * 技能响应(可直接使用技能来响应，在这里进行响应的处理)
      * 
@@ -1096,7 +1096,9 @@ declare interface ExSkillData {
      * 
      * 无参，简洁写法；
      */
-    check?: OneParmFun<Card, number | boolean> | TwoParmFun<GameEvent, Player, number | boolean> | NoneParmFum<number | boolean>;
+    ckeck?(event?: GameEvent, player?: Player): boolean;
+    check?(card?: Card): number;
+    check?(): number | boolean;
     // check?(...any:any):number|boolean;
     // /** ai用于检测的方法：用于主动使用触发技能 */
     // check?(card:Card):number|boolean;
@@ -1307,7 +1309,7 @@ interface ExModData {
      * @param player 
      * @param result 
      */
-    judge?(player: Player, result: JudgeResultData);
+    judge?(player: Player, result: JudgeResultData): void;
 
     //2020-2-23版本：
     /** 

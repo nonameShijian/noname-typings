@@ -81,8 +81,6 @@ type Dialog = Lib.element.Dialog;
 type GameEvent = Lib.element.Event;
 /** nogame的event类型=>主触发事件 */
 type Trigger = Lib.element.Event;
-
-type Dialog = Lib.element.Dialog;
 /** nogame的触发名 */
 type TriggerName = string;
 /** nogame中所使用的技能的名字 */
@@ -90,7 +88,7 @@ type Skill = string;
 /** nogeme中button的link列表(相关类型：Card|Player|string|CardBaseData) */
 type Links = any[];
 /** 标记等信息的缓存(Storage 被占用了) */
-type GameStorage = Map<string, any>;
+type GameStorage = SMap<GameStorageItem>;
 /** 指定标记的信息缓存 */
 type GameStorageItem = any;
 
@@ -115,7 +113,7 @@ type DivPosition = [number, number, number, number];
  * @param popname 为原先发动技能时弹出的文字（绝大多数情况下与name相同） 
  * @param checkShow 为双将模式下技能的来源（vice为主将 其他情况下为副将）
  */
-type SkillAnimateType = (name: string, popname: string, checkShow) => void;
+type SkillAnimateType = (name: string, popname: string, checkShow: 'main' | 'vice' | false) => void;
 /**
  * 卡牌动画方法
  * 
