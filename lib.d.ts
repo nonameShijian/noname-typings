@@ -90,12 +90,16 @@ interface Lib {
 
 	/** 聊天历史 */
 	chatHistory: [string, string][];
+	onload: NoneParmFum<void>[];
+	onload2: NoneParmFum<void>[];
+	onprepare: NoneParmFum<void>[];
 	/** 主要在lib.init记录场景加载的系列方法，在ui.arena中取出执行 */
 	arenaReady: NoneParmFum<void>[];
 	/** 保存一些UI处理的方法，在合适时机取出来执行 */
-	onfree: Function[];
+	onfree: NoneParmFum<void>[];
 	/** 在牌堆里牌(指不区分数字，花色，伤害属性的牌) */
 	inpile: string[];
+	inpile_nature: string[];
 	/**
 	 * 保存loadExtension中，保存读取到的扩展，在onload的proceed2中读取处理
 	 */
@@ -252,9 +256,7 @@ interface Lib {
 	card: {
 		/** 保存所有的卡牌的基本信息 */
 		list: CardBaseData[];
-		/** 所有卡牌的配置集中在这里 */
-		[key: string]: ExCardData;
-	};
+	} & /** 所有卡牌的配置集中在这里 */ SMap<ExCardData>;
 	/** 游戏内自定义的过滤方法 */
 	filter: Lib.Filter;
 	/** 游戏内自定义的sort排序方法 */
@@ -294,6 +296,8 @@ interface Lib {
 
 	/** 花色的常量列表 */
 	suit: string[];
+	suits: string[];
+	color: SMap<string[]>;
 	/** 势力的常量列表 */
 	group: HeroGroup[] | string[];
 	/** 属性伤害的常量列表 */
@@ -410,6 +414,8 @@ interface Lib {
 
 	/** 不知道，可能是监听卡牌属性变化的 */
 	cardSelectObserver: any;
+
+	junList?: string[];
 	//[key: string]: any;
 }
 
@@ -425,7 +431,11 @@ interface LibConfigData {
 	extension_sources: SMap<string>;
 	extension_source: string,
 	addedpile: SMap<any[]>,
-	all: SMap<any>,
+	all: {
+		cards: string[];
+		characters: string[];
+		[key: string]: any;
+	},
 	alteredSkills: any[],
 	animation: boolean,
 	appearence: boolean,

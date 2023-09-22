@@ -439,12 +439,12 @@ interface ExCardData {
 
     /**
      * 【应变模式相关】
-     * 用于展示卡牌长按时的应变描述。
-     * 可以为函数（参数为卡牌）或者字符串。
      */
-    yingbian_prompt?: string | OneParmFun<Card, string>;
+    defaultYingbianEffect?: string;
 
     judge2?(result: JudgeResultData): boolean;
+
+    nature: string[];
 
     //日后还有很多属性要添加的
     [key: string]: any;
@@ -514,6 +514,7 @@ interface CardBaseUIData {
 
     /** 真实使用的卡牌 */
     cards?: Card[];
+    storage?: SMap<any>;
 }
 
 /** 范围信息 */

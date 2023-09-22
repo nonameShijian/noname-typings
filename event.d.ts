@@ -529,6 +529,7 @@ declare namespace Lib.element {
          */
         cardname: string;
 
+        addCount?: false;
         /**
          * 标记当前事件有使，使用次数增加的标记；
          * 
@@ -631,6 +632,8 @@ declare namespace Lib.element {
         /** 当前事件，是否不触发濒死阶段 */
         nodying: boolean;
         _dyinged: boolean;
+
+        temporaryYingbian?: string[];
 
         //自己扩展任意参数
         [key: string]: any;

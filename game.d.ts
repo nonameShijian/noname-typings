@@ -2,6 +2,7 @@
  * 游戏主逻辑相关方法
  */
 interface Game extends IDownLoadFun {
+	updateBackground(): void;
 	/**
 	 * 卡牌弃置
 	 * 创建“cardsDiscard”事件，
@@ -1002,6 +1003,7 @@ interface Game extends IDownLoadFun {
 	saveConfigValue(key: string): void;
 	/** 保存扩展配置，key的结构为："extension_扩展名_key" */
 	saveExtensionConfig(extension: string, key: string, value?: any): void;
+	saveExtensionConfigValue(extension: string, key: string): void;
 	/** 获取扩展配置 */
 	getExtensionConfig(extension: string, key: string): any;
 	/** 清除mode玩法的配置 */

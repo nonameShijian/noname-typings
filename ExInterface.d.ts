@@ -224,7 +224,7 @@ interface BaseCommonResultData extends BaseResultData {
     /** 记录返回当前事件操作过程中的按钮 */
     buttons: Button[];
     /** 记录buttons内所有button.link(即该按钮的类型，link的类型很多，参考按钮的item) */
-    links: any[];
+    links: Links;
 
     //control系(直接control系列没有result.bool)
     /** control操作面板的选中结果，即该按钮的link，即名字 */

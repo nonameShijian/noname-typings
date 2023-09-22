@@ -33,6 +33,7 @@ declare namespace Lib {
          */
         css(path: string, file: string, before?: Function | HTMLElement): HTMLLinkElement;
         css(): HTMLLinkElement;
+        jsForExtension(path: string | string[], file: string | string[], onload?: () => void | (() => void)[], onerror?: () => void | (() => void)[]): void;
         /**
          * 读取外部加载js (动态加载js扩展)
          * 

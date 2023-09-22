@@ -16,9 +16,9 @@ interface UI {
         /** 选中的按钮列表（技能，操作） */
         buttons: any[],
         /** 选中的卡牌列表 */
-        cards: any[],
+        cards: Card[],
         /** 选中的玩家目标列表 */
-        targets: any[]
+        targets: Target[]
     },
     /** 主动清除游戏中“thrown”的节点 */
     clear(): void;
@@ -79,13 +79,13 @@ interface UI {
 
     //【核心】ui的的区域：
     /** 卡堆区（抽牌区） */
-    cardPile: HTMLDivElement;
+    cardPile: CardPile;
     /** 弃牌区 */
-    discardPile: HTMLDivElement;
+    discardPile: CardPile;
     /** 特殊区（放置与武将牌上，旁区域） */
-    special: HTMLDivElement;
+    special: CardPile;
     /** 处理区 */
-    ordering: HTMLDivElement;
+    ordering: CardPile;
 
     //玩家身上的区域
     /** 装备区 */
@@ -155,4 +155,8 @@ interface UI {
 
     /** 整理手牌按钮 */
     sortCard: HTMLDivElement;
+}
+
+interface CardPile extends HTMLDivElement {
+    readonly childNodes: NodeListOf<Card>;
 }

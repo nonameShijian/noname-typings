@@ -8,6 +8,11 @@ declare namespace Lib.element {
      * 来源：lib.element.player
      */
     interface Player {
+        canIgnoreHandcard(card: Card): boolean;
+        gift(cards: Card | Card[], taregt: Target): Event;
+        canGift(card: Card, target: Target, strict?: true): boolean;
+        getGiftAIResultTarget(card: Card, target: Target): number;
+        getGiftEffect(card: Card, target: Target): number;
         /**
          * 选择对策（进攻/防御）
          * 
@@ -711,7 +716,7 @@ declare namespace Lib.element {
          * 
          *  itemtype为"dialog"类型：对应next.dialog,且next.prompt=false,使用当前已有的会话面板；
          */
-        chooseTarget(...args: any[]): Event;
+        chooseTarget(...args: ((target: Target) => number | ((card: undefined, player: Player, target: Target) => boolean) | any)[]): Event;
         /**
          * 选择卡牌与目标
          * 
@@ -774,7 +779,7 @@ declare namespace Lib.element {
          *  itemtype类型为"dialog"：设置next.dialog；
          * @param args 
          */
-        chooseControl(...args: any[]): Event;
+        chooseControl(...args: ((event: Event, player: Player) => (string | number) | any)[]): Event;
         /**
          * 拥有“确认”，“取消”的选择面板
          * 
@@ -1327,7 +1332,7 @@ declare namespace Lib.element {
          * @param num 改变的护甲数，默认为1
          * @param type 护甲类型（暂时来看不参与逻辑）
          */
-        changeHujia(num?: number, type?: any): Event;
+        changeHujia(num?: number, type?: any, limit?: true | number): Event;
         /**
          * 濒死阶段
          * @param reason 造成死亡的事件,字符串“nosource”，标明无来源，不设置next.sorce
@@ -2133,8 +2138,8 @@ declare namespace Lib.element {
          * @returns 若两个参数都没有，则返回当前玩家回合的记录，若有key，则获取指定类型的记录
          */
         getHistory(): ActionHistoryData;
-        getHistory(key: 'useSkill', filter?: OneParmFun<HistoryUseSkillData, boolean>): HistoryUseSkillData[];
         getHistory(key: keyof ActionHistoryData, filter?: OneParmFun<GameEvent, boolean>): GameEvent[];
+        getHistory(key: 'useSkill', filter?: OneParmFun<HistoryUseSkillData, boolean>): HistoryUseSkillData[];
 
         /**
          * 玩家是否有符合某些条件的记录
@@ -2143,8 +2148,8 @@ declare namespace Lib.element {
          * @param filter 同getHistory的filter参数
          * @param last 取last个记录之前的事件
          */
-        hasHistory(key: 'useSkill', filter: OneParmFun<HistoryUseSkillData, boolean>, last?: number): boolean;
         hasHistory(key: keyof ActionHistoryData, filter: OneParmFun<GameEvent, boolean>, last?: number): boolean;
+        hasHistory(key: 'useSkill', filter: OneParmFun<HistoryUseSkillData, boolean>, last?: number): boolean;
 
         //【v1.9.98.6.1】
         /**
@@ -2155,16 +2160,16 @@ declare namespace Lib.element {
          * 例：Yui喵的【珍宝】判断整局游戏中因【激昂】获得过的牌的数量
          */
         getAllHistory(): ActionHistoryData;
-        getAllHistory(key: 'useSkill', filter?: OneParmFun<HistoryUseSkillData, boolean>): HistoryUseSkillData[];
         getAllHistory(key: keyof ActionHistoryData, filter?: OneParmFun<GameEvent, boolean>): GameEvent[];
+        getAllHistory(key: 'useSkill', filter?: OneParmFun<HistoryUseSkillData, boolean>): HistoryUseSkillData[];
 
         //【v1.9.102】
         /**
          * 用于获取某个玩家自己最近一个回合的actionHistory
          */
         getLastHistory(): ActionHistoryData;
-        getLastHistory(key: 'useSkill', filter?: OneParmFun<HistoryUseSkillData, boolean>): HistoryUseSkillData[];
         getLastHistory(key: keyof ActionHistoryData, filter?: OneParmFun<GameEvent, boolean>): GameEvent[];
+        getLastHistory(key: 'useSkill', filter?: OneParmFun<HistoryUseSkillData, boolean>): HistoryUseSkillData[];
 
         /**
          * 获取玩家本回合内使用倒数第X+1张牌的事件 
@@ -2660,7 +2665,7 @@ declare namespace Lib.element {
          * 
          * 主要功能：用于标记技能，缓存一些技能的信息在玩家缓存信息里，方便整场游戏的调用
          */
-        storage: SMap<any>;
+        storage: PlayerStorage;
         /**
          * 玩家的标记
          * 
@@ -2837,6 +2842,9 @@ declare namespace Lib.element {
     }
 }
 
+interface PlayerStorage {
+    [key: string]: any;
+}
 
 /**
  * 玩家的统计数据结构

@@ -318,7 +318,7 @@ declare interface ExSkillData {
      * 
      *  （被隔离玩家，目前确定的作用：player.getNext获取下一位玩家，player.getPrevious确定上一位玩家，player.distance计算玩家距离）；
      */
-    group?: string[];
+    group?: string | string[];
     /** 
      * 子技能：
      * 
@@ -1431,7 +1431,7 @@ interface ChooseButtonConfigData {
      * 
      * 其中参数event,为当前chooseToUse事件
      */
-    dialog?(event: GameEvent, player: Player): Dialog;
+    dialog?(event?: GameEvent, player?: Player): Dialog;
     /**
      * 卡牌选择条件
      * 
@@ -1439,14 +1439,15 @@ interface ChooseButtonConfigData {
      * @param button 
      * @param player 
      */
-    filter?(button: Button, player: Player): void;
+    filter?(button?: Button, player?: Player): void;
     /**
      * ai如何选牌
      * 
      * 既player.chooseButton的ai
      * @param button 
      */
-    check?(button: Button): number;
+    check?(event?: GameEvent, player?: Player): number | string;
+    check?(button?: Button): number;
     /** 
      * 选择数目，默认为1
      * 
@@ -1463,13 +1464,15 @@ interface ChooseButtonConfigData {
      * @param links result.links（由get.links获得，一般是指当前面板上的所有可选择按钮的link数据,一般为卡牌信息）
      * @param player 
      */
-    backup?(links: Links, player: Player): ExSkillData;
+    backup?(links?: Links, player?: Player): ExSkillData;
+    backup?(result?: BaseCommonResultData, player?: Player): ExSkillData;
     /**
      * 选择时弹出的提示
      * @param links result.links（由get.links获得，一般是指当前面板上的所有可选择按钮的link数据,一般为卡牌信息）
      * @param player 
      */
-    prompt?(links: Links, player: Player): string;
+    prompt?(links?: Links, player?: Player): string;
+    prompt?(result?: BaseCommonResultData, player?: Player): string;
 
     /**
      * 进行额外的选择时：
@@ -1489,7 +1492,7 @@ interface ChooseButtonConfigData {
      * @param event 
      * @param player 
      */
-    chooseControl?(event: GameEvent, player: Player): string[];
+    chooseControl?(event?: GameEvent, player?: Player): string[];
 }
 
 /** 时机的配置信息 */

@@ -146,6 +146,14 @@ interface Status {
 
     discarded: Card[];
 
+    _aozhan?: true;
+
+    tempBackground?: string;
+
+    tempAozhan?: string;
+
+    tempMusic?: string;
+
     /*  扩展成员  */
     [key: string]: any;
 }

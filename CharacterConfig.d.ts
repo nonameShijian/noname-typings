@@ -75,8 +75,7 @@ type HeroGroup = 'wei' | 'shu' | 'wu' | 'qun' | 'jin' | 'shen' | 'key' | 'ye';
  * 【v1.9.108.6~】 character[4]设置国战模式双势力: 格式 “doublegroup:xx:xx”，例如“doublegroup:wei:wu”。但是武将的id前缀必须是"gz_"或者"db_"
  * 
  */
-type HeroData = [HeroSex, HeroGroup | string, HeroHp, string[], string[], ...any[]] |
-[HeroSex, HeroGroup | string, HeroHp, string[], ...any[]];
+type HeroData = [HeroSex, HeroGroup | string, HeroHp, string[], string[], ...any[]];
 
 /** 武将信息索引 */
 declare const enum HeroDataFields {

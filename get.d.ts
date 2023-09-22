@@ -138,7 +138,7 @@ interface Get {
      * （对象结构过于复杂，可能会很慢）
      * @param obj 
      */
-    copy(obj: any): any;
+    copy<T>(obj: T): T;
     /**
      * 获取牌堆(lib.inpile)里所有指定类型的牌
      * @param type 牌的类型（详情请看get.type）
@@ -552,7 +552,7 @@ interface Get {
      * （“技能名_info”）
      * @param name 技能名
      */
-    skillInfoTranslation(name: string): string;
+    skillInfoTranslation(name: string, player?: Player): string;
     /**
      * 获取翻译（本地化）
      * 
@@ -925,6 +925,7 @@ interface Get {
      * @param player 对应的玩家
      */
     skillCategoriesOf(skill: ExSkillData, player: Player): string[];
+    cardNameLength(card: Card): number;
 }
 
 //由玩法模式自己扩展实现的方法接口：
