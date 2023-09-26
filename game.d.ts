@@ -921,7 +921,8 @@ interface Game extends IDownLoadFun {
 	 * @param id 键名
 	 * @param callback 回调函数
 	 */
-	getDB(type: DataDbIds, id: string, callback?: Function): void;
+	getDB(type: DataDbIds, id: string, callback?: OneParmFun<string, void>): Promise<string>;
+	getDB(type: DataDbIds, id?: null, callback?: OneParmFun<SMap<string>, void>): Promise<SMap<string>>;
 	/**
 	 * 删除indexDB中的数据
 	 * @param type 表名
@@ -1975,7 +1976,7 @@ type ModName = 'selectTarget' | 'judge' | 'inRange' | 'inRangeOf' | 'globalFrom'
 	'cardnature' | 'aiUseful' | 'aiValue' | 'aiOrder';
 
 /** indexDB数据库的表名 */
-type DataDbIds = 'audio' | 'config' | 'data' | 'image' | 'video';
+type DataDbIds = 'config' | 'data' | 'file' | 'video';
 
 /** 全局事件的使用记录 */
 type GlobalHistoryData = {

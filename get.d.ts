@@ -3,6 +3,11 @@ declare var get: Get;
  * 封装获取数据的方法
  */
 interface Get {
+    connectNickname(): string;
+    /** 获取当前传入的武将名的原替换配置的武将名（lib.characterReplace）【v1.9.106.3】 */
+    sourceCharacter(str: string): string;
+    /** 用于判断是否开启了【幸运星模式】的选项 */
+    isLuckyStar(): boolean;
     /** 获取当前血量（xx/xxx左边部分 或者自身） */
     infoHp(hp: HeroHp): number;
     /** 获取当前最大血量（xx/xxx右边部分 或者自身） */
@@ -719,9 +724,6 @@ interface Get {
     /** 获取按钮的link */
     links(buttons: Button[]): any[];
 
-    /** 获取当前传入的武将名的原替换配置的武将名（lib.characterReplace）【v1.9.106.3】 */
-    sourceCharacter(str: string): string;
-
     //卡牌标记cardtag（与模式——应变模式相关）【v1.9.107】
     cardtag(item: Card, tag: string): boolean;
 
@@ -991,9 +993,6 @@ interface Is {
     pos(str: string): boolean;
     /** 判断该技能是否是强制触发的（强制触发：locked，trigger&&forced，mod） */
     locked(skill: string): boolean;
-
-    /** 用于判断是否开启了【幸运星模式】的选项 */
-    isLuckyStar(): boolean;
 
     //新增的国战专用函数：(直接查阅苏大佬的文档，到时候给各个不同model的玩法，另外分开新的描述文档......)
     guozhanRank(name: string, player: Player): number;

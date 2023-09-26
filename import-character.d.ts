@@ -159,5 +159,7 @@ declare interface importCharacterConfig extends ExCommonConfig {
     help?: SMap<string>;
 
     /** 扩展中设置武将的名称(id)或技能翻译 */
-    translate?: SMap<string>
+    translate?: SMap<string>;
+
+    pinyins?: SMap<string[]>;
 }
