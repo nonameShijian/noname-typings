@@ -82,7 +82,7 @@ interface Lib {
 	 */
 	onwash: NoneParmFum<void | 'remove'>[];
 	/** game.over后执行的一些列结束方法 */
-	onover: OneParmFun<string, void>[];
+	onover: OneParmFun<boolean, void>[];
 
 	//记录数据，读取数据库
 	ondb: any[];
@@ -187,6 +187,7 @@ interface Lib {
 	 * （所有扩展的help都会集中到这里）
 	 */
 	help: SMap<string>;
+	path: typeof import('path');
 
 	//ui相关
 	/** 设置点击/触摸打开信息面板的节点 */
@@ -354,13 +355,10 @@ interface Lib {
 		//文件操作：
 		//以下对象，大多是nodejs的操作对象
 		/** node fs模块 */
-		/// @ts-ignore
 		fs: typeof import('fs');
 		/** node http模块(调用下载函数的时候可能才会被赋值) */
-		/// @ts-ignore
 		http: typeof import('http');
 		/** node https模块(调用下载函数的时候可能才会被赋值) */
-		/// @ts-ignore
 		https: typeof import('https');
 
 		/** 电脑端开启electron控制台 */

@@ -3,8 +3,6 @@
 // Definitions by: The Electron Team <https://github.com/electron/electron>
 // Definitions: https://github.com/electron/electron-typescript-definitions
 
-/// @ts-nocheck
-
 type GlobalEvent = Event & { returnValue: any };
 
 declare namespace Electron {

@@ -17,7 +17,12 @@ declare namespace Lib {
         //网络相关
         startOnline(): void;
         connection(ws: any): void;
-        req(str: any, onload: any, onerror: any, master: any): void;
+        req(str: string, onload?: (this: XMLHttpRequest, ev: ProgressEvent<XMLHttpRequestEventTarget>) => any, onerror?: (this: XMLHttpRequest, ev: ProgressEvent<XMLHttpRequestEventTarget>) => any, master?: 'nodev'): void;
+        /**
+         * 同步lib.init.req
+         */
+        reqSync(str: string, onload?: undefined, onerror?: (this: XMLHttpRequest, ev: ProgressEvent<XMLHttpRequestEventTarget>) => any, master?: 'nodev'): string;
+        reqSync(str: string, onload: (this: XMLHttpRequest, ev: ProgressEvent<XMLHttpRequestEventTarget>) => any, onerror?: (this: XMLHttpRequest, ev: ProgressEvent<XMLHttpRequestEventTarget>) => any, master?: 'nodev'): void;
         json(url: any, onload: any, onerror: any): void;
 
         /**
@@ -84,7 +89,7 @@ declare namespace Lib {
 
 
         /** cordova库，用于移动端 */
-        cordovaReady?: any;
+        cordovaReady?: NoneParmFum<void>;
     }
 
 }

@@ -922,7 +922,7 @@ interface Game extends IDownLoadFun {
 	 * @param callback 回调函数
 	 */
 	getDB(type: DataDbIds, id: string, callback?: OneParmFun<string, void>): Promise<string>;
-	getDB(type: DataDbIds, id?: null, callback?: OneParmFun<SMap<string>, void>): Promise<SMap<string>>;
+	getDB(type: DataDbIds, id?: undefined, callback?: OneParmFun<SMap<string>, void>): Promise<SMap<string>>;
 	/**
 	 * 删除indexDB中的数据
 	 * @param type 表名
@@ -1976,7 +1976,7 @@ type ModName = 'selectTarget' | 'judge' | 'inRange' | 'inRangeOf' | 'globalFrom'
 	'cardnature' | 'aiUseful' | 'aiValue' | 'aiOrder';
 
 /** indexDB数据库的表名 */
-type DataDbIds = 'config' | 'data' | 'file' | 'video';
+type DataDbIds = 'audio' | 'config' | 'data' | 'image' | 'video';
 
 /** 全局事件的使用记录 */
 type GlobalHistoryData = {
@@ -2019,7 +2019,6 @@ interface IDownLoadFun {
 	 * @param callback 回调函数
 	 * @param onerror 失败回调
 	 */
-	/// @ts-ignore
 	readFile(filename: string, callback: (data: Buffer | ArrayBuffer) => void, onerror: (err: Error) => void): void;
 	/**
 	 * 【v1.9.122】以文本格式读取本地文件
@@ -2037,14 +2036,12 @@ interface IDownLoadFun {
 	 * @param name 目标地址的文件名
 	 * @param callback 回调函数
 	 */
-	/// @ts-ignore
 	writeFile(data: string | ArrayBuffer | File, path: string, name: string, callback: (err: NodeJS.ErrnoException | null) => void): void;
 	/**
 	 * 删除本地文件
 	 * @param filename 目标地址相对于无名杀根目录的文件地址
 	 * @param callback 回调函数
 	 */
-	/// @ts-ignore
 	removeFile(filename: string, callback: (err: NodeJS.ErrnoException | null) => void): void;
 	/**
 	 * 获取一个文件夹内所有文件和文件夹

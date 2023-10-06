@@ -344,7 +344,7 @@ interface Get {
      *      若class列表有“dialog”，则返回类型：dialog（对话框，包括提示，弹出框...）；
      * @param obj 
      */
-    itemtype(obj: any): 'player' | 'dialog' | 'event' | 'card' | 'cards' | 'position' | 'nature' | 'players' | 'select' | 'divposition' | 'button' | void;
+    itemtype(obj: any): 'player' | 'card' | 'button' | 'event' | 'cards' | 'position' | 'natures' | 'nature' | 'players' | 'select' | 'divposition' | 'dialog' | void;
     /**
      * 获取装备的类型（1-5）
      * 逻辑和get.equiptype基本一致（算是冗余的方法）
@@ -928,6 +928,7 @@ interface Get {
      */
     skillCategoriesOf(skill: ExSkillData, player: Player): string[];
     cardNameLength(card: Card): number;
+    natureList(...args: any[]): string[];
 }
 
 //由玩法模式自己扩展实现的方法接口：
@@ -947,6 +948,19 @@ interface Get {
  * 一些条件判断
  */
 interface Is {
+    shownCard(card: Card): boolean;
+    /** 
+     * 是否是双势力/获取双势力武将
+     * @param name 只有一个参数：判定是否是双势力武将；
+     * @param array 第二个参数为true：则获取该名字武将的势力；
+     */
+    double(name: string): boolean;
+    double(name: string, array: true): string[];
+    //卡牌标记cardtag（与模式——应变模式相关）【v1.9.107】
+    /** 用于判断一张牌能否被应变 */
+    yingbian(node: HTMLDivElement | Card): boolean;
+    /** 是否有表情【v1.9.106.4】 */
+    emoji(substring: string): boolean;
     /**
      * 判断是非转化牌，包括“视为使用”的虚拟牌
      * 
@@ -959,19 +973,17 @@ interface Is {
     freePosition(cards: Card[]): boolean;
     /** 判断是否有菜单 */
     nomenu(name: string, item: boolean | string): boolean;
-    altered(skill: Skill): boolean;//无用，无能，这里，就此消失！
-
+    altered(skill: Skill): false;//无用，无能，这里，就此消失！
     /** 判断当前对象是html文档节点 */
-    node(obj: Object): boolean;
+    node(obj: any): obj is HTMLElement;
     /** 判断当前对象是div节点 */
-    div(obj: Object): boolean;
+    div(obj: any): obj is HTMLDivElement;
     /** 判断当前对象是Map（es6） */
-    map(obj: Object): boolean;
+    map(obj: any): obj is Map<any, any>;
     /** 判断当前对象是Set（es6） */
-    set(obj: Object): boolean;
+    set(obj: any): obj is Set<any>;
     /** 判断当前对象是对象 */
-    object(obj: Object): boolean;
-
+    object(obj: any): obj is Object;
     /** 是否是只有一个目标（单目标） */
     singleSelect(func: number | Select | NoneParmFum<number | Select>): boolean;
     /** 是否是“君主” */
@@ -993,25 +1005,9 @@ interface Is {
     pos(str: string): boolean;
     /** 判断该技能是否是强制触发的（强制触发：locked，trigger&&forced，mod） */
     locked(skill: string): boolean;
-
     //新增的国战专用函数：(直接查阅苏大佬的文档，到时候给各个不同model的玩法，另外分开新的描述文档......)
     guozhanRank(name: string, player: Player): number;
     guozhanReverse(name1: string, name2: string): boolean;
-
-    /** 是否有表情【v1.9.106.4】 */
-    emoji(substring: string): boolean;
-
-    //卡牌标记cardtag（与模式——应变模式相关）【v1.9.107】
-    /** 用于判断一张牌能否被应变 */
-    yingbian(node: HTMLDivElement | Card): boolean;
-
-    /** 
-     * 【国战】是否是双势力/获取双势力武将
-     * @param name 只有一个参数：判定是否是双势力武将；
-     * @param array 第二个参数为true：则获取该名字武将的势力；
-     */
-    double(name: string): boolean;
-    double(name: string, array: boolean): string[];
 }
 
 /** get.skillState方法的返回数据 */

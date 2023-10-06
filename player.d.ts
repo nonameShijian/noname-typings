@@ -8,6 +8,19 @@ declare namespace Lib.element {
      * 来源：lib.element.player
      */
     interface Player {
+        /**
+         * version 1.1
+         * 
+         * 链式创建一次性技能的api。
+         * 
+         * 使用者只需要关注技能的效果，而不是技能的本身。
+         * 
+         * @param triggerNames 要触发的时机名
+         * @returns 
+         */
+        when: (...triggerNames: string[]) => when;
+        addShownCards(...args: any[]): Event;
+        hideShownCards(...args: any[]): Event;
         canIgnoreHandcard(card: Card): boolean;
         gift(cards: Card | Card[], taregt: Target): Event;
         canGift(card: Card, target: Target, strict?: true): boolean;
@@ -2844,6 +2857,39 @@ declare namespace Lib.element {
 
 interface PlayerStorage {
     [key: string]: any;
+}
+
+interface when {
+    /**
+     * 传入技能filter。可传入多次
+     */
+    filter(fun: (event: GameEvent, player: Player, name: string) => boolean): when;
+    /**
+     * 移除技能filter
+     */
+    removeFilter(fun: (event: GameEvent, player: Player, name: string) => boolean): when;
+    /**
+     * 技能触发内容。一次为一个步骤step的内容。
+     * 
+     * 可以传入字符串。但是字符串不能出现大括号: {}
+     */
+    then(fun: string | ContentFuncByAll): when;
+    /**
+     * 触发技能时在玩家身上弹出的文字
+     * 
+     * 注意: popup和translation尽量一起用
+     */
+    popup(str: string): when;
+    /**
+     * 修改技能名的翻译
+     * 
+     * 注意: popup和translation尽量一起用
+     */
+    translation(translation: string): when;
+    /**
+     * 把一个对象的属性复制到创建的技能中
+     */
+    assign(obj: Object): when;
 }
 
 /**

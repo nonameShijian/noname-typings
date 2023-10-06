@@ -19,5 +19,9 @@
 	"bugs": {
 		"url": "https://github.com/nonameShijian/noname-typings/issues"
 	},
-	"homepage": "https://github.com/nonameShijian/noname-typings#readme"
+	"homepage": "https://github.com/nonameShijian/noname-typings#readme",
+	"dependencies": {
+		"@types/cordova": "*",
+		"@types/node": "*"
+	}
 }
