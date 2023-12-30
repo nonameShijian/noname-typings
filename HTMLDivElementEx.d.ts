@@ -4,11 +4,10 @@ interface HTMLDivElement {
     /**
      * 增加一个动画（增加className动画标记）
      * 
-     * 注：和新版的html中的animate的实现声明有区别，无法通过tsc编译......(估计最新的这个值被早已声明)
      * @param name className
      * @param time 该动画多长时间自动销毁
      */
-    animate(name: string, time: number): HTMLDivElement;
+    addTempClass(name: string, time?: number): HTMLDivElement;
     /**
      * 隐藏
      */
@@ -21,7 +20,7 @@ interface HTMLDivElement {
      * @param time 调用后删除的时间（延时删除）
      * @param callback 删除后的回调
      */
-    delete(time: number, callback: () => void): HTMLDivElement;
+    delete(time: number, callback?: () => void): HTMLDivElement;
     delete(): HTMLDivElement;
     /**
      * 将该节点div移除，并添加到目标处
@@ -76,13 +75,4 @@ interface HTMLDivElement {
     css<T extends keyof CSSStyleDeclaration>(style: {
         [key in T]?: string
     }): void;
-}
-
-interface HTMLTableElement {
-    /**
-     * 获取该div下表结构row行，col列的元素
-     * @param row 
-     * @param col 
-     */
-    get(row: number, col: number): HTMLElement;
 }

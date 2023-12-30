@@ -1,10 +1,7 @@
 // noname内扩展的一些array方法：
 declare interface Array<T> {
-    /** 是否包含这一元素(被无名杀覆盖的原生方法) */
-    // find(item): boolean;
     /**
-     * 是否包含这一元素
-     * @param item 
+     * @deprecated 已废弃，请使用includes
      */
     contains(item: T): boolean;
     /**
