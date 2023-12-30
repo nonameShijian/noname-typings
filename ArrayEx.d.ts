@@ -11,12 +11,12 @@ declare interface Array<T> {
      * 1. 当添加成功时，返回此数组 
      * 2. 添加失败(已有此元素)时返回false，若传入多个参数，且添加失败时，后面的元素不再进行添加操作
      */
-    add(...args: T[]): Array<T> | false;
+    add(...args: T[]): this | false;
     /**
      * 添加一个数组的所有元素到该数组中(循环执行this.add)，此时参数arr中若有一个数组元素可能会出现bug
      * @param arr 
      */
-    addArray(arr: T[]): Array<T>;
+    addArray(arr: T[]): this;
     /**
      * 移除一个元素出该数组(该元素不能是数组)
      * @param item 
@@ -25,14 +25,14 @@ declare interface Array<T> {
      * 2. 移除失败(没有此元素)时返回false 
      * 3. 传入参数为一个数组时，返回undefined
      */
-    remove(item: T): Array<T> | false;
+    remove(item: T): this | false;
 
     remove(item: T[]): void;
     /**
      * 将一个数组的所有元素移除出该数组(循环执行this.remove)，此时参数arr中若有一个数组元素可能会出现bug
      * @param arr 
      */
-    removeArray(arr: T[]): Array<T>;
+    removeArray(arr: T[]): this;
     /**
      * 随机获得该数组的一个元素
      * @param args 设置需要排除掉的部分元素；
@@ -51,14 +51,14 @@ declare interface Array<T> {
     /**
      * 随机重新排序数组（数组乱序）
      */
-    randomSort(): Array<T>;
+    randomSort(): this;
     /**
      * 随机获取数组的元素
      * 
      * 返回的是一个重新整合的数组
      * @param num 获取的数量, 不传参视为0
      */
-    randomGets(num?: number): Array<T>;
+    randomGets(num?: number): this;
     /**
      * 对所有玩家进行排序
      * 

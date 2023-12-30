@@ -43,7 +43,7 @@ declare interface Window {
     eo?: Error;
 
     game: Game;
-    lib: Lib;
+    lib: Library;
     _status: Status;
     ui: UI;
     get: Get;
@@ -60,7 +60,7 @@ declare interface Window {
     /** 【应用配置扩展】全局变量获取无名杀的变量 */
     newExtensionApi: {
         game: Game;
-        lib: Lib;
+        lib: Library;
         _status: Status;
         ui: UI;
         get: Get;
