@@ -13,9 +13,7 @@ declare interface Window {
     }
 
     /** 游戏配置 */
-    config: {
-        forbidai: string[],
-    }
+    config: SMap<any>,
 
     /** 游戏源列表（预加载资源列表，待验证） */
     noname_source_list?: string[],
@@ -68,8 +66,8 @@ declare interface Window {
         get: Get;
         ai: AI;
     }
-
-    initReadWriteFunction?(game: Game): void;
+    /** 为其他自定义平台提供文件读写函数赋值的一种方式 */
+    initReadWriteFunction?(game: Game): Promise<void>;
 
     bannedKeyWords: string[];
 }

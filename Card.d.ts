@@ -2,10 +2,10 @@ declare type CardBaseUIData = {
 	name?: string;
 	suit?: string;
 	number?: number;
-	nature?: string;
+	nature?: string | null;
 
 	//用于某些方法，用于过滤卡牌的额外结构
-	type?: string;
+	type?: string | string[];
 	subtype?: string;
 	color?: string;
 
