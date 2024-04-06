@@ -14,3 +14,7 @@
 /// <reference path="./cordova-plugin-file-transfer.d.ts" />
 /// <reference path="./cordova-plugin-local-notifications.d.ts" />
 /// <reference path="./electron.d.ts" />
+/// <reference path="./nonameModules/noname.d.ts" />
+declare module "noname-typings" {
+	
+}

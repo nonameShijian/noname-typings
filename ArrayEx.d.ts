@@ -4,6 +4,8 @@ declare interface Array<T> {
      * @deprecated 已废弃，请使用includes
      */
     contains(item: T): boolean;
+    containsSome(...item: T): boolean;
+    containsAll(...item: T): boolean;
     /**
      * 添加任意元素进数组中
      * @param args 
@@ -32,7 +34,7 @@ declare interface Array<T> {
      * 将一个数组的所有元素移除出该数组(循环执行this.remove)，此时参数arr中若有一个数组元素可能会出现bug
      * @param arr 
      */
-    removeArray(arr: T[]): this;
+    removeArray(...arr: T[]): this;
     /**
      * 随机获得该数组的一个元素
      * @param args 设置需要排除掉的部分元素；
@@ -46,8 +48,8 @@ declare interface Array<T> {
      * 2. 移除多个元素，返回一个被移除元素组成的数组
      * 3. 数组无元素返回undefined
      */
-    randomRemove(num: number): T | T[];
-    randomRemove(num: T): T | undefined;
+    randomRemove(num?: number): T | T[];
+    randomRemove(num?: T): T | undefined;
     /**
      * 随机重新排序数组（数组乱序）
      */
@@ -77,7 +79,9 @@ declare interface Array<T> {
      * 例：list.filterInD('h') 即判断数组中所有位于手牌区的卡牌
      * @param poiston 指定的区域，默认是 'o'
      */
-    filterInD(poiston?: string): Card[];
+    filterInD(poiston?: "e" | "j" | "x" | "s" | "h" | "c" | "d" | "o"): Card[];
+    someInD(poiston?: "e" | "j" | "x" | "s" | "h" | "c" | "d" | "o"): boolean;
+    everyInD(poiston?: "e" | "j" | "x" | "s" | "h" | "c" | "d" | "o"): boolean;
 
     //关于处理区：
     /*
@@ -100,5 +104,9 @@ declare interface Array<T> {
     /**
      * 获取 item 在数组中出现的次数
      */
-    numOf(item: T): number
+    numOf(item: T): number;
+    unique(): this;
+    toUniqued(): T[];
+    maxBy(sortBy?: Function, filter?: typeof Array['prototype']['filter']): T;
+    minBy(sortBy?: Function, filter?: typeof Array['prototype']['filter']): T;
 }

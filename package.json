@@ -1,6 +1,6 @@
 {
 	"name": "noname-typings",
-	"version": "2024.02.06",
+	"version": "2024.04.06",
 	"description": "Noname typings, mainly for showing type hints when creating extensions of the Sanguosha-like game Noname.",
 	"repository": {
 		"type": "git",
@@ -22,6 +22,8 @@
 	"homepage": "https://github.com/nonameShijian/noname-typings#readme",
 	"dependencies": {
 		"@types/cordova": "*",
-		"@types/node": "*"
+		"@types/node": "*",
+		"@types/codemirror": "*",
+		"@types/jszip": "^0.0.33"
 	}
 }

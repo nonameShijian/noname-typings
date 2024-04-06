@@ -1,6 +1,12 @@
 //noname内扩展的一些HTMLDivElement方法：
 interface HTMLDivElement {
     _link: any;
+    timeout?: number;
+    destiny?: HTMLDivElement;
+    _listeningEnd?: boolean;
+    _transitionEnded?: boolean;
+    _onEndDelete?: boolean;
+    _selfDestroyed?: boolean;
     /**
      * 增加一个动画（增加className动画标记）
      * 
@@ -20,8 +26,7 @@ interface HTMLDivElement {
      * @param time 调用后删除的时间（延时删除）
      * @param callback 删除后的回调
      */
-    delete(time: number, callback?: () => void): this;
-    delete(): this;
+    delete(time?: number, callback?: () => void): this;
     /**
      * 将该节点div移除，并添加到目标处
      * 
@@ -46,12 +51,12 @@ interface HTMLDivElement {
      * 设置游戏背景，并且缓存该设置
      * @param img 
      */
-    setBackgroundDB(img: string): this;
+    setBackgroundDB(img: string): Promise<this>;
     /**
      * 设置背景
      * @param img 
      */
-    setBackgroundImage(img: string): this;
+    setBackgroundImage(img: string | string[]): this;
     /**
      * 设置触摸/点击监听
      * @param func 
@@ -73,6 +78,8 @@ interface HTMLDivElement {
      * @param style 
      */
     css<T extends keyof CSSStyleDeclaration>(style: {
-        [key in T]?: string
+        [key in T]?: string;
+    } & {
+        innerHTML?: string;
     }): this;
 }

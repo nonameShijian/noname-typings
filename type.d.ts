@@ -59,31 +59,51 @@ declare type GeneratorContentFuncByAll = (event: GameEventPromise, map: {
 
 declare type OldContentFuncByAll = () => void
 
-declare type Game = typeof import('../../noname/game/index.js').Game;
-declare type Library = typeof import('../../noname/library/index.js').Library;
-declare type Status = typeof import('../../noname/status/index.js').status;
-declare type UI = typeof import('../../noname/ui/index.js').UI;
-declare type Get = typeof import('../../noname/get/index.js').Get;
-declare type AI = typeof import('../../noname/ai/index.js').AI;
+declare type Game = typeof import('./nonameModules/noname.d.ts').game;
+declare type Library = typeof import('./nonameModules/noname.d.ts').lib;
+declare type Status = typeof import('./nonameModules/noname.d.ts')._status;
+declare type UI = typeof import('./nonameModules/noname.d.ts').ui;
+declare type Get = typeof import('./nonameModules/noname.d.ts').get;
+declare type AI = typeof import('./nonameModules/noname.d.ts').ai;
 
-declare type Button = import('../../noname/library/index.js').Button;
-declare type Card = import('../../noname/library/index.js').Card;
-declare type VCard = import('../../noname/library/index.js').VCard;
-declare type Dialog = import('../../noname/library/index.js').Dialog;
-declare type GameEvent = import('../../noname/library/index.js').GameEvent;
-declare type GameEventPromise = import('../../noname/library/index.js').GameEventPromise;
-declare type Player = import('../../noname/library/index.js').Player;
-declare type VCard = import('../../noname/library/index.js').VCard;
-declare type Control = import('../../noname/library/index.js').Control;
+declare type Button = import('./nonameModules/noname/library/index.js').Button;
+declare type Card = import('./nonameModules/noname/library/index.js').Card;
+declare type VCard = import('./nonameModules/noname/library/index.js').VCard;
+declare type Dialog = import('./nonameModules/noname/library/index.js').Dialog;
+declare type GameEvent = import('./nonameModules/noname/library/index.js').GameEvent;
+declare type GameEventPromise = import('./nonameModules/noname/library/index.js').GameEventPromise;
+declare type Player = import('./nonameModules/noname/library/index.js').Player;
+declare type Control = import('./nonameModules/noname/library/index.js').Control;
 
-declare type Video = import('../../noname/game/index.js').Video;
-declare type Videos = import('../../noname/game/index.js').Videos;
-declare type GameHistory = import('../../noname/game/index.js').GameHistory;
-declare type CodeMirror = typeof import('../../game/codemirror.js').default;
+declare type Video = import('./nonameModules/noname/game/index.js').Video;
+declare type Videos = import('./nonameModules/noname/game/index.js').Videos;
+declare type GameHistory = import('./nonameModules/noname/game/index.js').GameHistory;
+// declare type CodeMirror = typeof import('codemirror/index');
 
 declare type Sex = 'male' | 'female' | 'dobule' | 'none';
 declare type Character = [Sex, string, number | string, string[], string[]] | [Sex, string, number | string, string[]];
 declare type Select = [number, number];
+
+declare interface progress extends HTMLDivElement {
+    /** 获取标题 */
+    getTitle: () => string;
+    /** 更改标题 */
+    setTitle: (title: string) => void;
+    /** 获取显示的文件名 */
+    getFileName: () => string;
+    /** 更改显示的文件名 */
+    setFileName: (title: string) => void;
+    /** 获取进度*/
+    getProgressValue: () => number;
+    /** 更改进度*/
+    setProgressValue: (value: number) => void;
+    /** 获取下载文件总数 */
+    getProgressMax: () => number;
+    /** 修改下载文件总数 */
+    setProgressMax: (max: number) => void;
+    /** 通过数组自动解析文件名 */
+    autoSetFileNameFromArray: (fileNameList: string[]) => void;
+}
 
 /**
  * 导入武将包的配置
@@ -269,7 +289,7 @@ declare interface importModeConfig {
      */
     characterSort?: SMap<SMap<string[]>>;
     /** 卡牌（主要是放些该模式下特有的卡牌） */
-    card?: SMap<ExCardData>;
+    card?: SMap<Card>;
     /** 
      * 卡包
      */

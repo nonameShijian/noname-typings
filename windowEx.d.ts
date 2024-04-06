@@ -25,7 +25,7 @@ declare interface Window {
     noname_skin_list?: SMap<number>;
 
     /** codeMirror,一个代码编辑器库 */
-    CodeMirror: CodeMirror;
+    // CodeMirror: typeof import('codemirror/index');
 
     resetGameTimeout: number;
 
