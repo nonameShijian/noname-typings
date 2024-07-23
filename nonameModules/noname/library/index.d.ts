@@ -1,51 +1,51 @@
 /// <reference types="node" />
-export class Library extends Uninstantable {
-    static configprefix: string;
-    static versionOL: number;
-    static updateURLS: {
+export class Library {
+    configprefix: string;
+    versionOL: number;
+    updateURLS: {
         coding: string;
         github: string;
     };
-    static updateURL: string;
-    static mirrorURL: string;
-    static hallURL: string;
-    static assetURL: string;
-    static userAgent: string;
-    static characterDefaultPicturePath: string;
-    static compatibleEdition: boolean;
-    static changeLog: any[];
-    static updates: any[];
-    static canvasUpdates: any[];
+    updateURL: string;
+    mirrorURL: string;
+    hallURL: string;
+    assetURL: string;
+    userAgent: string;
+    characterDefaultPicturePath: string;
+    compatibleEdition: boolean;
+    changeLog: any[];
+    updates: any[];
+    canvasUpdates: any[];
     /**
      * @type { Video[] }
      */
-    static video: Video[];
-    static skilllist: any[];
-    static connectBanned: any[];
-    static characterIntro: {};
-    static characterTitle: {};
-    static characterPack: {};
-    static characterFilter: {};
-    static characterSort: {};
-    static characterReplace: {};
-    static characterSubstitute: {};
-    static characterInitFilter: {};
-    static characterGuozhanFilter: string[];
-    static dynamicTranslate: {};
-    static cardPack: {};
-    static cardPackInfo: {};
+    video: Video[];
+    skilllist: any[];
+    connectBanned: any[];
+    characterIntro: {};
+    characterTitle: {};
+    characterPack: {};
+    characterFilter: {};
+    characterSort: {};
+    characterReplace: {};
+    characterSubstitute: {};
+    characterInitFilter: {};
+    characterGuozhanFilter: string[];
+    dynamicTranslate: {};
+    cardPack: {};
+    cardPackInfo: {};
     /**
      * @type { SMap<number> }
      */
-    static skin: SMap<number>;
-    static onresize: any[];
-    static onphase: any[];
-    static onwash: any[];
-    static onover: any[];
-    static ondb: any[];
-    static ondb2: any[];
-    static chatHistory: any[];
-    static emotionList: {
+    skin: SMap<number>;
+    onresize: any[];
+    onphase: any[];
+    onwash: any[];
+    onover: any[];
+    ondb: any[];
+    ondb2: any[];
+    chatHistory: any[];
+    emotionList: {
         xiaowu_emotion: number;
         xiaokuo_emotion: number;
         shibing_emotion: number;
@@ -55,37 +55,84 @@ export class Library extends Uninstantable {
         xiaotao_emotion: number;
         xiaojiu_emotion: number;
     };
-    static animate: {
+    animate: {
         skill: {};
         card: {};
     };
-    static onload: any[];
-    static onload2: any[];
-    static onprepare: any[];
-    static arenaReady: any[];
-    static onfree: any[];
-    static inpile: any[];
-    static inpile_nature: any[];
-    static extensions: any[];
-    static extensionPack: {};
-    static cardType: {};
-    static hook: {
+    onload: any[];
+    onload2: any[];
+    onprepare: any[];
+    /**
+     * @type { Function[] | undefined }
+     */
+    arenaReady: Function[] | undefined;
+    onfree: any[];
+    inpile: any[];
+    inpile_nature: any[];
+    extensions: any[];
+    extensionPack: {};
+    /**
+     * @type { IOnloadSplash[] }
+     */
+    onloadSplashes: IOnloadSplash[];
+    cardType: {};
+    hook: {
         globalskill: {};
     };
     /**
      *  @type { Player | undefined }
      */
-    static tempSortSeat: Player | undefined;
+    tempSortSeat: Player | undefined;
     /**
-    * @returns { never }
-    */
-    static typeAnnotation(): never;
+     * @type { 'android' | 'ios' | undefined }
+     */
+    device: 'android' | 'ios' | undefined;
+    /**
+     * @type { string }
+     */
+    version: string;
+    /**
+     * @type { Videos[] }
+     */
+    videos: Videos[];
+    /**
+     * @type { {
+     * 	fs: typeof import("fs"),
+     *  path: typeof import("path"),
+     *  debug: () => void,
+     *  clients: Element.Client[],
+     *  banned:[],
+     *  observing:[],
+     *  torespond:{},
+     *  torespondtimeout:{},
+     * } }
+     */
+    node: {
+        fs: typeof import("fs");
+        path: typeof import("path");
+        debug: () => void;
+        clients: Element.Client[];
+        banned: [];
+        observing: [];
+        torespond: {};
+        torespondtimeout: {};
+    };
+    /**
+     * @type { { [key: string]: Player } }
+     */
+    playerOL: {
+        [key: string]: Element.Player;
+    };
+    /**
+     * @type { IDBRequest<IDBDatabase> }
+     */
+    db: IDBRequest<IDBDatabase>;
     /**
      * 你可以往这里加入{钩子名:函数数组}，并在数组里增加你的自定义函数
      * 这样当某个地方调用game.callHook(钩子名,[...函数参数])时，就会按顺序将对应数组中的每个函数运行一遍（传参为callHook的第二个参数）。
      * 你可以将hook机制类比为event.trigger()，但是这里只能放同步代码
      */
-    static hooks: Readonly<{
+    hooks: Readonly<{
         checkBegin: import("./assembly/index.js").NonameAssembly<import("./assembly/interface.js").NonameAssemblyType, "checkBegin">;
         checkCard: import("./assembly/index.js").NonameAssembly<import("./assembly/interface.js").NonameAssemblyType, "checkCard">;
         checkTarget: import("./assembly/index.js").NonameAssembly<import("./assembly/interface.js").NonameAssemblyType, "checkTarget">;
@@ -120,7 +167,7 @@ export class Library extends Uninstantable {
      * // 从某个角落向channel发消息，若无消息接收则等待
      * await channel.send(item);
      */
-    static channel: typeof Channel;
+    channel: typeof Channel;
     /**
      * **无名杀消息推送库**
      *
@@ -146,12 +193,12 @@ export class Library extends Uninstantable {
      * // 若此时乙扩展不想继续订阅`skinChange`事件，可以通过`unsubscribe`解除订阅
      * lib.announce.unsubscribe("skinChange", method);
      */
-    static announce: Announce;
-    static objectURL: Map<any, any>;
-    static hookmap: {};
-    static imported: {};
-    static layoutfixed: string[];
-    static pinyins: {
+    announce: Announce;
+    objectURL: Map<any, any>;
+    hookmap: {};
+    imported: {};
+    layoutfixed: string[];
+    pinyins: {
         _metadata: {
             shengmu: string[];
             special_shengmu: string[];
@@ -184,10 +231,10 @@ export class Library extends Uninstantable {
      *
      * 应变
      */
-    static yingbian: {
+    yingbian: {
         condition: {
             color: Map<string, string>;
-            complex: Map<string, (event: any, ...args: any[]) => GameEventPromise>;
+            complex: Map<string, (event: any, ...args: any[]) => Element.GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise>;
             simple: Map<string, (event: any) => any>;
         };
         effect: Map<string, () => void>;
@@ -198,7 +245,7 @@ export class Library extends Uninstantable {
      *
      * 谋攻强化
      */
-    static stratagemBuff: {
+    stratagemBuff: {
         cost: Map<string, number>;
         effect: Map<string, (event: any, option: any) => void>;
         prompt: Map<string, () => string>;
@@ -208,13 +255,13 @@ export class Library extends Uninstantable {
      *
      * 实际的卡牌名称
      */
-    static actualCardName: Map<string, string>;
-    static characterDialogGroup: {
+    actualCardName: Map<string, string>;
+    characterDialogGroup: {
         收藏: (name: any, capt: any) => any;
         最近: (name: any, capt: any) => any;
     };
-    static listenEnd(node: any): void;
-    static configMenu: {
+    listenEnd(node: any): void;
+    configMenu: {
         general: {
             name: string;
             config: {
@@ -463,11 +510,11 @@ export class Library extends Uninstantable {
                     intro: string;
                     init: string;
                     item: {
-                        '500': string;
-                        '700': string;
-                        '1000': string;
-                        '1500': string;
-                        '2500': string;
+                        500: string;
+                        700: string;
+                        1000: string;
+                        1500: string;
+                        2500: string;
                     };
                 };
                 doubleclick_intro: {
@@ -481,12 +528,26 @@ export class Library extends Uninstantable {
                     init: string;
                     intro: string;
                     item: {
-                        '0': string;
-                        '5': string;
-                        '10': string;
-                        '20': string;
-                        '50': string;
-                        '10000': string;
+                        0: string;
+                        5: string;
+                        10: string;
+                        20: string;
+                        50: string;
+                        10000: string;
+                    };
+                    unfrequent: boolean;
+                };
+                video_default_play_speed: {
+                    name: string;
+                    init: string;
+                    intro: string;
+                    item: {
+                        "0.25x": string;
+                        "0.5x": string;
+                        "1x": string;
+                        "1.5x": string;
+                        "2x": string;
+                        "4x": string;
                     };
                     unfrequent: boolean;
                 };
@@ -606,7 +667,7 @@ export class Library extends Uninstantable {
                         style1: string;
                         style2: string;
                     };
-                    visualMenu: (node: any, link: any) => void;
+                    visualMenu: (node: any, link: any) => Promise<void>;
                 };
                 player_height: {
                     name: string;
@@ -679,10 +740,10 @@ export class Library extends Uninstantable {
                     init: string;
                     item: {
                         off: string;
-                        '30000': string;
-                        '60000': string;
-                        '120000': string;
-                        '300000': string;
+                        30000: string;
+                        60000: string;
+                        120000: string;
+                        300000: string;
                     };
                     intro: string;
                     onclick(item: any): void;
@@ -849,17 +910,17 @@ export class Library extends Uninstantable {
                     name: string;
                     init: string;
                     item: {
-                        '-5x': string;
-                        '-4x': string;
-                        '-3x': string;
-                        '-2x': string;
-                        '-1x': string;
-                        '0x': string;
-                        '1x': string;
-                        '2x': string;
-                        '3x': string;
-                        '4x': string;
-                        '5x': string;
+                        "-5x": string;
+                        "-4x": string;
+                        "-3x": string;
+                        "-2x": string;
+                        "-1x": string;
+                        "0x": string;
+                        "1x": string;
+                        "2x": string;
+                        "3x": string;
+                        "4x": string;
+                        "5x": string;
                     };
                     unfrequent: boolean;
                     onclick(item: any): void;
@@ -868,17 +929,17 @@ export class Library extends Uninstantable {
                     name: string;
                     init: string;
                     item: {
-                        '-5x': string;
-                        '-4x': string;
-                        '-3x': string;
-                        '-2x': string;
-                        '-1x': string;
-                        '0x': string;
-                        '1x': string;
-                        '2x': string;
-                        '3x': string;
-                        '4x': string;
-                        '5x': string;
+                        "-5x": string;
+                        "-4x": string;
+                        "-3x": string;
+                        "-2x": string;
+                        "-1x": string;
+                        "0x": string;
+                        "1x": string;
+                        "2x": string;
+                        "3x": string;
+                        "4x": string;
+                        "5x": string;
                     };
                     unfrequent: boolean;
                     onclick(item: any): void;
@@ -887,17 +948,17 @@ export class Library extends Uninstantable {
                     name: string;
                     init: string;
                     item: {
-                        '-5x': string;
-                        '-4x': string;
-                        '-3x': string;
-                        '-2x': string;
-                        '-1x': string;
-                        '0x': string;
-                        '1x': string;
-                        '2x': string;
-                        '3x': string;
-                        '4x': string;
-                        '5x': string;
+                        "-5x": string;
+                        "-4x": string;
+                        "-3x": string;
+                        "-2x": string;
+                        "-1x": string;
+                        "0x": string;
+                        "1x": string;
+                        "2x": string;
+                        "3x": string;
+                        "4x": string;
+                        "5x": string;
                     };
                     unfrequent: boolean;
                     onclick(item: any): void;
@@ -906,17 +967,17 @@ export class Library extends Uninstantable {
                     name: string;
                     init: string;
                     item: {
-                        '-5x': string;
-                        '-4x': string;
-                        '-3x': string;
-                        '-2x': string;
-                        '-1x': string;
-                        '0x': string;
-                        '1x': string;
-                        '2x': string;
-                        '3x': string;
-                        '4x': string;
-                        '5x': string;
+                        "-5x": string;
+                        "-4x": string;
+                        "-3x": string;
+                        "-2x": string;
+                        "-1x": string;
+                        "0x": string;
+                        "1x": string;
+                        "2x": string;
+                        "3x": string;
+                        "4x": string;
+                        "5x": string;
                     };
                     unfrequent: boolean;
                     onclick(item: any): void;
@@ -1350,10 +1411,10 @@ export class Library extends Uninstantable {
                     intro: string;
                     init: string;
                     item: {
-                        '6': string;
-                        '12': string;
-                        '20': string;
-                        '30': string;
+                        6: string;
+                        12: string;
+                        20: string;
+                        30: string;
                     };
                     unfrequent: boolean;
                 };
@@ -1584,15 +1645,15 @@ export class Library extends Uninstantable {
                     name: string;
                     init: number;
                     item: {
-                        '0': string;
-                        '1': string;
-                        '2': string;
-                        '3': string;
-                        '4': string;
-                        '5': string;
-                        '6': string;
-                        '7': string;
-                        '8': string;
+                        0: string;
+                        1: string;
+                        2: string;
+                        3: string;
+                        4: string;
+                        5: string;
+                        6: string;
+                        7: string;
+                        8: string;
                     };
                     onclick(volume: any): void;
                 };
@@ -1600,15 +1661,15 @@ export class Library extends Uninstantable {
                     name: string;
                     init: number;
                     item: {
-                        '0': string;
-                        '1': string;
-                        '2': string;
-                        '3': string;
-                        '4': string;
-                        '5': string;
-                        '6': string;
-                        '7': string;
-                        '8': string;
+                        0: string;
+                        1: string;
+                        2: string;
+                        3: string;
+                        4: string;
+                        5: string;
+                        6: string;
+                        7: string;
+                        8: string;
                     };
                     onclick(volume: any): void;
                 };
@@ -1666,7 +1727,7 @@ export class Library extends Uninstantable {
             };
         };
     };
-    static extensionMenu: {
+    extensionMenu: {
         cardpile: {
             enable: {
                 name: string;
@@ -1682,108 +1743,108 @@ export class Library extends Uninstantable {
                 name: string;
                 init: string;
                 item: {
-                    '1': string;
-                    '0.5': string;
-                    '0': string;
+                    1: string;
+                    0.5: string;
+                    0: string;
                 };
             };
             huosha: {
                 name: string;
                 init: string;
                 item: {
-                    '1': string;
-                    '0.5': string;
-                    '0': string;
+                    1: string;
+                    0.5: string;
+                    0: string;
                 };
             };
             leisha: {
                 name: string;
                 init: string;
                 item: {
-                    '1': string;
-                    '0.5': string;
-                    '0': string;
+                    1: string;
+                    0.5: string;
+                    0: string;
                 };
             };
             shan: {
                 name: string;
                 init: string;
                 item: {
-                    '1': string;
-                    '0.5': string;
-                    '0': string;
+                    1: string;
+                    0.5: string;
+                    0: string;
                 };
             };
             tao: {
                 name: string;
                 init: string;
                 item: {
-                    '1': string;
-                    '0.5': string;
-                    '0': string;
+                    1: string;
+                    0.5: string;
+                    0: string;
                 };
             };
             jiu: {
                 name: string;
                 init: string;
                 item: {
-                    '1': string;
-                    '0.5': string;
-                    '0': string;
+                    1: string;
+                    0.5: string;
+                    0: string;
                 };
             };
             wuxie: {
                 name: string;
                 init: string;
                 item: {
-                    '1': string;
-                    '0.5': string;
-                    '0': string;
+                    1: string;
+                    0.5: string;
+                    0: string;
                 };
             };
             nanman: {
                 name: string;
                 init: string;
                 item: {
-                    '1': string;
-                    '0.5': string;
-                    '0': string;
+                    1: string;
+                    0.5: string;
+                    0: string;
                 };
             };
             wanjian: {
                 name: string;
                 init: string;
                 item: {
-                    '1': string;
-                    '0.5': string;
-                    '0': string;
+                    1: string;
+                    0.5: string;
+                    0: string;
                 };
             };
             guohe: {
                 name: string;
                 init: string;
                 item: {
-                    '1': string;
-                    '0.5': string;
-                    '0': string;
+                    1: string;
+                    0.5: string;
+                    0: string;
                 };
             };
             shunshou: {
                 name: string;
                 init: string;
                 item: {
-                    '1': string;
-                    '0.5': string;
-                    '0': string;
+                    1: string;
+                    0.5: string;
+                    0: string;
                 };
             };
             tiesuo: {
                 name: string;
                 init: string;
                 item: {
-                    '1': string;
-                    '0.5': string;
-                    '0': string;
+                    1: string;
+                    0.5: string;
+                    0: string;
                 };
             };
             hide: {
@@ -1829,10 +1890,10 @@ export class Library extends Uninstantable {
                 name: string;
                 init: string;
                 item: {
-                    '0.1': string;
-                    '0.2': string;
-                    '0.3': string;
-                    '0.5': string;
+                    0.1: string;
+                    0.2: string;
+                    0.3: string;
+                    0.5: string;
                 };
             };
             hide: {
@@ -1874,7 +1935,7 @@ export class Library extends Uninstantable {
             };
         };
     };
-    static mode: {
+    mode: {
         identity: {
             name: string;
             connect: {
@@ -1906,9 +1967,9 @@ export class Library extends Uninstantable {
                     item: {
                         off: string;
                         group: string;
-                        '4': string;
-                        '6': string;
-                        '8': string;
+                        4: string;
+                        6: string;
+                        8: string;
                     };
                 };
                 connect_zhong_card: {
@@ -2181,12 +2242,12 @@ export class Library extends Uninstantable {
                     init: string;
                     restart: boolean;
                     item: {
-                        '3': string;
-                        '4': string;
-                        '5': string;
-                        '6': string;
-                        '8': string;
-                        '10': string;
+                        3: string;
+                        4: string;
+                        5: string;
+                        6: string;
+                        8: string;
+                        10: string;
                     };
                 };
                 limit_zhu: {
@@ -2196,9 +2257,9 @@ export class Library extends Uninstantable {
                     item: {
                         off: string;
                         group: string;
-                        '4': string;
-                        '6': string;
-                        '8': string;
+                        4: string;
+                        6: string;
+                        8: string;
                     };
                 };
                 choice_zhong: {
@@ -2206,12 +2267,12 @@ export class Library extends Uninstantable {
                     init: string;
                     restart: boolean;
                     item: {
-                        '3': string;
-                        '4': string;
-                        '5': string;
-                        '6': string;
-                        '8': string;
-                        '10': string;
+                        3: string;
+                        4: string;
+                        5: string;
+                        6: string;
+                        8: string;
+                        10: string;
                     };
                 };
                 choice_nei: {
@@ -2219,12 +2280,12 @@ export class Library extends Uninstantable {
                     init: string;
                     restart: boolean;
                     item: {
-                        '3': string;
-                        '4': string;
-                        '5': string;
-                        '6': string;
-                        '8': string;
-                        '10': string;
+                        3: string;
+                        4: string;
+                        5: string;
+                        6: string;
+                        8: string;
+                        10: string;
                     };
                 };
                 choice_fan: {
@@ -2232,12 +2293,12 @@ export class Library extends Uninstantable {
                     init: string;
                     restart: boolean;
                     item: {
-                        '3': string;
-                        '4': string;
-                        '5': string;
-                        '6': string;
-                        '8': string;
-                        '10': string;
+                        3: string;
+                        4: string;
+                        5: string;
+                        6: string;
+                        8: string;
+                        10: string;
                     };
                 };
                 enable_commoner: {
@@ -2252,12 +2313,12 @@ export class Library extends Uninstantable {
                     init: string;
                     restart: boolean;
                     item: {
-                        '3': string;
-                        '4': string;
-                        '5': string;
-                        '6': string;
-                        '8': string;
-                        '10': string;
+                        3: string;
+                        4: string;
+                        5: string;
+                        6: string;
+                        8: string;
+                        10: string;
                     };
                 };
                 enable_year_limit: {
@@ -2512,12 +2573,12 @@ export class Library extends Uninstantable {
                     init: string;
                     restart: boolean;
                     item: {
-                        '5': string;
-                        '6': string;
-                        '7': string;
-                        '8': string;
-                        '9': string;
-                        '10': string;
+                        5: string;
+                        6: string;
+                        7: string;
+                        8: string;
+                        9: string;
+                        10: string;
                     };
                 };
             };
@@ -2530,10 +2591,10 @@ export class Library extends Uninstantable {
                     name: string;
                     init: string;
                     item: {
-                        '1v1': string;
-                        '2v2': string;
-                        '3v3': string;
-                        '4v4': string;
+                        "1v1": string;
+                        "2v2": string;
+                        "3v3": string;
+                        "4v4": string;
                         guandu: string;
                     };
                     frequent: boolean;
@@ -2555,11 +2616,11 @@ export class Library extends Uninstantable {
                     init: string;
                     frequent: boolean;
                     item: {
-                        '12': string;
-                        '16': string;
-                        '20': string;
-                        '24': string;
-                        '40': string;
+                        12: string;
+                        16: string;
+                        20: string;
+                        24: string;
+                        40: string;
                     };
                 };
                 connect_replace_number: {
@@ -2567,12 +2628,12 @@ export class Library extends Uninstantable {
                     init: string;
                     frequent: boolean;
                     item: {
-                        '0': string;
-                        '1': string;
-                        '2': string;
-                        '3': string;
-                        '4': string;
-                        '5': string;
+                        0: string;
+                        1: string;
+                        2: string;
+                        3: string;
+                        4: string;
+                        5: string;
                     };
                 };
             };
@@ -2909,12 +2970,12 @@ export class Library extends Uninstantable {
                     init: string;
                     restart: boolean;
                     item: {
-                        '3': string;
-                        '4': string;
-                        '5': string;
-                        '6': string;
-                        '8': string;
-                        '10': string;
+                        3: string;
+                        4: string;
+                        5: string;
+                        6: string;
+                        8: string;
+                        10: string;
                     };
                 };
                 choice_fan: {
@@ -2922,12 +2983,12 @@ export class Library extends Uninstantable {
                     init: string;
                     restart: boolean;
                     item: {
-                        '3': string;
-                        '4': string;
-                        '5': string;
-                        '6': string;
-                        '8': string;
-                        '10': string;
+                        3: string;
+                        4: string;
+                        5: string;
+                        6: string;
+                        8: string;
+                        10: string;
                     };
                 };
                 edit_character: {
@@ -3049,10 +3110,10 @@ export class Library extends Uninstantable {
                     name: string;
                     init: string;
                     item: {
-                        '0': string;
-                        '0.2': string;
-                        '0.333': string;
-                        '0.5': string;
+                        0: string;
+                        0.2: string;
+                        0.333: string;
+                        0.5: string;
                     };
                     frequent: boolean;
                 };
@@ -3089,10 +3150,10 @@ export class Library extends Uninstantable {
                     init: string;
                     intro: string;
                     item: {
-                        '0': string;
-                        '10': string;
-                        '20': string;
-                        '30': string;
+                        0: string;
+                        10: string;
+                        20: string;
+                        30: string;
                     };
                 };
             };
@@ -3105,10 +3166,10 @@ export class Library extends Uninstantable {
                     init: string;
                     frequent: boolean;
                     item: {
-                        '10': string;
-                        '20': string;
-                        '30': string;
-                        '1000': string;
+                        10: string;
+                        20: string;
+                        30: string;
+                        1000: string;
                     };
                 };
                 tafang_difficulty: {
@@ -3116,9 +3177,9 @@ export class Library extends Uninstantable {
                     init: string;
                     frequent: boolean;
                     item: {
-                        '1': string;
-                        '2': string;
-                        '3': string;
+                        1: string;
+                        2: string;
+                        3: string;
                     };
                 };
                 show_range: {
@@ -3134,10 +3195,10 @@ export class Library extends Uninstantable {
                     intro: string;
                     init: string;
                     item: {
-                        '0': string;
-                        '10': string;
-                        '20': string;
-                        '30': string;
+                        0: string;
+                        10: string;
+                        20: string;
+                        30: string;
                     };
                 };
             };
@@ -3215,13 +3276,13 @@ export class Library extends Uninstantable {
                     init: string;
                     frequent: boolean;
                     item: {
-                        '1': string;
-                        '2': string;
-                        '3': string;
-                        '4': string;
-                        '6': string;
-                        '8': string;
-                        '10': string;
+                        1: string;
+                        2: string;
+                        3: string;
+                        4: string;
+                        6: string;
+                        8: string;
+                        10: string;
                     };
                     onclick(num: any): void;
                 };
@@ -3259,7 +3320,7 @@ export class Library extends Uninstantable {
             };
         };
     };
-    static status: {
+    status: {
         running: boolean;
         canvas: boolean;
         time: number;
@@ -3269,7 +3330,7 @@ export class Library extends Uninstantable {
         videoId: number;
         globalId: number;
     };
-    static help: {
+    help: {
         关于游戏: string;
         游戏操作: string;
         游戏命令: string;
@@ -3278,44 +3339,44 @@ export class Library extends Uninstantable {
     /**
      * @type {import('path')}
      */
-    static path: import("path").PlatformPath;
-    static getErrorTip(msg: any): any;
-    static codeMirrorReady(node: any, editor: any): void;
-    static setIntro(node: any, func: any, left: any): void;
-    static setPopped(node: any, func: any, width: any, height: any, forceclick: any, paused2: any): void;
-    static placePoppedDialog(dialog: any, e: any): void;
-    static setHover(node: any, func: any, hoveration: any, width: any): any;
-    static setScroll(node: any): any;
-    static setMousewheel(node: any): void;
-    static setLongPress(node: any, func: any): any;
-    static updateCanvas(time: any): boolean;
-    static run(time: any): void;
-    static getUTC(date: any): any;
-    static saveVideo(): void;
-    static genAsync(fn: any): (...args: any[]) => Promise<Generator<unknown, any, unknown>>;
-    static genAwait(item: any): Promise<any>;
-    static gnc: {
-        of: (fn: any) => (...args: any[]) => Promise<Generator<unknown, any, unknown>>;
+    path: import("path").PlatformPath;
+    getErrorTip(msg: any): any;
+    codeMirrorReady(node: any, editor: any): void;
+    setIntro(node: any, func: any, left: any): void;
+    setPopped(node: any, func: any, width: any, height: any, forceclick: any, paused2: any): void;
+    placePoppedDialog(dialog: any, e: any): void;
+    setHover(node: any, func: any, hoveration: any, width: any): any;
+    setScroll(node: any): any;
+    setMousewheel(node: any): void;
+    setLongPress(node: any, func: any): any;
+    updateCanvas(time: any): boolean;
+    run(time: any): void;
+    getUTC(date: any): any;
+    saveVideo(): void;
+    genAsync(fn: Function): (...args: any[]) => Promise<Generator<unknown, any, unknown>>;
+    genAwait(item: any): Promise<any>;
+    gnc: {
+        of: (fn: Function) => (...args: any[]) => Promise<Generator<unknown, any, unknown>>;
         is: {
             coroutine: (item: any) => boolean;
             generatorFunc: (item: any) => boolean;
             generator: (item: any) => boolean;
         };
     };
-    static comparator: {
+    comparator: {
         equals: (...args: any[]) => boolean;
         equalAny: (...args: any[]) => boolean;
         notEquals: (...args: any[]) => boolean;
         notEqualAny: (...args: any[]) => boolean;
         typeEquals: (...args: any[]) => boolean;
     };
-    static creation: {
+    creation: {
         readonly array: any[];
         readonly object: {};
         readonly nullObject: any;
         readonly string: string;
     };
-    static linq: {
+    linq: {
         cselector: {
             hasAttr: (name: any) => string;
             isAttr: (name: any, item: any) => string;
@@ -3348,8 +3409,8 @@ export class Library extends Uninstantable {
             div(...args: any[]): any;
         };
     };
-    static init: typeof LibInit;
-    static cheat: {
+    init: LibInit;
+    cheat: {
         /**
          * 将游戏内部的对象暴露到全局中
          *
@@ -3612,7 +3673,7 @@ export class Library extends Uninstantable {
          */
         z(name: string): void;
     };
-    static translate: {
+    translate: {
         flower: string;
         egg: string;
         wine: string;
@@ -3646,6 +3707,8 @@ export class Library extends Uninstantable {
         none2: string;
         red: string;
         black: string;
+        red2: string;
+        black2: string;
         ok: string;
         ok2: string;
         cancel: string;
@@ -3832,8 +3895,8 @@ export class Library extends Uninstantable {
         phaseDiscard: string;
         phaseJieshu: string;
     };
-    static experimental: typeof Experimental;
-    static element: {
+    experimental: typeof Experimental;
+    element: {
         content: {
             emptyEvent: () => void;
             changeCharacter(event: any, trigger: any, player: any): Promise<void>;
@@ -3864,8 +3927,8 @@ export class Library extends Uninstantable {
             cardsGotoOrdering: () => void;
             cardsGotoSpecial: () => void;
             cardsGotoPile: () => void;
-            chooseToEnable: () => void;
-            chooseToDisable: () => void;
+            chooseToEnable: (event: any, trigger: any, player: any) => Promise<void>;
+            chooseToDisable: (event: any, trigger: any, player: any) => Promise<void>;
             swapEquip: () => void;
             disableJudge: () => void;
             enableJudge: () => void;
@@ -3952,7 +4015,7 @@ export class Library extends Uninstantable {
             link: () => void;
             chooseToGuanxing: () => void;
         };
-        contents: SMap<((event: GameEventPromise, trigger: GameEventPromise, player: Element.Player) => Promise<any>)[]>;
+        contents: SMap<((event: import("noname-typings/nonameModules/noname/library/index.js").GameEventPromise, trigger: import("noname-typings/nonameModules/noname/library/index.js").GameEventPromise, player: import("noname-typings/nonameModules/noname/library/element/player.js").Player) => Promise<any>)[]>;
         Player: typeof Element.Player;
         Card: typeof Element.Card;
         VCard: typeof Element.VCard;
@@ -3963,6 +4026,7 @@ export class Library extends Uninstantable {
         Control: typeof Element.Control;
         Client: typeof Element.Client;
         NodeWS: typeof Element.NodeWS;
+        Character: typeof Element.Character;
         ws: {
             onopen: () => void;
             onmessage: (messageevent: any) => void;
@@ -4001,9 +4065,16 @@ export class Library extends Uninstantable {
          * @legacy Use {@link lib.element.NodeWS.prototype} instead.
          */
         readonly nodews: Element.NodeWS;
+        /**
+         * @legacy Use {@link lib.element.Character.prototype} instead.
+         */
+        readonly character: Element.Character;
     };
-    static card: {
-        list: any[];
+    card: {
+        /**
+         * @type { [CardBaseUIData['suit'], CardBaseUIData['number'], string][] }
+         */
+        list: [CardBaseUIData['suit'], CardBaseUIData['number'], string][];
         cooperation_damage: {
             fullskin: boolean;
         };
@@ -4118,7 +4189,7 @@ export class Library extends Uninstantable {
             fullimage: boolean;
         };
     };
-    static filter: {
+    filter: {
         all: () => boolean;
         none: () => boolean;
         /**
@@ -4206,7 +4277,7 @@ export class Library extends Uninstantable {
         autoRespondShan: () => boolean;
         wuxieSwap: (event: any) => boolean;
     };
-    static sort: {
+    sort: {
         nature: (a: any, b: any) => number;
         group: (a: any, b: any) => number;
         character: (a: any, b: any) => number;
@@ -4233,7 +4304,7 @@ export class Library extends Uninstantable {
      * 	[key: string]: Skill;
      * }}
      */
-    static skill: {
+    skill: {
         [key: string]: Skill;
         global: string[];
         globalmap: SMap<Player[]>;
@@ -4244,30 +4315,80 @@ export class Library extends Uninstantable {
         zhuSkill: SMap<any>;
         land_used: SMap<any>;
     };
-    static character: {};
-    static perfectPair: {};
-    static cardPile: {};
-    static message: {
+    /** @type {Object<string, import("./element/character.js").Character>} */
+    character: {
+        [x: string]: import("./element/character.js").Character;
+    };
+    perfectPair: {};
+    cardPile: {};
+    message: {
         server: {
-            /** @this { any } */
-            init(this: any, version: any, config: any, banned_info: any): void;
-            /** @this { any } */
-            inited(this: any): void;
-            /** @this { any } */
-            reinited(this: any): void;
-            result: (result: any) => void;
-            tempResult: (result: any) => void;
-            startGame: () => void;
-            changeRoomConfig: (config: any) => void;
-            changeNumConfig: (num: any, index: any, bool: any) => void;
-            throwEmotion: (target: any, emotion: any, rotate: any) => void;
-            emotion: (id: any, pack: any, emotion: any) => void;
-            chat: (id: any, str: any) => void;
-            giveup: (player: any) => void;
-            auto: () => void;
-            unauto: () => void;
-            exec: (func: any) => void;
-            log: (...args: any[]) => void;
+            /**
+             * @this {import("./element/client.js").Client}
+             */
+            init(this: Element.Client, version: any, config: any, banned_info: any): void;
+            /**
+             * @this {import("./element/client.js").Client}
+             */
+            inited(this: Element.Client): void;
+            /**
+             * @this {import("./element/client.js").Client}
+             */
+            reinited(this: Element.Client): void;
+            /**
+             * @this {import("./element/client.js").Client}
+             */
+            result(this: Element.Client, result: any): void;
+            /**
+             * @this {import("./element/client.js").Client}
+             */
+            tempResult(this: Element.Client, result: any): void;
+            /**
+             * @this {import("./element/client.js").Client}
+             */
+            startGame(this: Element.Client): void;
+            /**
+             * @this {import("./element/client.js").Client}
+             */
+            changeRoomConfig(this: Element.Client, config: any): void;
+            /**
+             * @this {import("./element/client.js").Client}
+             */
+            changeNumConfig(this: Element.Client, num: any, index: any, bool: any): void;
+            /**
+             * @this {import("./element/client.js").Client}
+             */
+            throwEmotion(this: Element.Client, target: any, emotion: any, rotate: any): void;
+            /**
+             * @this {import("./element/client.js").Client}
+             */
+            emotion(this: Element.Client, id: any, pack: any, emotion: any): void;
+            /**
+             * @this {import("./element/client.js").Client}
+             */
+            chat(this: Element.Client, id: any, str: any): void;
+            /**
+             * ```plain
+             * 当客机向主机发送投降请求时的回调
+             * ```
+             *
+             * @this {import("./element/client.js").Client}
+             * @param {Player} player
+             */
+            giveup(this: Element.Client, player: Player): void;
+            /**
+             * @this {import("./element/client.js").Client}
+             */
+            auto(this: Element.Client): void;
+            /**
+             * @this {import("./element/client.js").Client}
+             */
+            unauto(this: Element.Client): void;
+            exec(func: any): void;
+            /**
+             * @this {import("./element/client.js").Client}
+             */
+            log(this: Element.Client, ...args: any[]): void;
         };
         client: {
             log: (arr: any) => void;
@@ -4295,16 +4416,16 @@ export class Library extends Uninstantable {
             updateWaiting: (map: any) => void;
         };
     };
-    static suit: string[];
-    static suits: string[];
-    static color: {
+    suit: string[];
+    suits: string[];
+    color: {
         black: string[];
         red: string[];
         none: string[];
     };
-    static group: string[];
-    static nature: Map<string, number>;
-    static natureAudio: {
+    group: string[];
+    nature: Map<string, number>;
+    natureAudio: {
         damage: {
             fire: string;
             thunder: string;
@@ -4325,10 +4446,10 @@ export class Library extends Uninstantable {
             kami: string;
         };
     };
-    static linked: string[];
-    static natureBg: Map<string, string>;
-    static natureSeparator: string;
-    static namePrefix: Map<string, {
+    linked: string[];
+    natureBg: Map<string, string>;
+    natureSeparator: string;
+    namePrefix: Map<string, {
         color: string;
         nature: string;
         showName?: undefined;
@@ -4366,7 +4487,7 @@ export class Library extends Uninstantable {
         nature?: undefined;
         showName?: undefined;
     }>;
-    static groupnature: {
+    groupnature: {
         shen: string;
         wei: string;
         shu: string;
@@ -4377,48 +4498,33 @@ export class Library extends Uninstantable {
         jin: string;
         ye: string;
     };
-    static lineColor: Map<string, number[]>;
-    static phaseName: string[];
-    static quickVoice: string[];
-    static other: {
+    lineColor: Map<string, number[]>;
+    phaseName: string[];
+    quickVoice: string[];
+    other: {
         ignore: () => any;
     };
-    static InitFilter: {
+    InitFilter: {
         noZhuHp: string;
         noZhuSkill: string;
     };
+    config: any;
+    configOL: any;
 }
-export namespace Library {
-    let videos: Videos[];
-    let node: {
-        fs: typeof import("fs");
-        path: typeof import("path");
-        debug: () => void;
-        clients: Element.Client[];
-        banned: [];
-        observing: [];
-        torespond: {};
-        torespondtimeout: {};
-    };
-    let playerOL: {
-        [key: string]: string;
-    };
-    let config: any;
-    let configOL: any;
-}
-export const lib: typeof Library;
+export let lib: Library;
+export function setLibrary(instance?: InstanceType<typeof Library>): void;
 export type Player = InstanceType<typeof lib.element.Player>;
 export type Card = InstanceType<typeof lib.element.Card>;
 export type VCard = InstanceType<typeof lib.element.VCard>;
 export type Button = InstanceType<typeof lib.element.Button>;
 export type Dialog = InstanceType<typeof lib.element.Dialog>;
 export type GameEvent = InstanceType<typeof lib.element.GameEvent>;
-export type GameEventPromise = InstanceType<typeof lib.element.GameEvent> & InstanceType<typeof lib.element.GameEventPromise>;
+export type GameEventPromise = GameEvent & InstanceType<typeof lib.element.GameEventPromise>;
 export type NodeWS = InstanceType<typeof lib.element.NodeWS>;
 export type Control = InstanceType<typeof lib.element.Control>;
-import { Uninstantable } from "../util/index.js";
+export type IOnloadSplash = import("../init/onload/onload-splash.d.ts").OnloadSplash;
+import * as Element from "./element/index.js";
 import { Channel } from "./channel/index.js";
 import { Announce } from "./announce/index.js";
 import { LibInit } from "./init/index.js";
 import { Experimental } from "./experimental/index.js";
-import * as Element from "./element/index.js";

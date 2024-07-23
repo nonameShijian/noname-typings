@@ -1,12 +1,13 @@
-export class GNC extends Uninstantable {
+export class GNC {
     /**
-     * @param {GeneratorFunction} fn
-     * @returns
-     */
-    static of(fn: GeneratorFunction): (...args: any[]) => Promise<Generator<unknown, any, unknown>>;
-    static is: typeof Is;
+	 * @template {GeneratorFunction} T
+	 * @param {T} fn
+	 * @returns { (...args: Parameters<T>) => Promise<ReturnType<T>> }
+	 */
+    of<T extends GeneratorFunction>(fn: T): (...args: Parameters<T>) => Promise<ReturnType<T>>;
+    is: Is;
 }
-export const gnc: typeof GNC;
-import { Uninstantable } from "../util/index.js";
+export let gnc: GNC;
+export function setGNC(instance?: InstanceType<typeof GNC>): void;
 import { GeneratorFunction } from "../util/index.js";
 import { Is } from "./is.js";

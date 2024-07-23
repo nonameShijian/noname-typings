@@ -29,7 +29,7 @@ declare interface Window {
 
     resetGameTimeout: number;
 
-    cordovaLoadTimeout: number;
+    cordovaLoadTimeout?: number;
 
     /** window.onerror的参数列表 */
     ea?: any[];
@@ -70,4 +70,8 @@ declare interface Window {
     initReadWriteFunction?(game: Game): Promise<void>;
 
     bannedKeyWords: string[];
+
+    device: Device;
+
+    NonameAndroidBridge: NonameAndroidBridge;
 }

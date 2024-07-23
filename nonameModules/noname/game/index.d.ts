@@ -1,39 +1,43 @@
-export class Game extends Uninstantable {
-    static online: boolean;
-    static onlineID: any;
-    static onlineKey: any;
+export class Game extends GameCompatible {
+    online: boolean;
+    onlineID: any;
+    onlineKey: any;
     /**
      * @type {Player[]}
      */
-    static players: Player[];
+    players: Player[];
     /**
      * @type {Player[]}
      */
-    static dead: Player[];
-    static imported: any[];
+    dead: Player[];
+    imported: any[];
     /**
      * @type { { [key: string]: Player } }
      */
-    static playerMap: {
-        [key: string]: import("../library/element/player.js").Player;
+    playerMap: {
+        [key: string]: import("noname-typings/nonameModules/noname/library/element/player.js").Player;
     };
-    static phaseNumber: number;
-    static roundNumber: number;
-    static shuffleNumber: number;
-    static promises: typeof GamePromises;
+    phaseNumber: number;
+    roundNumber: number;
+    shuffleNumber: number;
+    promises: GamePromises;
     /**
      * @type { string }
      */
-    static layout: string;
+    layout: string;
     /**
      * @type { Player }
      */
-    static me: Player;
+    me: Player;
     /**
      * @type { boolean }
      */
-    static chess: boolean;
-    static globalEventHandlers: {
+    chess: boolean;
+    /**
+     * @type { Player }
+     */
+    zhu: Player;
+    globalEventHandlers: {
         _handlers: {};
         getHandler(name: any, type: any): any;
         ensureHandlerList(name: any, type: any): any;
@@ -42,29 +46,29 @@ export class Game extends Uninstantable {
         getDefaultHandlerType(name: any): string;
         addHandlerToEvent(event: any): void;
     };
-    static setStratagemBuffCost(cardName: any, cost: any): void;
-    static setStratagemBuffEffect(cardName: any, effect: any): void;
-    static setStratagemBuffPrompt(cardName: any, prompt: any): void;
+    setStratagemBuffCost(cardName: any, cost: any): void;
+    setStratagemBuffEffect(cardName: any, effect: any): void;
+    setStratagemBuffPrompt(cardName: any, prompt: any): void;
     /**
      * 添加新的属性杀
      */
-    static addNature(nature: any, translation: any, config: any): any;
+    addNature(nature: any, translation: any, config: any): any;
     /**
      * 判断卡牌信息/事件是否有某个属性
      */
-    static hasNature(item: any, nature: any, player: any): boolean;
+    hasNature(item: any, nature: any, player: any): boolean;
     /**
      * 设置卡牌信息/事件的属性
      */
-    static setNature(item: any, nature: any, addNature: any): any;
+    setNature(item: any, nature: any, addNature: any): any;
     /**
      * 洗牌
      */
-    static washCard(): false | any[] | import("../library/index.js").GameEventPromise;
+    washCard(): false | any[] | (import("../library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise);
     /**
      * 基于钩子的添加势力方法
      */
-    static addGroup(id: any, short: any, name: any, config: any): any;
+    addGroup(id: any, short: any, name: any, config: any): any;
     /**
      * @typedef {import("../library/hooks/interface.js").NonameHookType} NonameHookType
      */
@@ -76,13 +80,13 @@ export class Game extends Uninstantable {
      * @param {Name} name
      * @param {Parameters<HookType[Name]>} args
      */
-    static callHook<HookType extends import("../library/hooks/interface.js").NonameHookType, Name extends keyof HookType>(name: Name, args: Parameters<HookType[Name]>): void;
-    static yingbianEffect(event: any, content: any, ...args: any[]): import("../library/index.js").GameEventPromise;
-    static setYingbianConditionColor(yingbianCondition: any, color: any): void;
-    static setComplexYingbianCondition(yingbianCondition: any, condition: any): void;
-    static setSimpleYingbianCondition(yingbianCondition: any, condition: any): void;
-    static setYingbianEffect(yingbianEffect: any, effect: any): void;
-    static setYingbianPrompt(yingbian: any, prompt: any): void;
+    callHook<HookType extends import("../library/hooks/interface.js").NonameHookType, Name extends keyof HookType>(name: Name, args: Parameters<HookType[Name]>): void;
+    yingbianEffect(event: any, content: any, ...args: any[]): import("../library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    setYingbianConditionColor(yingbianCondition: any, color: any): void;
+    setComplexYingbianCondition(yingbianCondition: any, condition: any): void;
+    setSimpleYingbianCondition(yingbianCondition: any, condition: any): void;
+    setYingbianEffect(yingbianEffect: any, effect: any): void;
+    setYingbianPrompt(yingbian: any, prompt: any): void;
     /**
      * Dynamic Style Manager
      * 动态CSS管理对象
@@ -127,49 +131,49 @@ export class Game extends Uninstantable {
      * 	textAlign: "center"
      * });
      */
-    static dynamicStyle: DynamicStyle;
+    dynamicStyle: DynamicStyle;
     /**
      * Add a background music to the config option
      *
      * 在设置选项中添加一首背景音乐
      */
-    static addBackgroundMusic(link: any, musicName: any, aozhan: any): void;
+    addBackgroundMusic(link: any, musicName: any, aozhan: any): void;
     /**
      * Remove a background music from the config option
      *
      * 从设置选项中移除一首背景音乐
      */
-    static removeBackgroundMusic(link: any, aozhan: any): void;
-    static updateBackground(): void;
+    removeBackgroundMusic(link: any, aozhan: any): void;
+    updateBackground(): void;
     /**
      * Generate a beatmap using the given BPM, beats, and offset
      *
      * 用给定的BPM、节拍和偏移生成谱面
      */
-    static generateBeatmapTimeleap(bpm: any, beats: any, offset: any): any;
-    static updateRenku(): void;
+    generateBeatmapTimeleap(bpm: any, beats: any, offset: any): any;
+    updateRenku(): void;
     /**
      * 为牌添加知情者
      * @param { Card[] | Card } cards
      * @param { Player[] } players
      */
-    static addCardKnower(cards: Card[] | Card, players: Player[]): void;
+    addCardKnower(cards: Card[] | Card, players: Player[]): void;
     /**
      * 移除牌的所有知情者。
      * @param { Card[] | Card } cards
      */
-    static clearCardKnowers(cards: Card[] | Card): void;
+    clearCardKnowers(cards: Card[] | Card): void;
     /**
      * @param { { [key: string]: any } } [arg]
      */
-    static loseAsync(arg?: {
+    loseAsync(arg?: {
         [key: string]: any;
-    }): import("../library/index.js").GameEventPromise;
-    static callFuncUseStepCache(prefix: any, func: any, params: any): any;
+    }): import("../library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    callFuncUseStepCache(prefix: any, func: any, params: any): any;
     /**
      * @param {string} name
      */
-    static getRarity(name: string): "legend" | "epic" | "rare" | "junk" | "common";
+    getRarity(name: string): "legend" | "epic" | "rare" | "junk" | "common";
     /**
      * @template { keyof GameHistory } T
      * @param { T } key
@@ -177,7 +181,7 @@ export class Game extends Uninstantable {
      * @param { GameEventPromise } [last]
      * @returns { boolean }
      */
-    static hasGlobalHistory<T extends keyof GameHistory>(key: T, filter: (event: GameEventPromise) => boolean, last?: GameEventPromise): boolean;
+    hasGlobalHistory<T extends keyof GameHistory>(key: T, filter: (event: GameEventPromise) => boolean, last?: GameEventPromise): boolean;
     /**
      * @template { keyof GameHistory } T
      * @param { T } key
@@ -185,12 +189,12 @@ export class Game extends Uninstantable {
      * @param { GameEventPromise } [last]
      * @returns { void }
      */
-    static checkGlobalHistory<T_1 extends keyof GameHistory>(key: T_1, filter: (event: GameEventPromise) => boolean, last?: GameEventPromise): void;
+    checkGlobalHistory<T_1 extends keyof GameHistory>(key: T_1, filter: (event: GameEventPromise) => boolean, last?: GameEventPromise): void;
     /**
      * @overload
      * @returns { GameHistory }
      */
-    static getGlobalHistory(): GameHistory;
+    getGlobalHistory(): GameHistory;
     /**
      * @template { keyof GameHistory } T
      * @overload
@@ -199,7 +203,7 @@ export class Game extends Uninstantable {
      * @param { GameEventPromise } [last]
      * @returns { GameHistory[T] }
      */
-    static getGlobalHistory<T_2 extends keyof GameHistory>(key: T_2, filter?: (event: GameEventPromise) => boolean, last?: GameEventPromise): GameHistory[T_2];
+    getGlobalHistory<T_2 extends keyof GameHistory>(key: T_2, filter?: (event: GameEventPromise) => boolean, last?: GameEventPromise): GameHistory[T_2];
     /**
      * @template { keyof GameHistory } T
      * @param { T } key
@@ -207,7 +211,7 @@ export class Game extends Uninstantable {
      * @param { GameEventPromise } [last]
      * @returns { boolean }
      */
-    static hasAllGlobalHistory<T_3 extends keyof GameHistory>(key: T_3, filter: (event: GameEventPromise) => boolean, last?: GameEventPromise): boolean;
+    hasAllGlobalHistory<T_3 extends keyof GameHistory>(key: T_3, filter: (event: GameEventPromise) => boolean, last?: GameEventPromise): boolean;
     /**
      * @template { keyof GameHistory } T
      * @param { T } key
@@ -215,12 +219,12 @@ export class Game extends Uninstantable {
      * @param { GameEventPromise } [last]
      * @returns { void }
      */
-    static checkAllGlobalHistory<T_4 extends keyof GameHistory>(key: T_4, filter: (event: GameEventPromise) => boolean, last?: GameEventPromise): void;
+    checkAllGlobalHistory<T_4 extends keyof GameHistory>(key: T_4, filter: (event: GameEventPromise) => boolean, last?: GameEventPromise): void;
     /**
      * @overload
      * @returns { GameHistory[] }
      */
-    static getAllGlobalHistory(): GameHistory[];
+    getAllGlobalHistory(): GameHistory[];
     /**
      * @template { keyof GameHistory } T
      * @overload
@@ -229,60 +233,60 @@ export class Game extends Uninstantable {
      * @param { GameEventPromise } [last]
      * @returns { GameHistory[T] }
      */
-    static getAllGlobalHistory<T_5 extends keyof GameHistory>(key: T_5, filter?: (event: GameEventPromise) => boolean, last?: GameEventPromise): GameHistory[T_5];
+    getAllGlobalHistory<T_5 extends keyof GameHistory>(key: T_5, filter?: (event: GameEventPromise) => boolean, last?: GameEventPromise): GameHistory[T_5];
     /**
      * @overload
      * @returns { void }
      */
-    static cardsDiscard(): void;
+    cardsDiscard(): void;
     /**
      * @overload
      * @param { Card } cards
      * @returns { GameEventPromise }
      */
-    static cardsDiscard(cards: Card): GameEventPromise;
+    cardsDiscard(cards: Card): GameEventPromise;
     /**
      * @overload
      * @param {Card[]} cards
      * @returns { GameEventPromise }
      */
-    static cardsDiscard(cards: Card[]): GameEventPromise;
+    cardsDiscard(cards: Card[]): GameEventPromise;
     /**
      * @overload
      * @returns { void }
      */
-    static cardsGotoOrdering(): void;
+    cardsGotoOrdering(): void;
     /**
      * @overload
      * @param { Card } cards
      * @returns { GameEventPromise }
      */
-    static cardsGotoOrdering(cards: Card): GameEventPromise;
+    cardsGotoOrdering(cards: Card): GameEventPromise;
     /**
      * @overload
      * @param {Card[]} cards
      * @returns { GameEventPromise }
      */
-    static cardsGotoOrdering(cards: Card[]): GameEventPromise;
+    cardsGotoOrdering(cards: Card[]): GameEventPromise;
     /**
      * @overload
      * @returns { void }
      */
-    static cardsGotoSpecial(): void;
+    cardsGotoSpecial(): void;
     /**
      * @overload
      * @param { Card } cards
      * @param { 'toRenku' | false } [bool] 为false时不触发trigger，为'toRenku'时牌放到仁库
      * @returns { GameEventPromise }
      */
-    static cardsGotoSpecial(cards: Card, bool?: 'toRenku' | false): GameEventPromise;
+    cardsGotoSpecial(cards: Card, bool?: 'toRenku' | false): GameEventPromise;
     /**
      * @overload
      * @param {Card[]} cards
      * @param { 'toRenku' | false } [bool] 为false时不触发trigger，为'toRenku'时牌放到仁库
      * @returns { GameEventPromise }
      */
-    static cardsGotoSpecial(cards: Card[], bool?: 'toRenku' | false): GameEventPromise;
+    cardsGotoSpecial(cards: Card[], bool?: 'toRenku' | false): GameEventPromise;
     /**
      *
      * @param {...(
@@ -294,49 +298,55 @@ export class Game extends Uninstantable {
      * )} args
      * @returns
      */
-    static cardsGotoPile(...args: (Card[] | Card | Function | 'insert' | 'washCard' | 'triggeronly' | [
+    cardsGotoPile(...args: (Card[] | Card | Function | 'insert' | 'washCard' | 'triggeronly' | [
         string,
         any
-    ])[]): import("../library/index.js").GameEventPromise;
+    ])[]): import("../library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     /**
      * @param { GameEventPromise } event
      */
-    static $cardsGotoPile(event: GameEventPromise): void;
+    $cardsGotoPile(event: GameEventPromise): void;
     /**
      * @param { false } [pause]
      */
-    static showHistory(pause?: false): void;
+    showHistory(pause?: false): void;
     /**
      * @param { string } src
      * @param { true } [blur]
      */
-    static createBackground(src: string, blur?: true): HTMLDivElement;
+    createBackground(src: string, blur?: true): HTMLDivElement;
     /**
      *
      * @param { string } url
      * @param { Player } [player]
      */
-    static changeLand(url: string, player?: Player): void;
+    changeLand(url: string, player?: Player): void;
     /**
      * @param { string[] } updates
      * @param { Function } proceed
      */
-    static checkFileList(updates: string[], proceed: Function): void;
+    checkFileList(updates: string[], proceed: Function): void;
     /**
-     * @param  {...(Player[] | Player)} args
+     * @overload
+     * @param  {[Player[]]} args
      */
-    static replaceHandcards(...args: (Player[] | Player)[]): void;
+    replaceHandcards(args: [Player[]]): any;
+    /**
+     * @overload
+     * @param {Player[]} args
+     */
+    replaceHandcards(args: Player[]): any;
     /**
      * @param { string } name
      */
-    static removeCard(name: string): void;
+    removeCard(name: string): void;
     /**
      * @param { 'hidden' } [type]
      */
-    static randomMapOL(type?: 'hidden'): void;
-    static closeMenu(): void;
-    static closeConnectMenu(): void;
-    static closePopped(): void;
+    randomMapOL(type?: 'hidden'): void;
+    closeMenu(): void;
+    closeConnectMenu(): void;
+    closePopped(): void;
     /**
      * @template { keyof typeof lib.message.client } T
      * @overload
@@ -344,7 +354,7 @@ export class Game extends Uninstantable {
      * @param { ...Parameters<typeof lib.message.client[T]> } args
      * @returns { void }
      */
-    static broadcast<T_6 extends "cancel" | "onclose" | "init" | "reinit" | "log" | "opened" | "onconnection" | "onmessage" | "selfclose" | "reloadroom" | "createroom" | "enterroomfailed" | "roomlist" | "updaterooms" | "updateclients" | "updateevents" | "eventsdenied" | "exec" | "denied" | "closeDialog" | "createDialog" | "gameStart" | "updateWaiting">(func: T_6, ...args: Parameters<{
+    broadcast<T_6 extends "cancel" | "onclose" | "init" | "reinit" | "log" | "opened" | "onconnection" | "onmessage" | "selfclose" | "reloadroom" | "createroom" | "enterroomfailed" | "roomlist" | "updaterooms" | "updateclients" | "updateevents" | "eventsdenied" | "exec" | "denied" | "closeDialog" | "createDialog" | "gameStart" | "updateWaiting">(func: T_6, ...args: Parameters<{
         log: (arr: any) => void;
         opened: () => void;
         onconnection: (id: any) => void;
@@ -376,7 +386,7 @@ export class Game extends Uninstantable {
      * @param { ...T } args
      * @returns { void }
      */
-    static broadcast<T_6 extends "cancel" | "onclose" | "init" | "reinit" | "log" | "opened" | "onconnection" | "onmessage" | "selfclose" | "reloadroom" | "createroom" | "enterroomfailed" | "roomlist" | "updaterooms" | "updateclients" | "updateevents" | "eventsdenied" | "exec" | "denied" | "closeDialog" | "createDialog" | "gameStart" | "updateWaiting">(func: (...args: T_6) => void, ...args: T_6): void;
+    broadcast<T_6 extends "cancel" | "onclose" | "init" | "reinit" | "log" | "opened" | "onconnection" | "onmessage" | "selfclose" | "reloadroom" | "createroom" | "enterroomfailed" | "roomlist" | "updaterooms" | "updateclients" | "updateevents" | "eventsdenied" | "exec" | "denied" | "closeDialog" | "createDialog" | "gameStart" | "updateWaiting">(func: (...args: T_6) => void, ...args: T_6): void;
     /**
      * @template { keyof typeof lib.message.client } T
      * @overload
@@ -384,7 +394,7 @@ export class Game extends Uninstantable {
      * @param { ...Parameters<typeof lib.message.client[T]> } args
      * @returns { void }
      */
-    static broadcastAll<T_7 extends "cancel" | "onclose" | "init" | "reinit" | "log" | "opened" | "onconnection" | "onmessage" | "selfclose" | "reloadroom" | "createroom" | "enterroomfailed" | "roomlist" | "updaterooms" | "updateclients" | "updateevents" | "eventsdenied" | "exec" | "denied" | "closeDialog" | "createDialog" | "gameStart" | "updateWaiting">(func: T_7, ...args: Parameters<{
+    broadcastAll<T_7 extends "cancel" | "onclose" | "init" | "reinit" | "log" | "opened" | "onconnection" | "onmessage" | "selfclose" | "reloadroom" | "createroom" | "enterroomfailed" | "roomlist" | "updaterooms" | "updateclients" | "updateevents" | "eventsdenied" | "exec" | "denied" | "closeDialog" | "createDialog" | "gameStart" | "updateWaiting">(func: T_7, ...args: Parameters<{
         log: (arr: any) => void;
         opened: () => void;
         onconnection: (id: any) => void;
@@ -416,75 +426,94 @@ export class Game extends Uninstantable {
      * @param { ...T } args
      * @returns { void }
      */
-    static broadcastAll<T_7 extends "cancel" | "onclose" | "init" | "reinit" | "log" | "opened" | "onconnection" | "onmessage" | "selfclose" | "reloadroom" | "createroom" | "enterroomfailed" | "roomlist" | "updaterooms" | "updateclients" | "updateevents" | "eventsdenied" | "exec" | "denied" | "closeDialog" | "createDialog" | "gameStart" | "updateWaiting">(func: (...args: T_7) => void, ...args: T_7): void;
-    static syncState(): void;
-    static updateWaiting(): void;
+    broadcastAll<T_7 extends "cancel" | "onclose" | "init" | "reinit" | "log" | "opened" | "onconnection" | "onmessage" | "selfclose" | "reloadroom" | "createroom" | "enterroomfailed" | "roomlist" | "updaterooms" | "updateclients" | "updateevents" | "eventsdenied" | "exec" | "denied" | "closeDialog" | "createDialog" | "gameStart" | "updateWaiting">(func: (...args: T_7) => void, ...args: T_7): void;
+    syncState(): void;
+    updateWaiting(): void;
     /**
      * @param { Function } func
      */
-    static waitForPlayer(func: Function): void;
+    waitForPlayer(func: Function): void;
     /**
      * @param { number } time
      * @param { Function } [onEnd]
      */
-    static countDown(time: number, onEnd?: Function): void;
-    static countChoose(clear: any): void;
-    static stopCountChoose(): void;
+    countDown(time: number, onEnd?: Function): void;
+    countChoose(clear: any): void;
+    stopCountChoose(): void;
+    /**
+     * ```plain
+     * 进入沙盒运行模式
+     * ```
+     *
+     * @param { string } ip
+     */
+    requireSandboxOn(ip?: string): void;
     /**
      * @param { string } ip
      * @param { (result: boolean) => any } callback
      */
-    static connect(ip: string, callback: (result: boolean) => any): void;
-    static send(...args: any[]): void;
+    connect(ip: string, callback: (result: boolean) => any): void;
+    send(...args: any[]): void;
     /**
      * @param { string } id
      * @param {*} message
      */
-    static sendTo(id: string, message: any): import("../library/element/client.js").Client;
-    static createServer(): void;
+    sendTo(id: string, message: any): import("../library/element/client.js").Client;
+    createServer(): void;
     /**
+     * @overload
+     * @param { object } options
+     * @param { string } options.path
+     * //param { boolean } [options.broadcast = false]
+     * @param { boolean } [options.addVideo = true]
+     * @param { boolean } [options.video = false]
+     * @param { (evt: Event) => void } [options.onCanPlay = (evt => void 0)]
+     * @param { (evt: Event) => void } [options.onPlay = (evt => void 0)]
+     * @param { (evt: Event) => void } [options.onEnded = (evt => void 0)]
+     * @param { (evt: Event) => void } [options.onError = (evt => void 0)]
      * @returns { HTMLAudioElement }
      */
-    static playAudio(...args: any[]): HTMLAudioElement;
+    playAudio(options: {
+        path: string;
+        addVideo?: boolean;
+        video?: boolean;
+        onCanPlay?: (evt: Event) => void;
+        onPlay?: (evt: Event) => void;
+        onEnded?: (evt: Event) => void;
+        onError?: (evt: Event) => void;
+    }): HTMLAudioElement;
     /**
-    * 根据skill中的audio,audioname,audioname2和player来获取音频地址列表
-    * @typedef {[string,number]|string|number|boolean} audioInfo
-    * @typedef {{audio: audioInfo, audioname?:string[], audioname2?:{[playerName: string]: audioInfo}}} skillInfo
-    * @param { string } skill  技能名
-    * @param { Player | string } [player]  角色/角色名
-    * @param { skillInfo | audioInfo } [skillInfo]  预设的skillInfo/audioInfo(转为skillInfo)，覆盖lib.skill[skill]
-    * @returns { string[] }  语音地址列表
-    * @example
-    * ```js
-    * const info=lib.skill['skillname'];
-    * info.audio=undefined //默认值[true,2]
-    * info.audio=false // 不播放语音
-    * info.audio=true // [skill/skillname.mp3]
-    * info.audio=3 // [skill/skillname1.mp3,skill/skillname2.mp3,skill/skillname3.mp3]（项数为数字大小）
-    * info.audio="(ext:extName|db:extension-extName)(/anyPath):true|number(:format)" //间接路径
-    * // 同上，只是将目录改为(ext:extName|db:extension-extName)(/anyPath)，且可以指定格式(默认mp3)
-    * info.audio="(ext:extName|db:extension-extName/)(anyPath/)filename(.format)" //直接路径
-    * //path和format至少有一个，否则会识别为引用技能
-    * //起始位置为audio/(若无anyPath则为audio/skill/)，若没有format默认mp3
-    * info.audio="otherSkillname" //引用技能
-    * //引用一个其他技能的语音，若lib.skill["otherSkillname"]不存在则读取"otherSkillname"的audio为默认值[true,2]
-    * info.audio=["otherSkillname", number] //带fixedNum的引用技能
-    * //同样引用一个其他技能的语音，若lib.skill["otherSkillname"]不存在则读取"otherSkillname"的audio为number
-    * //若"otherSkillname"的语音数超过number，则只取前number个
-    * info.audio=[true,2,"otherSkillname1",["otherSkillname2",2]] //任意元素拼接
-    * //数组里可以放任何以上的格式，结果为分析完的结果合并
-    *
-    * info.audioname=['player1','player2']
-    * //audioname里可以放任意角色名。
-    * //如果其中包含发动技能的角色名"player"，且info.audio不是直接路径"(anyPath/)filename(.format)"的形式
-    * //则在"skill"和number中插入"_player"，形如
-    *
-    * info.audioname2={'player1':audioInfo1,'player2':audioInfo2}
-    * //audioname2是一个对象，其中key为角色名，value的类型和info.audio一样
-    * //如果key中包含发动技能的角色名player，则直接改用info.audioname2[player]来播放语音
-    * ```
-    */
-    static parseSkillAudio(skill: string, player?: Player | string, skillInfo?: {
+     * @overload
+     * @param { ...string | number | ((evt: Event) => void) } args
+     * @returns { HTMLAudioElement }
+     */
+    playAudio(...args: string | number | ((evt: Event) => void)): HTMLAudioElement;
+    /**
+     * @param { object } options
+     * @param { string[] } options.audioList
+     * @param { boolean } [options.autoplay = true]
+     * @param { boolean } [options.random = true]
+     * @param { boolean } [options.addVideo = true]
+     * @returns
+     */
+    tryAudio({ audioList, autoplay, random, addVideo }: {
+        audioList: string[];
+        autoplay?: boolean;
+        random?: boolean;
+        addVideo?: boolean;
+    }): HTMLAudioElement | (() => HTMLAudioElement);
+    /**
+     * @deprecated 请使用get.Audio.skill().fileList
+     *
+     * 根据skill中的audio,audioname,audioname2和player来获取音频地址列表
+     * @typedef {[string,number]|string|number|boolean} audioInfo
+     * @typedef {{audio: audioInfo, audioname?:string[], audioname2?:{[playerName: string]: audioInfo}}} skillInfo
+     * @param { string } skill  技能名
+     * @param { Player | Object | string } [player]  角色/角色名
+     * @param { skillInfo | audioInfo } [skillInfo]  使用指定的skillInfo/audioInfo
+     * @returns { string[] }  语音地址列表
+     */
+    parseSkillAudio(skill: string, player?: Player | any | string, skillInfo?: {
         audio: string | number | boolean | [string, number];
         audioname?: string[];
         audioname2?: {
@@ -492,149 +521,217 @@ export class Game extends Uninstantable {
         };
     } | (string | number | boolean | [string, number])): string[];
     /**
+     * @deprecated 请使用get.Audio.skill().textList
+     *
+     * 根据skill中的audio,audioname,audioname2和player来获取技能台词列表
+     * @param { string } skill  技能名
+     * @param { Player | Object | string } [player]  角色/角色名
+     * @param { skillInfo | audioInfo } [skillInfo]  使用指定的skillInfo/audioInfo
+     * @returns { string[] }  语音地址列表
+     */
+    parseSkillText(skill: string, player?: Player | any | string, skillInfo?: {
+        audio: string | number | boolean | [string, number];
+        audioname?: string[];
+        audioname2?: {
+            [playerName: string]: string | number | boolean | [string, number];
+        };
+    } | (string | number | boolean | [string, number])): string[];
+    /**
+     * @deprecated 请使用get.Audio.skill().audioList
+     *
+     * 根据skill中的audio,audioname,audioname2和player来获取技能台词列表及其对应的源文件名
+     * @param { string } skill  技能名
+     * @param { Player | Object | string } [player]  角色/角色名
+     * @param { skillInfo | audioInfo } [skillInfo]  使用指定的skillInfo/audioInfo
+     * @returns 语音地址列表
+     */
+    parseSkillTextMap(skill: string, player?: Player | any | string, skillInfo?: {
+        audio: string | number | boolean | [string, number];
+        audioname?: string[];
+        audioname2?: {
+            [playerName: string]: string | number | boolean | [string, number];
+        };
+    } | (string | number | boolean | [string, number])): import("../get/audio.js").TextMap[];
+    /**
+     * @deprecated 请使用get.Audio.die().audioList
+     *
+     * 获取角色死亡时能播放的所有阵亡语音
+     * @param { string | Player } player  角色名
+     * @returns 语音地址列表
+     */
+    parseDieTextMap(player: string | Player): import("../get/audio.js").TextMap[];
+    /**
      *
      * @param { string } skill
      * @param { Player | string } player
      * @param { boolean } [directaudio]
      * @param { boolean } [nobroadcast]
-     * @param { ['lib']['skill'] } [skillInfo]
+     * @param { any } [skillInfo]
      * @returns
      */
-    static trySkillAudio(skill: string, player: Player | string, directaudio?: boolean, nobroadcast?: boolean, skillInfo?: any): HTMLAudioElement;
+    trySkillAudio(skill: string, player: Player | string, directaudio?: boolean, nobroadcast?: boolean, skillInfo?: any): HTMLAudioElement | (() => HTMLAudioElement);
     /**
+     * @param { Player | string } player
+     * @returns
+     */
+    tryDieAudio(player: Player | string): HTMLAudioElement | (() => HTMLAudioElement);
+    /**
+     * @deprecated
      * @param { string } name
      * @param { number } [index]
      * @returns
      */
-    static playSkillAudio(name: string, index?: number, ...args: any[]): void;
+    playSkillAudio(name: string, index?: number, ...args: any[]): void;
     /**
      * @param { string | Card } card
      * @param { Player | Sex } sex
      */
-    static playCardAudio(card: string | Card, sex: Player | Sex): void;
-    static playBackgroundMusic(): void;
+    playCardAudio(card: string | Card, sex: Player | Sex): void;
+    playBackgroundMusic(): void;
     /**
      * @overload
      * @param { 'character' } type
      * @param {(
-     * 	lib: Library,
-     * 	game: typeof Game,
-     * 	ui: UI,
-     * 	get: Get,
-     * 	ai: AI,
-     * _status: Status
+     * 	lib: InstanceType<typeof import('../library/index.js').Library>,
+     * 	game: InstanceType<typeof Game>,
+     * 	ui: InstanceType<typeof import('../ui/index.js').UI>,
+     * 	get: InstanceType<typeof import('../get/index.js').Get>,
+     * 	ai: InstanceType<typeof import('../ai/index.js').AI>,
+     * _status: InstanceType<typeof import('../status/index.js').status>
      * ) => importCharacterConfig } content
      * @param {*} [url]
      */
-    static import(type: 'character', content: (lib: Library, game: typeof Game, ui: UI, get: Get, ai: AI, _status: Status) => importCharacterConfig, url?: any): any;
+    import(type: 'character', content: (lib: InstanceType<typeof import('../library/index.js').Library>, game: InstanceType<typeof Game>, ui: InstanceType<typeof import('../ui/index.js').UI>, get: InstanceType<typeof import('../get/index.js').Get>, ai: InstanceType<typeof import('../ai/index.js').AI>, _status: InstanceType<typeof import('../status/index.js').status>) => importCharacterConfig, url?: any): any;
     /**
      * @overload
      * @param { 'card' } type
      * @param {(
-     * 	lib: Library,
-     * 	game: typeof Game,
-     * 	ui: UI,
-     * 	get: Get,
-     * 	ai: AI,
-     * _status: Status
+     * 	lib: InstanceType<typeof import('../library/index.js').Library>,
+     * 	game: InstanceType<typeof Game>,
+     * 	ui: InstanceType<typeof import('../ui/index.js').UI>,
+     * 	get: InstanceType<typeof import('../get/index.js').Get>,
+     * 	ai: InstanceType<typeof import('../ai/index.js').AI>,
+     * _status: InstanceType<typeof import('../status/index.js').status>
      * ) => importCardConfig } content
      * @param {*} [url]
      */
-    static import(type: 'card', content: (lib: Library, game: typeof Game, ui: UI, get: Get, ai: AI, _status: Status) => importCardConfig, url?: any): any;
+    import(type: 'card', content: (lib: InstanceType<typeof import('../library/index.js').Library>, game: InstanceType<typeof Game>, ui: InstanceType<typeof import('../ui/index.js').UI>, get: InstanceType<typeof import('../get/index.js').Get>, ai: InstanceType<typeof import('../ai/index.js').AI>, _status: InstanceType<typeof import('../status/index.js').status>) => importCardConfig, url?: any): any;
     /**
      * @overload
      * @param { 'mode' } type
      * @param {(
-     * 	lib: Library,
-     * 	game: typeof Game,
-     * 	ui: UI,
-     * 	get: Get,
-     * 	ai: AI,
-     * _status: Status
+     * 	lib: InstanceType<typeof import('../library/index.js').Library>,
+     * 	game: InstanceType<typeof Game>,
+     * 	ui: InstanceType<typeof import('../ui/index.js').UI>,
+     * 	get: InstanceType<typeof import('../get/index.js').Get>,
+     * 	ai: InstanceType<typeof import('../ai/index.js').AI>,
+     * _status: InstanceType<typeof import('../status/index.js').status>
      * ) => importModeConfig } content
      * @param {*} [url]
      */
-    static import(type: 'mode', content: (lib: Library, game: typeof Game, ui: UI, get: Get, ai: AI, _status: Status) => importModeConfig, url?: any): any;
+    import(type: 'mode', content: (lib: InstanceType<typeof import('../library/index.js').Library>, game: InstanceType<typeof Game>, ui: InstanceType<typeof import('../ui/index.js').UI>, get: InstanceType<typeof import('../get/index.js').Get>, ai: InstanceType<typeof import('../ai/index.js').AI>, _status: InstanceType<typeof import('../status/index.js').status>) => importModeConfig, url?: any): any;
     /**
      * @overload
      * @param { 'player' } type
      * @param {(
-     * 	lib: Library,
-     * 	game: typeof Game,
-     * 	ui: UI,
-     * 	get: Get,
-     * 	ai: AI,
-     * _status: Status
+     * 	lib: InstanceType<typeof import('../library/index.js').Library>,
+     * 	game: InstanceType<typeof Game>,
+     * 	ui: InstanceType<typeof import('../ui/index.js').UI>,
+     * 	get: InstanceType<typeof import('../get/index.js').Get>,
+     * 	ai: InstanceType<typeof import('../ai/index.js').AI>,
+     * _status: InstanceType<typeof import('../status/index.js').status>
      * ) => importPlayerConfig } content
      * @param {*} [url]
      */
-    static import(type: 'player', content: (lib: Library, game: typeof Game, ui: UI, get: Get, ai: AI, _status: Status) => importPlayerConfig, url?: any): any;
+    import(type: 'player', content: (lib: InstanceType<typeof import('../library/index.js').Library>, game: InstanceType<typeof Game>, ui: InstanceType<typeof import('../ui/index.js').UI>, get: InstanceType<typeof import('../get/index.js').Get>, ai: InstanceType<typeof import('../ai/index.js').AI>, _status: InstanceType<typeof import('../status/index.js').status>) => importPlayerConfig, url?: any): any;
     /**
      * @overload
      * @param { 'extension' } type
      * @param {(
-     * 	lib: Library,
-     * 	game: typeof Game,
-     * 	ui: UI,
-     * 	get: Get,
-     * 	ai: AI,
-     * _status: Status
+     * 	lib: InstanceType<typeof import('../library/index.js').Library>,
+     * 	game: InstanceType<typeof Game>,
+     * 	ui: InstanceType<typeof import('../ui/index.js').UI>,
+     * 	get: InstanceType<typeof import('../get/index.js').Get>,
+     * 	ai: InstanceType<typeof import('../ai/index.js').AI>,
+     * _status: InstanceType<typeof import('../status/index.js').status>
      * ) => importExtensionConfig } content
      * @param {*} [url]
      */
-    static import(type: 'extension', content: (lib: Library, game: typeof Game, ui: UI, get: Get, ai: AI, _status: Status) => importExtensionConfig, url?: any): any;
-    static loadExtension(object: any): Promise<any>;
+    import(type: 'extension', content: (lib: InstanceType<typeof import('../library/index.js').Library>, game: InstanceType<typeof Game>, ui: InstanceType<typeof import('../ui/index.js').UI>, get: InstanceType<typeof import('../get/index.js').Get>, ai: InstanceType<typeof import('../ai/index.js').AI>, _status: InstanceType<typeof import('../status/index.js').status>) => importExtensionConfig, url?: any): any;
+    /**
+     * @overload
+     * @param { 'play' } type
+     * @param {(
+     * 	lib: InstanceType<typeof import('../library/index.js').Library>,
+     * 	game: InstanceType<typeof Game>,
+     * 	ui: InstanceType<typeof import('../ui/index.js').UI>,
+     * 	get: InstanceType<typeof import('../get/index.js').Get>,
+     * 	ai: InstanceType<typeof import('../ai/index.js').AI>,
+     * _status: InstanceType<typeof import('../status/index.js').status>
+     * ) => importPlayConfig } content
+     * @param {*} [url]
+     */
+    import(type: 'play', content: (lib: InstanceType<typeof import('../library/index.js').Library>, game: InstanceType<typeof Game>, ui: InstanceType<typeof import('../ui/index.js').UI>, get: InstanceType<typeof import('../get/index.js').Get>, ai: InstanceType<typeof import('../ai/index.js').AI>, _status: InstanceType<typeof import('../status/index.js').status>) => importPlayConfig, url?: any): any;
+    loadExtension(object: any): Promise<any>;
     /**
      * 下载文件
-     * @type { (url: string, folder: string, onsuccess?: Function, onerror?: (e: Error) => void) => void, dev?: 'nodev', onprogress?: Function) => void }
+     * @type { undefined | ((url: string, folder: string, onsuccess?: Function, onerror?: (e: Error) => void, dev?: 'nodev', onprogress?: Function) => void) }
      */
-    static download: (url: string, folder: string, onsuccess?: Function, onerror?: (e: Error) => void) => void;
+    download: (url: string, folder: string, onsuccess?: Function, onerror?: (e: Error) => void, dev?: 'nodev', onprogress?: Function) => void;
     /**
      * 读取文件为arraybuffer
-     * @type { (filename: string, callback?: (data: Buffer | ArrayBuffer) => any, onerror?: (e: Error) => void) => void }
+     * @type { undefined | ((filename: string, callback?: (data: Buffer | ArrayBuffer) => any, onerror?: (e: Error) => void) => void) }
      */
-    static readFile: (filename: string, callback?: (data: Buffer | ArrayBuffer) => any, onerror?: (e: Error) => void) => void;
+    readFile: (filename: string, callback?: (data: Buffer | ArrayBuffer) => any, onerror?: (e: Error) => void) => void;
     /**
      * 读取文件为文本
-     * @type { (filename: string, callback?: (data: string) => any, onerror?: (e: Error) => void) => void }
+     * @type { undefined | ((filename: string, callback?: (data: string) => any, onerror?: (e: Error) => void) => void) }
      */
-    static readFileAsText: (filename: string, callback?: (data: string) => any, onerror?: (e: Error) => void) => void;
+    readFileAsText: (filename: string, callback?: (data: string) => any, onerror?: (e: Error) => void) => void;
     /**
      * 将数据写入文件
-     * @type { (data: File | ArrayBuffer, path: string, name: string, callback?: (e: Error) => void) => void }
+     * @type { undefined | ((data: File | ArrayBuffer, path: string, name: string, callback?: (e: Error) => void) => void) }
      */
-    static writeFile: (data: File | ArrayBuffer, path: string, name: string, callback?: (e: Error) => void) => void;
+    writeFile: (data: File | ArrayBuffer, path: string, name: string, callback?: (e: Error) => void) => void;
     /**
      * 移除文件
-     * @type { (filename: string, callback?: (e: Error) => void) => void }
+     * @type { undefined | ((filename: string, callback?: (e: Error) => void) => void) }
      */
-    static removeFile: (filename: string, callback?: (e: Error) => void) => void;
+    removeFile: (filename: string, callback?: (e: Error) => void) => void;
     /**
      * 获取文件列表
-     * @type { (dir: string, success: (folders: string[], files: string[]) => any, failure: (e: Error) => void) => void }
+     * @type { undefined | ((dir: string, success: (folders: string[], files: string[]) => any, failure?: (e: Error) => void) => void) }
      */
-    static getFileList: (dir: string, success: (folders: string[], files: string[]) => any, failure: (e: Error) => void) => void;
+    getFileList: (dir: string, success: (folders: string[], files: string[]) => any, failure?: (e: Error) => void) => void;
     /**
      * 按路径依次创建文件夹
-     * @type { (list: string | string[], callback: Function, file?: boolean) => void }
+     * @type { undefined | ((list: string | string[], callback: Function, file?: boolean) => void) }
      */
-    static ensureDirectory: (list: string | string[], callback: Function, file?: boolean) => void;
+    ensureDirectory: (list: string | string[], callback: Function, file?: boolean) => void;
     /**
      * 创建文件夹
-     * @type { (directory: string, successCallback?: Function, errorCallback?: Function) => void }
+     * @type { undefined | ((directory: string, successCallback?: Function, errorCallback?: Function) => void) }
      */
-    static createDir: (directory: string, successCallback?: Function, errorCallback?: Function) => void;
+    createDir: (directory: string, successCallback?: Function, errorCallback?: Function) => void;
     /**
      * 删除文件夹
-     * @type { (directory: string, successCallback?: Function, errorCallback?: Function) => void }
+     * @type { undefined | ((directory: string, successCallback?: Function, errorCallback?: Function) => void) }
      */
-    static removeDir: (directory: string, successCallback?: Function, errorCallback?: Function) => void;
-    static importExtension(data: any, finishLoad: any, exportExtension: any, extensionPackage: any): Promise<boolean>;
+    removeDir: (directory: string, successCallback?: Function, errorCallback?: Function) => void;
+    /**
+     * @type { (forcecheck?: boolean | null, dev?: boolean) => Promise<any> }
+     */
+    checkForUpdate: (forcecheck?: boolean | null, dev?: boolean) => Promise<any>;
+    /**
+     * @type { () => Promise<any> }
+     */
+    checkForAssetUpdate: () => Promise<any>;
+    importExtension(data: any, finishLoad: any, exportExtension: any, extensionPackage: any): Promise<boolean>;
     /**
      * @param { string } textToWrite
      * @param { string } [name]
      */
-    static export(textToWrite: string, name?: string): void;
+    export(textToWrite: string, name?: string): void;
     /**
      * @param { string[] } list
      * @param { Function } [onsuccess]
@@ -643,7 +740,7 @@ export class Game extends Uninstantable {
      * @param { Function } [process]
      * @param {*} [dev]
      */
-    static multiDownload2(list: string[], onsuccess?: Function, onerror?: Function, onfinish?: Function, process?: Function, dev?: any): void;
+    multiDownload2(list: string[], onsuccess?: Function, onerror?: Function, onfinish?: Function, process?: Function, dev?: any): void;
     /**
      * @param { string[] } list
      * @param { Function } onsuccess
@@ -652,24 +749,24 @@ export class Game extends Uninstantable {
      * @param { Function } [process]
      * @param {*} [dev]
      */
-    static multiDownload(list: string[], onsuccess: Function, onerror: Function, onfinish: Function, process?: Function, dev?: any, ...args: any[]): void;
+    multiDownload(list: string[], onsuccess: Function, onerror: Function, onfinish: Function, process?: Function, dev?: any, ...args: any[]): void;
     /**
      * @param { string } url
      * @param { Function } onload
      * @param { Function } [onerror]
      * @param { Function } [onprogress]
      */
-    static fetch(url: string, onload: Function, onerror?: Function, onprogress?: Function): void;
+    fetch(url: string, onload: Function, onerror?: Function, onprogress?: Function): void;
     /**
      * @param { string } time
      * @param { string } mode
      */
-    static playVideo(time: string, mode: string): void;
+    playVideo(time: string, mode: string): void;
     /**
      * @param { Videos } video
      */
-    static playVideoContent(video: Videos): void;
-    static videoContent: {
+    playVideoContent(video: Videos): void;
+    videoContent: {
         arrangeLib: (content: any) => void;
         $syncDisable: (player: any, map: any) => void;
         $syncExpand: (player: any, map: any) => void;
@@ -713,6 +810,7 @@ export class Game extends Uninstantable {
         reinit2: (source: any, name: any) => void;
         reinit3: (source: any, content: any) => void;
         changeSkin: (player: any, map: any) => void;
+        changeGroup: (player: any, targetGroup: any) => void;
         skill: (player: any, content: any) => void;
         addFellow: (content: any) => void;
         windowzoom1: () => void;
@@ -792,50 +890,49 @@ export class Game extends Uninstantable {
         swapPlayer: (player: any, hs: any) => void;
         over: (str: any) => void;
     };
-    static reload(): void;
-    static reload2(): void;
-    static exit(): void;
+    reload(): void;
+    reload2(): void;
     /**
      * @param { string } url
      */
-    static open(url: string): void;
-    static reloadCurrent(): void;
+    open(url: string): void;
+    reloadCurrent(): void;
     /**
      * @param { Function } func
      */
-    static update(func: Function): Function;
+    update(func: Function): Function;
     /**
      * @param { Function } func
      */
-    static unupdate(func: Function): void;
-    static stop(): void;
-    static run(): void;
+    unupdate(func: Function): void;
+    stop(): void;
+    run(): void;
     /**
      * @param { string } type
      * @param { Player } player
      * @param { any } [content]
      * @returns
      */
-    static addVideo(type: string, player: Player, content?: any): void;
+    addVideo(type: string, player: Player, content?: any): void;
     /**
      * @param { Function } func
      */
-    static draw(func: Function): void;
+    draw(func: Function): void;
     /**
      * @param { number } [time]
      */
-    static vibrate(time?: number): void;
-    static prompt(...args: any[]): void;
-    static alert(str: any): void;
-    static print(...args: any[]): void;
-    static animate: {
+    vibrate(time?: number): void;
+    prompt(...args: any[]): void;
+    alert(str: any): void;
+    print(...args: any[]): void;
+    animate: {
         window: (num: any) => void;
         flame: (x: any, y: any, duration: any, type: any) => void;
     };
     /**
      * @param { [number, number | {opacity:any, color:any, dashed:any, duration:any} | string, number, number] } path
      */
-    static linexy(path: [number, string | number | {
+    linexy(path: [number, string | number | {
         opacity: any;
         color: any;
         dashed: any;
@@ -844,7 +941,7 @@ export class Game extends Uninstantable {
     /**
      * @param { [number, number | {opacity:any, color:any, dashed:any, duration:any} | string, number, number] } path
      */
-    static _linexy(path: [number, string | number | {
+    _linexy(path: [number, string | number | {
         opacity: any;
         color: any;
         dashed: any;
@@ -857,7 +954,7 @@ export class Game extends Uninstantable {
      * @param { GameEventPromise } event
      * @returns { GameEventPromise }
      */
-    static createTrigger(name: string, skill: string, player: Player, event: GameEventPromise, indexedData: any): GameEventPromise;
+    createTrigger(name: string, skill: string, player: Player, event: GameEventPromise, indexedData: any): GameEventPromise;
     /**
      * @legacy Use {@link lib.element.GameEvent.constructor} instead.
      *
@@ -865,12 +962,12 @@ export class Game extends Uninstantable {
      * @param { false } [trigger]
      * @param { GameEventPromise } [triggerEvent]
      */
-    static createEvent(name: string, trigger?: false, triggerEvent?: GameEventPromise): import("../library/index.js").GameEventPromise;
+    createEvent(name: string, trigger?: false, triggerEvent?: GameEventPromise): import("../library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     /**
      * @param { string } name
      * @param { { extension: string, sex: Sex, group: string, hp: string | number, skills?: string[], tags?: any[], translate: string } } information
      */
-    static addCharacter(name: string, information: {
+    addCharacter(name: string, information: {
         extension: string;
         sex: Sex;
         group: string;
@@ -883,7 +980,7 @@ export class Game extends Uninstantable {
      * @param { { mode?: string, forbid?: any, character: { [key: string]: Character }, skill: { [key: string]: object }, [key: string]: any } } pack
      * @param { string } [packagename]
      */
-    static addCharacterPack(pack: {
+    addCharacterPack(pack: {
         [key: string]: any;
         mode?: string;
         forbid?: any;
@@ -899,7 +996,7 @@ export class Game extends Uninstantable {
      * @param { Card } info
      * @param { { extension: string, translate: string, description: string, number?: number, color?: string } } info2
      */
-    static addCard(name: string, info: Card, info2: {
+    addCard(name: string, info: Card, info2: {
         extension: string;
         translate: string;
         description: string;
@@ -910,13 +1007,13 @@ export class Game extends Uninstantable {
      * @param { { extension: string, mode?: string[], forbid?: string[], list: any[], card: {[key: string]: Card}, skill: { [key: string]: object }  } } pack
      * @param { string } [packagename]
      */
-    static addCardPack(pack: {
+    addCardPack(pack: {
         extension: string;
         mode?: string[];
         forbid?: string[];
         list: any[];
         card: {
-            [key: string]: import("../library/element/card.js").Card;
+            [key: string]: import("noname-typings/nonameModules/noname/library/element/card.js").Card;
         };
         skill: {
             [key: string]: any;
@@ -930,7 +1027,7 @@ export class Game extends Uninstantable {
      * @param { string } [appendInfo]
      * @param { string } [abInfo]
      */
-    static addSkill(name: string, info: {
+    addSkill(name: string, info: {
         [key: string]: any;
     }, translate?: string, description?: string, appendInfo?: string, abInfo?: string): boolean;
     /**
@@ -938,7 +1035,7 @@ export class Game extends Uninstantable {
      * @param {*} info
      * @param { { translate: string, config: { [key: string]: object } } } info2
      */
-    static addMode(name: string, info: any, info2: {
+    addMode(name: string, info: any, info2: {
         translate: string;
         config: {
             [key: string]: any;
@@ -948,40 +1045,41 @@ export class Game extends Uninstantable {
      * @param { string } skill
      * @param { Player } [player]
      */
-    static addGlobalSkill(skill: string, player?: Player): boolean;
+    addGlobalSkill(skill: string, player?: Player): boolean;
     /**
      * @param { string } skill
+     * @param { lib.element.Player } player
      */
-    static removeGlobalSkill(skill: string): void;
-    static resetSkills(): void;
+    removeGlobalSkill(skill: string, player: lib.element.Player): void;
+    resetSkills(): void;
     /**
      * @param { string } extensionName
      */
-    static hasExtension(extensionName: string): any;
+    hasExtension(extensionName: string): boolean;
     /**
      * @param { string } extensionName
      */
-    static hasExtensionInstalled(extensionName: string): any;
+    hasExtensionInstalled(extensionName: string): any;
     /**
      * @param { string } extensionName
      */
-    static hasExtensionLoaded(extensionName: string): any;
+    hasExtensionLoaded(extensionName: string): boolean;
     /**
      * @param { string } extensionName
      * @param { Function } runnable
      */
-    static runAfterExtensionLoaded(extensionName: string, runnable: Function): void;
+    runAfterExtensionLoaded(extensionName: string, runnable: Function): void;
     /**
      * @param { string } extensionName
      * @param { boolean } [keepFile]
      */
-    static removeExtension(extensionName: string, keepFile?: boolean): void;
-    static addRecentCharacter(...args: any[]): void;
+    removeExtension(extensionName: string, keepFile?: boolean): void;
+    addRecentCharacter(...args: any[]): void;
     /**
      * @overload
      * @returns { Card }
      */
-    static createCard(): Card;
+    createCard(): Card;
     /**
      * @overload
      * @param { Card | string } name
@@ -989,12 +1087,12 @@ export class Game extends Uninstantable {
      * @param { number | string } [number]
      * @param { string } [nature]
      */
-    static createCard(name: Card | string, suit?: string, number?: number | string, nature?: string): any;
+    createCard(name: Card | string, suit?: string, number?: number | string, nature?: string): any;
     /**
      * @overload
      * @returns { Card }
      */
-    static createCard2(): Card;
+    createCard2(): Card;
     /**
      * @overload
      * @param { Card | string } name
@@ -1002,18 +1100,18 @@ export class Game extends Uninstantable {
      * @param { number } number
      * @param { string } nature
      */
-    static createCard2(name: Card | string, suit: string, number: number, nature: string): any;
+    createCard2(name: Card | string, suit: string, number: number, nature: string): any;
     /**
      * @param { boolean } bool
      * @param { Function } callback
      */
-    static forceOver(bool: boolean, callback: Function): void;
+    forceOver(bool: boolean, callback: Function): void;
     /**
      * @param { boolean | string } [result]
      * @param { boolean } [bool]
      * @returns
      */
-    static over(result?: boolean | string, bool?: boolean, ...args: any[]): void;
+    over(result?: boolean | string, bool?: boolean, ...args: any[]): void;
     /**
      * @type { Map<GameEvent, Promise<any>> }
      *
@@ -1021,35 +1119,35 @@ export class Game extends Uninstantable {
      *
      * 但是需要事件结果的除外
      */
-    static executingAsyncEventMap: Map<GameEvent, Promise<any>>;
+    executingAsyncEventMap: Map<GameEvent, Promise<any>>;
     /**
      * @type { GameEventPromise[] }
      */
-    static belongAsyncEventList: GameEventPromise[];
+    belongAsyncEventList: GameEventPromise[];
     /**
      * @param { GameEventPromise } [belongAsyncEvent]
      */
-    static loop(belongAsyncEvent?: GameEventPromise): Promise<void>;
+    loop(belongAsyncEvent?: GameEventPromise): Promise<void>;
     /**
      * @param { GameEventPromise } [belongAsyncEvent]
      */
-    static runContent(belongAsyncEvent?: GameEventPromise): Promise<any>;
-    static pause(): void;
-    static pause2(): void;
-    static resume(): void;
-    static resume2(): void;
-    static delaye(...args: any[]): import("../library/index.js").GameEventPromise;
-    static delayex(...args: any[]): import("../library/index.js").GameEventPromise;
+    runContent(belongAsyncEvent?: GameEventPromise): Promise<any>;
+    pause(): void;
+    pause2(): void;
+    resume(): void;
+    resume2(): void;
+    delaye(...args: any[]): import("../library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    delayex(...args: any[]): import("../library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     /**
      * @param { number } [time]
      * @param { number } [time2]
      */
-    static delay(time?: number, time2?: number): void;
+    delay(time?: number, time2?: number): void;
     /**
      * @param { number } [time]
      * @param { number } [time2]
      */
-    static delayx(time?: number, time2?: number): void;
+    delayx(time?: number, time2?: number): void;
     /**
      * 在async content中对game.delay的代替使用方法
      *
@@ -1058,7 +1156,7 @@ export class Game extends Uninstantable {
      * @param { number } [time]
      * @param { number } [time2]
      */
-    static asyncDelay(time?: number, time2?: number): Promise<void>;
+    asyncDelay(time?: number, time2?: number): Promise<void>;
     /**
      * 在async content中对game.delayx的代替使用方法
      *
@@ -1067,39 +1165,13 @@ export class Game extends Uninstantable {
      * @param { number } [time]
      * @param { number } [time2]
      */
-    static asyncDelayx(time?: number, time2?: number): Promise<void>;
+    asyncDelayx(time?: number, time2?: number): Promise<void>;
     /**
      * @param { GameEventPromise } [event]
      */
-    static check(event?: GameEventPromise): boolean;
-    static Check: {
-        new (): {};
-        processSelection({ type, items, event, useCache, isSelectable }: {
-            type: any;
-            items: any;
-            event: any;
-            useCache: any;
-            isSelectable: any;
-        }): {
-            ok: boolean;
-            auto: boolean;
-        };
-        button(event: any, useCache: any): {
-            ok: boolean;
-            auto: boolean;
-        };
-        card(event: any, useCache: any): {
-            ok: boolean;
-            auto: boolean;
-        };
-        target(event: any, useCache: any): {
-            ok: boolean;
-            auto: boolean;
-        };
-        skill(event: any): void;
-        confirm(event: any, confirm: any): void;
-    };
-    static uncheck(...args: any[]): void;
+    check(event?: GameEventPromise): boolean;
+    Check: Check;
+    uncheck(...args: any[]): void;
     /**
      * @param { Player } player1
      * @param { Player } player2
@@ -1107,79 +1179,79 @@ export class Game extends Uninstantable {
      * @param { boolean } [behind]
      * @param { boolean } [noanimate]
      */
-    static swapSeat(player1: Player, player2: Player, prompt?: boolean, behind?: boolean, noanimate?: boolean): void;
+    swapSeat(player1: Player, player2: Player, prompt?: boolean, behind?: boolean, noanimate?: boolean): void;
     /**
      * @param { Player } player1
      * @param { Player } [player2]
      */
-    static swapPlayer(player: any, player2?: Player): void;
+    swapPlayer(player: any, player2?: Player): void;
     /**
      * @param { Player } player
      */
-    static swapControl(player: Player): void;
-    static swapPlayerAuto(player: any): void;
+    swapControl(player: Player): void;
+    swapPlayerAuto(player: any): void;
     /**
      * @param { Player } player
      */
-    static findNext(player: Player): import("../library/element/player.js").Player;
+    findNext(player: Player): import("noname-typings/nonameModules/noname/library/element/player.js").Player;
     /**
      * @param { string } name
      * @param { Function } callback
      */
-    static loadModeAsync(name: string, callback: Function): void;
+    loadModeAsync(name: string, callback: Function): void;
     /**
      * @param { string } name
      * @param {*} configx
      */
-    static switchMode(name: string, configx: any): void;
+    switchMode(name: string, configx: any): void;
     /**
      * @param { string } mode
      */
-    static loadMode(mode: string): void;
+    loadMode(mode: string): void;
     /**
      * @param  {...string} args
      */
-    static loadPackage(...args: string[]): void;
+    loadPackage(...args: string[]): void;
     /**
      * @param { Player } player
      */
-    static phaseLoop(player: Player): void;
+    phaseLoop(player: Player): void;
     /**
      * @param { Player } [player]
      */
-    static gameDraw(player?: Player, num?: number): import("../library/index.js").GameEventPromise;
-    static chooseCharacterDouble(...args: any[]): void;
-    static updateRoundNumber(): void;
+    gameDraw(player?: Player, num?: number): import("../library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    chooseCharacterDouble(...args: any[]): void;
+    updateRoundNumber(): void;
     /**
      * @param { Player[] } players
-     * @param { number | number[] | (player: Player) => number } num
+     * @param { number | number[] | (player: Player) => number } [num]
      * @param { { drawDeck: boolean } } [drawDeck]
      * @param { boolean } [bottom]
      */
-    static asyncDraw(players: Player[], num: number | number[] | ((player: Player) => number), drawDeck?: {
+    asyncDraw(players: Player[], num?: number | number[] | ((player: Player) => number), drawDeck?: {
         drawDeck: boolean;
-    }, bottom?: boolean): void;
+    }, bottom?: boolean): Promise<void>;
     /**
      * @param { Player[] } players
      * @param { number | number[] | (player: Player) => number } num
      * @param { { drawDeck: boolean } } [drawDeck]
      */
-    static asyncDrawAuto(players: Player[], num: number | number[] | ((player: Player) => number), drawDeck?: {
+    asyncDrawAuto(players: Player[], num: number | number[] | ((player: Player) => number), drawDeck?: {
         drawDeck: boolean;
     }, ...args: any[]): void;
-    static finishSkill(i: any, sub: any): void;
-    static finishCards(): void;
+    finishSkill(i: any, sub: any): void;
+    finishCards(): void;
     /**
      * 这玩意至少19种重载了吧
      */
-    static checkMod(...args: any[]): any;
+    checkMod(...args: any[]): any;
     /**
      * @param { number } num
      */
-    static prepareArena(num: number): void;
-    static clearArena(): void;
-    static clearConnect(): void;
-    static log(...args: any[]): void;
+    prepareArena(num: number): void;
+    clearArena(): void;
+    clearConnect(): void;
+    log(...args: any[]): void;
     /**
      * @param { Player } player
      * @param { string | Card[] } card
@@ -1188,7 +1260,7 @@ export class Game extends Uninstantable {
      * @param { boolean } [forced]
      * @param { string } [logvid]
      */
-    static logv(player: Player, card: string | Card[], targets?: Player[], event?: GameEventPromise, forced?: boolean, logvid?: string): HTMLDivElement;
+    logv(player: Player, card: string | Card[], targets?: Player[], event?: GameEventPromise, forced?: boolean, logvid?: string): HTMLDivElement;
     /**
      * @param { string } storeName
      * @param { string } idbValidKey
@@ -1196,7 +1268,7 @@ export class Game extends Uninstantable {
      * @param { Function } [onSuccess]
      * @param { Function } [onError]
      */
-    static putDB(storeName: string, idbValidKey: string, value: any, onSuccess?: Function, onError?: Function): Promise<any>;
+    putDB(storeName: string, idbValidKey: string, value: any, onSuccess?: Function, onError?: Function): Promise<any>;
     /**
      *
      * @param { string } storeName
@@ -1204,142 +1276,129 @@ export class Game extends Uninstantable {
      * @param { Function } [onSuccess]
      * @param { Function } [onError]
      */
-    static getDB(storeName: string, query?: string | null, onSuccess?: Function, onError?: Function): Promise<any>;
+    getDB(storeName: string, query?: string | null, onSuccess?: Function, onError?: Function): Promise<any>;
     /**
      * @param { string } storeName
      * @param { string } [query]
      * @param { Function } [onSuccess]
      * @param { Function } [onError]
      */
-    static deleteDB(storeName: string, query?: string, onSuccess?: Function, onError?: Function): Promise<any>;
+    deleteDB(storeName: string, query?: string, onSuccess?: Function, onError?: Function): Promise<any>;
     /**
      * @param { string } key
      * @param { * } [value]
      * @param { string } [mode]
      */
-    static save(key: string, value?: any, mode?: string): void;
-    static showChangeLog(): void;
+    save(key: string, value?: any, mode?: string): void;
+    showChangeLog(): void;
     /**
      * @param { string } str
      * @param { string } [extname]
      */
-    static showExtensionChangeLog(str: string, extname?: string): void;
+    showExtensionChangeLog(str: string, extname?: string): void;
     /**
      * @param { string } key
      * @param { * } [value]
      * @param { string | boolean } [local]
-     * @param { Function } [callback]
+     * @param { function(): void } [callback]
      */
-    static saveConfig(key: string, value?: any, local?: string | boolean, callback?: Function): void;
+    saveConfig(key: string, value?: any, local?: string | boolean, callback?: () => void): void;
     /**
      * @param { string } key
      */
-    static saveConfigValue(key: string): void;
+    saveConfigValue(key: string): void;
     /**
      * @param { string } extension
      * @param { string } key
      * @param { * } [value]
      */
-    static saveExtensionConfig(extension: string, key: string, value?: any): void;
+    saveExtensionConfig(extension: string, key: string, value?: any): void;
     /**
      * @param { string } extension
      * @param { string } key
      */
-    static saveExtensionConfigValue(extension: string, key: string): void;
+    saveExtensionConfigValue(extension: string, key: string): void;
     /**
      * @param { string } extension
      * @param { string } key
      */
-    static getExtensionConfig(extension: string, key: string): any;
+    getExtensionConfig(extension: string, key: string): any;
     /**
      * @param { string } mode
      */
-    static clearModeConfig(mode: string): void;
+    clearModeConfig(mode: string): void;
     /**
      * @param { number } position
      * @param { string } [character]
      * @param { string } [character2]
      */
-    static addPlayer(position: number, character?: string, character2?: string): import("../library/element/player.js").Player;
+    addPlayer(position: number, character?: string, character2?: string): import("../library/element/player.js").Player;
     /**
      * @param { number } position
      * @param { string } [character]
      * @param { string } [animation]
      */
-    static addFellow(position: number, character?: string, animation?: string): import("../library/element/player.js").Player;
+    addFellow(position: number, character?: string, animation?: string): import("../library/element/player.js").Player;
     /**
      * @param { Player } player
      */
-    static triggerEnter(player: Player): import("../library/index.js").GameEventPromise;
+    triggerEnter(player: Player): import("../library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     /**
      * @param { Player } player
      */
-    static restorePlayer(player: Player): import("../library/element/player.js").Player;
+    restorePlayer(player: Player): import("noname-typings/nonameModules/noname/library/element/player.js").Player;
     /**
      * @param { Player } player
      */
-    static removePlayer(player: Player): import("../library/element/player.js").Player;
+    removePlayer(player: Player): import("noname-typings/nonameModules/noname/library/element/player.js").Player;
     /**
      * @param { Player } player
      * @param { string } [character]
      * @param { string } [character2]
      */
-    static replacePlayer(player: Player, character?: string, character2?: string): import("../library/element/player.js").Player;
-    static arrangePlayers(): void;
+    replacePlayer(player: Player, character?: string, character2?: string): import("../library/element/player.js").Player;
+    arrangePlayers(): void;
     /**
      * @param { string[] } skills
      * @param { Player } player
      * @param { string[] } exclude
      */
-    static filterSkills(skills: string[], player: Player, exclude: string[]): string[];
+    filterSkills(skills: string[], player: Player, exclude: string[]): string[];
     /**
      * @param { string[] } skills
      */
-    static expandSkills(skills: string[]): string[];
+    expandSkills(skills: string[]): string[];
     /**
      * @param { { [key:string]: any } } style
      */
-    static css(style: {
+    css(style: {
         [key: string]: any;
     }): void;
     /**
      * @param { (player: Player) => boolean } func
      * @param { boolean } [includeOut]
      */
-    static hasPlayer(func: (player: Player) => boolean, includeOut?: boolean): boolean;
+    hasPlayer(func: (player: Player) => boolean, includeOut?: boolean): boolean;
     /**
      * @param { (player: Player) => boolean } func
      * @param { boolean } [includeOut]
      */
-    static hasPlayer2(func: (player: Player) => boolean, includeOut?: boolean): boolean;
+    hasPlayer2(func: (player: Player) => boolean, includeOut?: boolean): boolean;
     /**
      * @param { (player: Player) => boolean } func
      * @param { boolean } [includeOut]
      */
-    static countPlayer(func: (player: Player) => boolean, includeOut?: boolean): number;
+    countPlayer(func: (player: Player) => boolean, includeOut?: boolean): number;
     /**
      * @param { (player: Player) => boolean } func
      * @param { boolean } [includeOut]
      */
-    static countPlayer2(func: (player: Player) => boolean, includeOut?: boolean): number;
+    countPlayer2(func: (player: Player) => boolean, includeOut?: boolean): number;
     /**
      * @overload
      * @returns { Player[] }
      */
-    static filterPlayer(): Player[];
-    /**
-     * @overload
-     * @param { (player: Player) => boolean } func
-     * @param { Player[] } [list]
-     * @param { boolean } [includeOut]
-     * @returns { Player[] }
-     */
-    static filterPlayer(func: (player: Player) => boolean, list?: Player[], includeOut?: boolean): Player[];
-    /**
-     * @overload
-     * @returns { Player[] }
-     */
-    static filterPlayer2(): Player[];
+    filterPlayer(): Player[];
     /**
      * @overload
      * @param { (player: Player) => boolean } func
@@ -1347,29 +1406,42 @@ export class Game extends Uninstantable {
      * @param { boolean } [includeOut]
      * @returns { Player[] }
      */
-    static filterPlayer2(func: (player: Player) => boolean, list?: Player[], includeOut?: boolean): Player[];
+    filterPlayer(func: (player: Player) => boolean, list?: Player[], includeOut?: boolean): Player[];
+    /**
+     * @overload
+     * @returns { Player[] }
+     */
+    filterPlayer2(): Player[];
+    /**
+     * @overload
+     * @param { (player: Player) => boolean } func
+     * @param { Player[] } [list]
+     * @param { boolean } [includeOut]
+     * @returns { Player[] }
+     */
+    filterPlayer2(func: (player: Player) => boolean, list?: Player[], includeOut?: boolean): Player[];
     /**
      * @param { (player: Player) => boolean } func
      * @param { boolean } [includeOut]
      */
-    static findPlayer(func: (player: Player) => boolean, includeOut?: boolean): import("../library/element/player.js").Player;
+    findPlayer(func: (player: Player) => boolean, includeOut?: boolean): import("noname-typings/nonameModules/noname/library/element/player.js").Player;
     /**
      * @param { (player: Player) => boolean } func
      * @param { boolean } [includeOut]
      */
-    static findPlayer2(func: (player: Player) => boolean, includeOut?: boolean): import("../library/element/player.js").Player;
+    findPlayer2(func: (player: Player) => boolean, includeOut?: boolean): import("noname-typings/nonameModules/noname/library/element/player.js").Player;
     /**
      * @param { (player: Player) => boolean } func
      * @param { boolean } [all]
      */
-    static findCards(func: (player: Player) => boolean, all?: boolean): string[];
-    static countGroup(): number;
+    findCards(func: (player: Player) => boolean, all?: boolean): string[];
+    countGroup(): number;
     /**
      * 此函数用于计算函数的时间消耗。
      * @param {function} 测试的函数
      * @returns {number} 消耗的时间
      */
-    static testRunCost(func: any): number;
+    testRunCost(func: any): number;
     /**
      * 此方法用于对所有targets按顺序执行一个async函数。
      *
@@ -1377,9 +1449,10 @@ export class Game extends Uninstantable {
      * @param { (player: Player, i: number) => Promise<any | void> } asyncFunc 需要执行的async方法
      * @param { (a: Player, b: Player) => number } sort 排序器，默认为lib.sort.seat
      */
-    static doAsyncInOrder(targets: Player[], asyncFunc: (player: Player, i: number) => Promise<any | void>, sort: (a: Player, b: Player) => number): Promise<void>;
+    doAsyncInOrder(targets: Player[], asyncFunc: (player: Player, i: number) => Promise<any | void>, sort: (a: Player, b: Player) => number): Promise<void>;
 }
-export const game: typeof Game;
+export let game: Game;
+export function setGame(instance?: InstanceType<typeof Game>): void;
 export type GameHistory = {
     cardMove: GameEventPromise[];
     custom: GameEventPromise[];
@@ -1388,6 +1461,7 @@ export type GameHistory = {
     everything: GameEventPromise[];
 };
 export type Video = {
+    name?: string;
     type: string;
     player?: string;
     content?: string | any[];
@@ -1402,8 +1476,9 @@ export type Videos = {
     video: Video;
     win: boolean;
 };
-import { Uninstantable } from "../util/index.js";
+import { GameCompatible } from "./compatible.js";
 import { GamePromises } from "./promises.js";
 import { DynamicStyle } from "./dynamic-style/index.js";
-import { Library as lib } from '../library/index.js';
+import { lib } from "../library/index.js";
+import { Check } from "./check.js";
 import { delay } from "../util/index.js";

@@ -1,5 +1,5 @@
 export class GameEvent {
-    static initialGameEvent(): import("../index.js").GameEventPromise;
+    static initialGameEvent(): GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     /**
      * @param {string | GameEvent} [name]
      * @param {false} [trigger]
@@ -35,9 +35,13 @@ export class GameEvent {
      **/
     async: boolean;
     /**
-     * @type {null|(event: GameEvent)=>any} 这个异步事件对应Promise的resolve函数
+     * @type {null|((event: GameEvent | PromiseLike<GameEvent>)=>void)} 这个异步事件对应Promise的resolve函数
      **/
-    resolve: (event: GameEvent) => any;
+    resolve: (event: GameEvent | PromiseLike<GameEvent>) => void;
+    /**
+     * @type {null|((value?: any) => void)} 另一种结束event.content的resolve形式
+     **/
+    resolveContent: (value?: any) => void;
     _triggered: number;
     __args: any;
     /**
@@ -48,6 +52,10 @@ export class GameEvent {
      * @type { Player }
      */
     player: Player;
+    /**
+     * @type { Player[] }
+     */
+    players: Player[];
     /**
      * @type { Player }
      */
@@ -121,9 +129,57 @@ export class GameEvent {
      */
     parent: GameEventPromise | void | null;
     /**
-     * @type { Function | void | null }
+     * @type { (this: GameEventPromise) => any | undefined | void | null }
      */
-    filterStop: Function | void | null;
+    filterStop: (this: GameEventPromise) => any | undefined | void | null;
+    /**
+     * @type { Result['cost_data'] }
+     */
+    cost_data: Result['cost_data'];
+    /**
+     * @type { boolean }
+     */
+    responded: boolean;
+    /**
+     * @type { string | undefined }
+     */
+    judgestr: string | undefined;
+    /**
+     * @type { boolean }
+     */
+    judging: boolean;
+    /**
+     * @type { Function | undefined }
+     */
+    judge2: Function | undefined;
+    /**
+     * @type { Card[] }
+     */
+    orderingCards: Card[];
+    /**
+     * @type { Function | undefined }
+     */
+    ai: Function | undefined;
+    /**
+     * @type { string }
+     */
+    triggername: string;
+    /**
+     * @type { ContentFuncByAll | GeneratorContentFuncByAll | OldContentFuncByAll }
+     */
+    content: ContentFuncByAll | GeneratorContentFuncByAll | OldContentFuncByAll;
+    /**
+     * @type { boolean }
+     */
+    forceDie: boolean;
+    /**
+     * @type { Function | undefined }
+     */
+    _oncancel: Function | undefined;
+    /**
+     * @type { boolean }
+     */
+    includeOut: boolean;
     /**
      * @param {keyof this} key
      * @param {number} [value]
@@ -203,7 +259,7 @@ export class GameEvent {
     putTempCache(key1: any, key2: any, value: any): any;
     _tempCache: {};
     getTempCache(key1: any, key2: any): any;
-    cancel(arg1: any, arg2: any, notrigger: any): import("../index.js").GameEventPromise;
+    cancel(arg1: any, arg2: any, notrigger: any): GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     neutralize(event: any): this;
     _neutralized: boolean;
     _neutralize_event: any;
@@ -217,7 +273,6 @@ export class GameEvent {
      * @param {ArrayLike<Function> | Function | keyof typeof lib.element.content} item
      */
     setContent(item: ArrayLike<Function> | Function | keyof typeof lib.element.content): this;
-    content: any;
     /**
      *
      * @param {Function | keyof typeof lib.element.contents} contents
@@ -232,18 +287,18 @@ export class GameEvent {
      * 获取事件的父节点。
      * 获取事件链上的指定事件。
      * 默认获取上一个父节点（核心）。
-     * @param {number|string|(evt:gameEvent)=>boolean} [level=1] 获取深度（number）/指定名字（string）/指定特征（function）
+     * @param {number|string|((evt:GameEvent)=>boolean)} [level=1] 获取深度（number）/指定名字（string）/指定特征（function）
      * @param {boolean} [forced] 若获取不到节点，默认返回{}，若forced为true则返回null
      * @param {boolean} [includeSelf] 若level不是数字，指定搜索时是否包含事件本身
      * @returns {GameEvent|{}|null}
      */
-    getParent(level?: string | number | ((evt: gameEvent) => boolean), forced?: boolean, includeSelf?: boolean): GameEvent | {} | null;
+    getParent(level?: string | number | ((evt: GameEvent) => boolean), forced?: boolean, includeSelf?: boolean): GameEvent | {} | null;
     getTrigger(): any;
     getRand(name: any): any;
     _rand_map: {};
     _rand: number;
-    insert(content: any, map: any): import("../index.js").GameEventPromise;
-    insertAfter(content: any, map: any): import("../index.js").GameEventPromise;
+    insert(content: any, map: any): GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    insertAfter(content: any, map: any): GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     backup(skill: any): this;
     _backup: any;
     filterButton: any;
@@ -273,14 +328,12 @@ export class GameEvent {
     isPhaseUsing(player: any): boolean;
     addTrigger(skills: any, player: any): this;
     removeTrigger(skills: any, player: any): this;
-    trigger(name: any): import("../index.js").GameEventPromise;
+    trigger(name: any): GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     untrigger(all: boolean, player: any): this;
     /**
      * 事件转为Promise化
-     *
-     * @returns { GameEventPromise }
      */
-    toPromise(): GameEventPromise;
+    toPromise(): this & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     #private;
 }
-import { Library as lib } from "../index.js";
+import { lib } from "../index.js";

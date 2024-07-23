@@ -69,29 +69,9 @@ export class Player extends HTMLDivElement {
         skill: {};
     }[];
     /**
-     * @type { {
-     * 	useCard: GameEventPromise[],
-     * 	respond: GameEventPromise[],
-     * 	skipped: GameEventPromise[],
-     * 	lose: GameEventPromise[],
-     * 	gain: GameEventPromise[],
-     * 	sourceDamage: GameEventPromise[],
-     * 	damage: GameEventPromise[],
-     * 	custom: GameEventPromise[],
-     * 	useSkill: GameEventPromise[],
-     * }[] }
+     * @type { ActionHistory[] }
      */
-    actionHistory: {
-        useCard: GameEventPromise[];
-        respond: GameEventPromise[];
-        skipped: GameEventPromise[];
-        lose: GameEventPromise[];
-        gain: GameEventPromise[];
-        sourceDamage: GameEventPromise[];
-        damage: GameEventPromise[];
-        custom: GameEventPromise[];
-        useSkill: GameEventPromise[];
-    }[];
+    actionHistory: ActionHistory[];
     /**
      * @type { SMap<string[]> }
      */
@@ -117,7 +97,8 @@ export class Player extends HTMLDivElement {
      * 	friend: [],
      * 	enemy: [],
      * 	neutral: [],
-     * 	handcards: {
+     * 	shown?: number,
+     * 	handcards?: {
      * 		global: [],
      * 		source: [],
      * 		viewed: []
@@ -128,7 +109,8 @@ export class Player extends HTMLDivElement {
         friend: [];
         enemy: [];
         neutral: [];
-        handcards: {
+        shown?: number;
+        handcards?: {
             global: [];
             source: [];
             viewed: [];
@@ -208,6 +190,22 @@ export class Player extends HTMLDivElement {
      * @type { ((player: this) => any)[] }
      */
     _inits: ((player: this) => any)[];
+    /**
+     * @type { boolean }
+     */
+    isZhu: boolean;
+    /**
+     * @type { string }
+     */
+    identity: string;
+    /**
+     * @type { boolean | undefined }
+     */
+    identityShown: boolean | undefined;
+    /**
+     * @type { boolean }
+     */
+    removed: boolean;
     /**
      * 怒气
      * @param { number } amount
@@ -290,18 +288,21 @@ export class Player extends HTMLDivElement {
     /**
      * 让一名角色明置一些手牌
      */
-    addShownCards(...args: any[]): import("../index.js").GameEventPromise;
-    hideShownCards(...args: any[]): import("../index.js").GameEventPromise;
+    addShownCards(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    /**
+     * 让一名角色暗置一些手牌
+     */
+    hideShownCards(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     /**
      * 获取角色所有的明置手牌
      */
-    getShownCards(): import("./card.js").Card[];
+    getShownCards(): import("noname-typings/nonameModules/noname/library/element/card.js").Card[];
     /**
      * 获取该角色被other所知的牌
      * @param { Player } [other]
      * @param { (card: Card) => boolean } [filter]
      */
-    getKnownCards(other?: Player, filter?: (card: Card) => boolean): import("./card.js").Card[];
+    getKnownCards(other?: Player, filter?: (card: Card) => boolean): import("noname-typings/nonameModules/noname/library/element/card.js").Card[];
     /**
      * 判断此角色的手牌是否已经被看光了
      * @param { Player } [other]
@@ -329,12 +330,13 @@ export class Player extends HTMLDivElement {
      * @param {*} judge2
      * @returns
      */
-    executeDelayCardEffect(card: Card | string, target: Player, judge: any, judge2: any, ...args: any[]): import("../index.js").GameEventPromise;
+    executeDelayCardEffect(card: Card | string, target: Player, judge: any, judge2: any, ...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     /**
      * Check if the card does not count toward hand limit
      *
      * 检测此牌是否不计入手牌上限
      * @param { Card } card
+     * @returns { boolean }
      */
     canIgnoreHandcard(card: Card): boolean;
     /**
@@ -344,7 +346,7 @@ export class Player extends HTMLDivElement {
      * @param { Card | Card[] } cards
      * @param { Player } target
      */
-    gift(cards: Card | Card[], target: Player, ...args: any[]): import("../index.js").GameEventPromise;
+    gift(cards: Card | Card[], target: Player, ...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     /**
      * Check if the player can gift the card
      *
@@ -381,7 +383,7 @@ export class Player extends HTMLDivElement {
      * @param { (player: Player, cards: Card[]) => any } [recastingLose]
      * @param { (player: Player, cards: Card[]) => any } [recastingGain]
      */
-    recast(cards: Card | Card[], recastingLose?: (player: Player, cards: Card[]) => any, recastingGain?: (player: Player, cards: Card[]) => any, ...args: any[]): import("../index.js").GameEventPromise;
+    recast(cards: Card | Card[], recastingLose?: (player: Player, cards: Card[]) => any, recastingGain?: (player: Player, cards: Card[]) => any, ...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     /**
      * Check if the player can recast the card
      *
@@ -459,19 +461,19 @@ export class Player extends HTMLDivElement {
      *
      * 参数：废除来源角色（不写默认当前事件角色），废除区域（数字/区域字符串/数组，可以写多个，重复废除）
      */
-    disableEquip(...args: any[]): import("../index.js").GameEventPromise;
+    disableEquip(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     /**
      * 新的恢复装备区
      *
      * 参数：恢复来源角色（不写默认当前事件角色），恢复区域（数字/区域字符串/数组，可以写多个，重复恢复）
      */
-    enableEquip(...args: any[]): import("../index.js").GameEventPromise;
+    enableEquip(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     /**
      * 新的扩展装备区
      *
      * 参数：扩展来源角色（不写默认当前事件角色），扩展区域（数字/区域字符串/数组，可以写多个，重复扩展）
      */
-    expandEquip(...args: any[]): import("../index.js").GameEventPromise;
+    expandEquip(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     /**
      * 判断判定区是否被废除
      */
@@ -489,7 +491,7 @@ export class Player extends HTMLDivElement {
     /**
      * @param { string | Card | VCard | CardBaseUIData } name
      * @param { boolean } [replace]
-     * @returns
+     * @returns { boolean }
      */
     canEquip(name: string | Card | VCard | CardBaseUIData, replace?: boolean): boolean;
     /**
@@ -512,20 +514,26 @@ export class Player extends HTMLDivElement {
      * @deprecated
      */
     $enableEquip(): void;
-    chooseToDebate(...args: any[]): import("../index.js").GameEventPromise;
+    chooseToDebate(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     /**
      * 向target发起协力
      * @param { Player } target
-     * @param {*} type
+     * @param { string } type
      * @param {*} reason
      */
-    cooperationWith(target: Player, type: any, reason: any): void;
-    chooseCooperationFor(...args: any[]): import("../index.js").GameEventPromise;
+    cooperationWith(target: Player, type: string, reason: any): void;
+    chooseCooperationFor(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     checkCooperationStatus(target: any, reason: any): boolean;
     removeCooperation(info: any): void;
     /**
+     * @param { boolean } unseen 是否无视暗将的限制
+     * @returns { string[] }
+     */
+    getClans(unseen: boolean): string[];
+    /**
      * @param { string } clan 氏族名称
      * @param { boolean } unseen 是否无视暗将的限制
+     * @returns { boolean }
      */
     hasClan(clan: string, unseen: boolean): boolean;
     /**
@@ -537,9 +545,14 @@ export class Player extends HTMLDivElement {
      */
     $changeZhuanhuanji(skill: string): void;
     /**
+     * 设置玩家的座位号
      * @param { number } num
      */
     setSeatNum(num: number): void;
+    /**
+     * 返回玩家的座位号
+     * @returns { number }
+     */
     getSeatNum(): number;
     /**
      * 是否拥有某一性别
@@ -564,17 +577,26 @@ export class Player extends HTMLDivElement {
      * @param { string } skill
      */
     removeSkillBlocker(skill: string): void;
-    loseToSpecial(cards: any, tag: any, target: any): import("../index.js").GameEventPromise;
     /**
+     *
+     * @param { Card[] } cards
+     * @param { string } tag
+     * @param { Player } target
+     * @returns { GameEventPromise }
+     */
+    loseToSpecial(cards: Card[], tag: string, target: Player): GameEventPromise;
+    /**
+     * 给一些牌加上Gaintag
      * @param { Card | Card[] } cards
      * @param { string } tag
      */
     addGaintag(cards: Card | Card[], tag: string): void;
     /**
+     * 移除一些牌的Gaintag
      * @param { string } tag
-     * @param { Card[] } [cards]
+     * @param { Card | Card[] } [cards]
      */
-    removeGaintag(tag: string, cards?: Card[]): void;
+    removeGaintag(tag: string, cards?: Card | Card[]): void;
     /**
      * @param { Player } target
      */
@@ -596,18 +618,19 @@ export class Player extends HTMLDivElement {
      */
     changeCharacter(newPairs: string[], log?: boolean): GameEventPromise;
     /**
+     * 亮将函数，若num为0，则只亮主将，num为1，则只亮副将，num为2，则亮主将和副将
      * @param { 0 | 1 | 2 } num
      * @param { false } [log]
      */
-    showCharacter(num: 0 | 1 | 2, log?: false, ...args: any[]): import("../index.js").GameEventPromise;
+    showCharacter(num: 0 | 1 | 2, log?: false, ...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     /**
      * @param { 0 | 1 | 2 } num
      * @param { false } [log]
      */
     $showCharacter(num: 0 | 1 | 2, log?: false): void;
-    chooseToPlayBeatmap(beatmap: any, ...args: any[]): import("../index.js").GameEventPromise;
-    chooseToMove(...args: any[]): import("../index.js").GameEventPromise;
-    chooseToGuanxing(num: any): import("../index.js").GameEventPromise;
+    chooseToPlayBeatmap(beatmap: any, ...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    chooseToMove(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    chooseToGuanxing(num: any): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     /**
      * @param { Player } target
      * @param { string } name
@@ -634,8 +657,9 @@ export class Player extends HTMLDivElement {
     /**
      * @param { string } name
      * @param { string } type
+     * @returns { boolean | undefined }
      */
-    hasUsableCard(name: string, type: string): boolean;
+    hasUsableCard(name: string, type: string): boolean | undefined;
     /**
      * @param { Player } to
      * @returns { boolean }
@@ -643,6 +667,7 @@ export class Player extends HTMLDivElement {
     inRange(to: Player): boolean;
     /**
      * @param { Player } source
+     * @returns { boolean }
      */
     inRangeOf(source: Player): boolean;
     /**
@@ -651,6 +676,7 @@ export class Player extends HTMLDivElement {
      * 获取角色的体力值。设置“raw”为true以获取角色的体力。
      *
      * @param { boolean } [raw]
+     * @returns { number }
      */
     getHp(raw?: boolean): number;
     /**
@@ -659,40 +685,58 @@ export class Player extends HTMLDivElement {
      * 设置“raw”为true以获取角色已损失的体力。
      *
      * @param { boolean } [raw]
+     * @returns { number }
      */
     getDamagedHp(raw?: boolean): number;
     /**
+     * 将玩家切换至某个势力
      * @param { string } group
+     * @param { boolean } [log]
+     * @param { "nobroadcast" } [broadcast]
+     * @returns { GameEventPromise }
      */
-    changeGroup(group: string, log: any, broadcast: any, ...args: any[]): import("../index.js").GameEventPromise;
+    changeGroup(group: string, log?: boolean, broadcast?: "nobroadcast", ...args: any[]): GameEventPromise;
     /**
      * @param { Player } target
      */
-    chooseToDuiben(target: Player): import("../index.js").GameEventPromise;
+    chooseToDuiben(target: Player): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     /**
+     * 令玩家与target划拳
      * @param { Player } target
+     * @returns { GameEventPromise }
      */
-    chooseToPSS(target: Player): import("../index.js").GameEventPromise;
-    chooseToEnable(...args: any[]): import("../index.js").GameEventPromise;
-    chooseToDisable(...args: any[]): import("../index.js").GameEventPromise;
+    chooseToPSS(target: Player): GameEventPromise;
     /**
+     * 令玩家选择恢复一个已废除的装备栏
+     * @returns { GameEventPromise }
+     */
+    chooseToEnable(...args: any[]): GameEventPromise;
+    /**
+     * 令玩家选择废除一个未废除的装备栏
+     * @returns { GameEventPromise }
+     */
+    chooseToDisable(...args: any[]): GameEventPromise;
+    /**
+     * 返回玩家是否处于出牌阶段
      * @param { boolean } [notmeisok]
      */
     isPhaseUsing(notmeisok?: boolean): boolean;
     /**
+     * 与target交换装备区里的牌
      * @param { Player } target
      */
-    swapEquip(target: Player): import("../index.js").GameEventPromise;
+    swapEquip(target: Player): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     /**
+     * 返回玩家是否可以与target拼点
      * @param { Player } target
-     * @param { boolean } [goon]
-     * @param { boolean} [bool]
+     * @param { boolean } [goon] 忽略玩家的手牌不足以拼点
+     * @param { boolean} [bool] 忽略target的手牌不足以拼点
      */
     canCompare(target: Player, goon?: boolean, bool?: boolean): boolean;
     $disableJudge(): void;
     $enableJudge(): void;
-    disableJudge(): import("../index.js").GameEventPromise;
-    enableJudge(): import("../index.js").GameEventPromise;
+    disableJudge(): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    enableJudge(): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     init(character: any, character2: any, skill: any, update: any): this;
     skin: {
         name: any;
@@ -740,8 +784,16 @@ export class Player extends HTMLDivElement {
     playerid: string;
     throwEmotion(target: any, emotion: any, rotate: any): void;
     emotion(pack: any, id: any): void;
-    chat(str: any): void;
-    say(str: any): void;
+    /**
+     * 用法同 {@link say}，但联机模式用这个
+     * @param { string } str
+     */
+    chat(str: string): void;
+    /**
+     * 让玩家说话
+     * @param { string } str
+     */
+    say(str: string): void;
     showGiveup(): void;
     _giveUp: boolean;
     applySkills(skills: any): void;
@@ -754,12 +806,12 @@ export class Player extends HTMLDivElement {
         name: string;
         name1: string;
         name2: string;
-        handcards: import("./card.js").Card[];
+        handcards: import("noname-typings/nonameModules/noname/library/element/card.js").Card[];
         gaintag: any[];
-        equips: import("./card.js").Card[];
-        judges: import("./card.js").Card[];
-        specials: import("./card.js").Card[];
-        expansions: import("./card.js").Card[];
+        equips: import("noname-typings/nonameModules/noname/library/element/card.js").Card[];
+        judges: import("noname-typings/nonameModules/noname/library/element/card.js").Card[];
+        specials: import("noname-typings/nonameModules/noname/library/element/card.js").Card[];
+        expansions: import("noname-typings/nonameModules/noname/library/element/card.js").Card[];
         expansion_gaintag: any[];
         disableJudge: boolean;
         disabledSlots: SMap<number>;
@@ -768,9 +820,9 @@ export class Player extends HTMLDivElement {
         position: number;
         hujia: number;
         side: any;
-        identityShown: any;
+        identityShown: boolean;
         identityNode: string[];
-        identity: any;
+        identity: string;
         dead: boolean;
         linked: boolean;
         turnedover: boolean;
@@ -786,27 +838,78 @@ export class Player extends HTMLDivElement {
     flashAvatar(skill: any, name: any): void;
     update(...args: any[]): void;
     $update(...args: any[]): this;
-    clearMark(i: any, log: any): void;
-    removeMark(i: any, num: any, log: any): void;
-    addMark(i: any, num: any, log: any): void;
-    setMark(name: any, num: any, log: any): void;
     /**
-     * @param {*} i
+     * 清除玩家的标记
+     * @param { string } i
+     * @param { boolean } [log]
+     */
+    clearMark(i: string, log?: boolean): void;
+    /**
+     * 移除玩家的标记
+     * @param { string } i
+     * @param { number } [num = 1]
+     * @param { boolean } [log]
+     */
+    removeMark(i: string, num?: number, log?: boolean): void;
+    /**
+     * 增加玩家的标记
+     * @param { string } i
+     * @param { number } [num = 1]
+     * @param { boolean } [log]
+     */
+    addMark(i: string, num?: number, log?: boolean): void;
+    /**
+     * 设置玩家的标记数
+     * @param { string } name
+     * @param { number } num
+     * @param { boolean } [log]
+     */
+    setMark(name: string, num: number, log?: boolean): void;
+    /**
+     * 返回玩家的标记数
+     * @param { string } i
      * @returns { number }
      */
-    countMark(i: any): number;
-    hasMark(i: any): boolean;
+    countMark(i: string): number;
+    /**
+     * 返回玩家是否拥有某个标记
+     * @param { string } i
+     * @returns { boolean }
+     */
+    hasMark(i: string): boolean;
     updateMark(i: any, storage: any): this;
     updateMarks(connect: any): void;
+    /**
+     * @deprecated
+     */
     num(arg1: any, arg2: any, arg3: any): any;
     line(target: any, config: any): void;
     line2(targets: any, config: any): void;
-    getNext(): this;
-    getPrevious(): this;
+    /**
+     * 返回玩家的下家
+     * @returns { Player | null }
+     */
+    getNext(): Player | null;
+    /**
+     * 返回玩家的上家
+     * @returns { Player | null }
+     */
+    getPrevious(): Player | null;
     countUsed(card: any, type: any): number;
     getCacheKey(): string;
-    countSkill(skill: any): any;
-    getStockSkills(unowned: any, unique: any, hidden: any): any[];
+    /**
+     * 返回玩家本回合使用某个技能的次数
+     * @param { string } skill
+     * @returns { number }
+     */
+    countSkill(skill: string): number;
+    /**
+     * @param {*} [unowned]
+     * @param {*} [unique]
+     * @param {*} [hidden]
+     * @returns { string[] }
+     */
+    getStockSkills(unowned?: any, unique?: any, hidden?: any): string[];
     /**
      * @param { string } [arg1='h']
      * @param { string | Record<string, any> | ((card: Card) => boolean) } [arg2]
@@ -819,128 +922,337 @@ export class Player extends HTMLDivElement {
      * @returns { Card[] }
      */
     getCards(arg1?: string, arg2?: string | Record<string, any> | ((card: Card) => boolean)): Card[];
-    iterableGetDiscardableCards(player: any, arg1: any, arg2: any): Generator<any, void, unknown>;
-    getDiscardableCards(player: any, arg1: any, arg2: any): any[];
-    iterableGetGainableCards(player: any, arg1: any, arg2: any): Generator<any, void, unknown>;
-    getGainableCards(player: any, arg1: any, arg2: any): any[];
+    /**
+     * @param { Player } player
+     * @param { string } [arg1]
+     * @param { string } [arg2]
+     * @returns { Generator<Card, void, unknown> }
+     */
+    iterableGetDiscardableCards(player: Player, arg1?: string, arg2?: string): Generator<Card, void, unknown>;
+    getDiscardableCards(player: any, arg1: any, arg2: any): import("noname-typings/nonameModules/noname/library/element/card.js").Card[];
+    /**
+     * @param {Parameters<lib['filter']['canBeGained']>[1]} player
+     * @param {Parameters<this['iterableGetCards']>[0]} arg1
+     * @param {Parameters<this['iterableGetCards']>[1]} arg2
+     */
+    iterableGetGainableCards(player: [card?: any, player?: any, target?: any, event?: any][1], arg1: Parameters<this['iterableGetCards']>[0], arg2: Parameters<this['iterableGetCards']>[1]): Generator<any, void, unknown>;
+    /**
+     *
+     * @param {Parameters<this['iterableGetGainableCards']>[0]} player
+     * @param {Parameters<this['iterableGetGainableCards']>[1]} [arg1]
+     * @param {Parameters<this['iterableGetGainableCards']>[2]} [arg2]
+     */
+    getGainableCards(player: Parameters<this['iterableGetGainableCards']>[0], arg1?: Parameters<this['iterableGetGainableCards']>[1], arg2?: Parameters<this['iterableGetGainableCards']>[2]): any[];
     getGainableSkills(func: any): any[];
-    countCards(arg1: any, arg2: any): number;
+    /**
+     * @param { Parameters<typeof this['iterableGetCards']>[0] } [arg1]
+     * @param { Parameters<typeof this['iterableGetCards']>[1] } [arg2]
+     */
+    countCards(arg1?: Parameters<typeof this['iterableGetCards']>[0], arg2?: Parameters<typeof this['iterableGetCards']>[1]): number;
     getCardIndex(arg1: any, name: any, card: any, max: any): number;
     countDiscardableCards(player: any, arg1: any, arg2: any): number;
-    countGainableCards(player: any, arg1: any, arg2: any): number;
-    getOriginalSkills(): any[];
+    /**
+     * @param {Parameters<this['getGainableCards']>[0]} player
+     * @param {Parameters<this['getGainableCards']>[1]} [arg1]
+     * @param {Parameters<this['getGainableCards']>[2]} [arg2]
+     */
+    countGainableCards(player: Parameters<this['getGainableCards']>[0], arg1?: Parameters<this['getGainableCards']>[1], arg2?: Parameters<this['getGainableCards']>[2]): number;
+    /**
+     * 返回武将牌上原有的技能
+     * @returns { Array<string> } 技能名数组
+     */
+    getOriginalSkills(): Array<string>;
     getModableSkills(): any[];
-    getSkills(arg2: any, arg3: any, arg4: any): any[];
+    /**
+     * @param { string | boolean | null } [arg2]
+     * @param { boolean | null} [arg3]
+     * @param {boolean} [arg4]
+     */
+    getSkills(arg2?: string | boolean | null, arg3?: boolean | null, arg4?: boolean): any[];
+    /**
+     * @deprecated
+     */
     get(arg1: any, arg2: any, arg3: any, arg4: any, ...args: any[]): any[] | ChildNode;
     syncStorage(skill: any): void;
     syncSkills(): void;
     playerfocus(time: any): this;
     setIdentity(identity: any, nature: any): this;
-    insertPhase(skill: any, insert: any): import("../index.js").GameEventPromise;
-    insertEvent(name: any, content: any, arg: any): import("../index.js").GameEventPromise;
-    phase(skill: any): import("../index.js").GameEventPromise;
-    phaseZhunbei(): import("../index.js").GameEventPromise;
-    phaseJudge(): import("../index.js").GameEventPromise;
-    phaseDraw(): import("../index.js").GameEventPromise;
-    phaseUse(): import("../index.js").GameEventPromise;
-    phaseDiscard(): import("../index.js").GameEventPromise;
-    phaseJieshu(): import("../index.js").GameEventPromise;
-    chooseToUse(use: any, ...args: any[]): import("../index.js").GameEventPromise;
-    chooseToRespond(...args: any[]): import("../index.js").GameEventPromise;
-    chooseToGive(...args: any[]): import("../index.js").GameEventPromise;
-    chooseToDiscard(...args: any[]): import("../index.js").GameEventPromise;
-    chooseToCompare(target: any, check: any, ...args: any[]): import("../index.js").GameEventPromise;
-    chooseSkill(target: any, ...args: any[]): void;
-    discoverCard(list: any, ...args: any[]): import("../index.js").GameEventPromise;
-    chooseCardButton(...args: any[]): import("../index.js").GameEventPromise;
-    chooseVCardButton(...args: any[]): import("../index.js").GameEventPromise;
-    chooseButton(...args: any[]): import("../index.js").GameEventPromise;
-    chooseButtonOL(list: any, callback: any, ai: any, ...args: any[]): import("../index.js").GameEventPromise;
-    chooseCardOL(...args: any[]): import("../index.js").GameEventPromise;
-    chooseCard(choose: any, ...args: any[]): import("../index.js").GameEventPromise;
-    chooseUseTarget(...args: any[]): import("../index.js").GameEventPromise;
-    chooseTarget(...args: any[]): import("../index.js").GameEventPromise;
-    chooseCardTarget(choose: any, ...args: any[]): import("../index.js").GameEventPromise;
-    chooseControlList(...args: any[]): import("../index.js").GameEventPromise;
-    chooseControl(...args: any[]): import("../index.js").GameEventPromise;
-    chooseBool(...args: any[]): import("../index.js").GameEventPromise;
-    chooseDrawRecover(...args: any[]): import("../index.js").GameEventPromise;
-    choosePlayerCard(...args: any[]): import("../index.js").GameEventPromise;
-    discardPlayerCard(...args: any[]): import("../index.js").GameEventPromise;
-    gainPlayerCard(...args: any[]): import("../index.js").GameEventPromise;
-    showHandcards(str: any, ...args: any[]): import("../index.js").GameEventPromise;
-    showCards(cards: any, str: any, ...args: any[]): import("../index.js").GameEventPromise;
-    viewCards(str: any, cards: any, ...args: any[]): import("../index.js").GameEventPromise;
-    viewHandcards(target: any): false | import("../index.js").GameEventPromise;
+    insertPhase(skill: any, insert: any): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    insertEvent(name: any, content: any, arg: any): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    phase(skill: any): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    phaseZhunbei(): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    phaseJudge(): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    phaseDraw(): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    phaseUse(): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    phaseDiscard(): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    phaseJieshu(): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    chooseToUse(use: any, ...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    chooseToRespond(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    chooseToGive(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    chooseToDiscard(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    chooseToCompare(target: any, check: any, ...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    chooseSkill(target: any, ...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    discoverCard(list: any, ...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    chooseCardButton(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    chooseVCardButton(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    chooseButton(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    chooseButtonOL(list: any, callback: any, ai: any, ...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    chooseCardOL(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    chooseCard(choose: any, ...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    chooseUseTarget(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    chooseTarget(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    chooseCardTarget(choose: any, ...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    chooseControlList(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    chooseControl(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    chooseBool(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    chooseDrawRecover(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    choosePlayerCard(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    discardPlayerCard(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    gainPlayerCard(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    /**
+     * 玩家展示手牌
+     * @param { string } str
+     * @returns { GameEventPromise }
+     */
+    showHandcards(str: string, ...args: any[]): GameEventPromise;
+    /**
+     * 玩家展示一些牌
+     * @param { Card[] } cards
+     * @param { string } str
+     * @returns { GameEventPromise }
+     */
+    showCards(cards: Card[], str: string, ...args: any[]): GameEventPromise;
+    /**
+     * 玩家观看一些牌
+     * @param { string } str
+     * @param { Card[] } cards
+     * @returns { GameEventPromise }
+     */
+    viewCards(str: string, cards: Card[], ...args: any[]): GameEventPromise;
+    /**
+     * 玩家观看target的手牌
+     * @param { Player } target
+     * @returns { GameEventPromise }
+     */
+    viewHandcards(target: Player): GameEventPromise;
     canMoveCard(withatt: any, nojudge: any, ...args: any[]): boolean;
-    moveCard(...args: any[]): import("../index.js").GameEventPromise;
-    useResult(result: any, event: any): import("../index.js").GameEventPromise;
-    useCard(...args: any[]): import("../index.js").GameEventPromise;
-    useSkill(...args: any[]): import("../index.js").GameEventPromise;
-    drawTo(num: any, args: any): import("../index.js").GameEventPromise;
-    draw(...args: any[]): import("../index.js").GameEventPromise;
-    randomDiscard(...args: any[]): import("./card.js").Card[];
+    /**
+     * 移动一些牌
+     * @returns { GameEventPromise }
+     */
+    moveCard(...args: any[]): GameEventPromise;
+    useResult(result: any, event: any): import("noname-typings/nonameModules/noname/library/index.js").GameEventPromise;
+    /**
+     * 令玩家使用牌
+     * @returns { GameEventPromise }
+     */
+    useCard(...args: any[]): GameEventPromise;
+    /**
+     * 令玩家使用某个技能
+     * @returns { GameEventPromise }
+     */
+    useSkill(...args: any[]): GameEventPromise;
+    /**
+     * 令玩家摸牌摸至指定值
+     * @param { number } num
+     * @param { * } args
+     * @returns { GameEventPromise }
+     */
+    drawTo(num: number, args: any): GameEventPromise;
+    /**
+     * 令玩家摸牌
+     * @returns { GameEventPromise }
+     */
+    draw(...args: any[]): GameEventPromise;
+    randomDiscard(...args: any[]): import("noname-typings/nonameModules/noname/library/element/card.js").Card[];
     randomGain(...args: any[]): any;
-    discard(...args: any[]): import("../index.js").GameEventPromise;
-    loseToDiscardpile(...args: any[]): import("../index.js").GameEventPromise;
-    respond(...args: any[]): import("../index.js").GameEventPromise;
-    swapHandcards(target: any, cards1: any, cards2: any): import("../index.js").GameEventPromise;
+    /**
+     * 令玩家弃置一些牌
+     * @returns { GameEventPromise }
+     */
+    discard(...args: any[]): GameEventPromise;
+    /**
+     * 令玩家将一些牌置入弃牌堆
+     * @returns { GameEventPromise }
+     */
+    loseToDiscardpile(...args: any[]): GameEventPromise;
+    /**
+     * 令玩家打出牌
+     * @returns { GameEventPromise }
+     */
+    respond(...args: any[]): GameEventPromise;
+    swapHandcards(target: any, cards1: any, cards2: any): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     directequip(cards: any): void;
     $addToExpansion(cards: any, broadcast: any, gaintag: any): this;
     directgain(cards: any, broadcast: any, gaintag: any): this;
     directgains(cards: any, broadcast: any, gaintag: any): this;
-    gainMultiple(targets: any, position: any): import("../index.js").GameEventPromise;
-    gain(...args: any[]): import("../index.js").GameEventPromise;
-    addToExpansion(...args: any[]): import("../index.js").GameEventPromise;
-    give(cards: any, target: any, visible: any): any;
-    lose(...args: any[]): import("../index.js").GameEventPromise;
-    damage(...args: any[]): import("../index.js").GameEventPromise;
-    recover(...args: any[]): import("../index.js").GameEventPromise;
-    doubleDraw(): import("../index.js").GameEventPromise;
-    loseHp(num: any): import("../index.js").GameEventPromise;
-    loseMaxHp(...args: any[]): import("../index.js").GameEventPromise;
-    gainMaxHp(...args: any[]): import("../index.js").GameEventPromise;
-    changeHp(num: any, popup: any): import("../index.js").GameEventPromise;
-    changeHujia(num: any, type: any, limit: any): import("../index.js").GameEventPromise;
+    /**
+     * @param { Player[] } targets
+     * @param { string } [position = "h"]
+     */
+    gainMultiple(targets: Player[], position?: string): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    /**
+     * 令玩家获得一些牌
+     * @returns { GameEventPromise }
+     */
+    gain(...args: any[]): GameEventPromise;
+    /**
+     * 将一些牌置入玩家的武将牌上
+     * @returns { GameEventPromise }
+     */
+    addToExpansion(...args: any[]): GameEventPromise;
+    /**
+     * 玩家交给target一些牌
+     * @param { Card | Card[] } cards
+     * @param { Player } target
+     * @param { boolean } [visible]
+     */
+    give(cards: Card | Card[], target: Player, visible?: boolean): import("noname-typings/nonameModules/noname/library/index.js").GameEventPromise;
+    lose(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    /**
+     * 令玩家受到伤害
+     * @returns { GameEventPromise }
+     */
+    damage(...args: any[]): GameEventPromise;
+    /**
+     * 令玩家回复体力
+     * @returns { GameEventPromise }
+     */
+    recover(...args: any[]): GameEventPromise;
+    /**
+     * 令玩家回复体力至指定值
+     * @returns { GameEventPromise }
+     */
+    recoverTo(...args: any[]): GameEventPromise;
+    doubleDraw(): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    /**
+     * 令玩家流失体力
+     * @param { number } [num]
+     */
+    loseHp(num?: number): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    /**
+     * 扣减玩家的体力上限
+     * @returns { GameEventPromise }}
+     */
+    loseMaxHp(...args: any[]): GameEventPromise;
+    /**
+     * 令玩家获得体力上限
+     * @returns { GameEventPromise }
+     */
+    gainMaxHp(...args: any[]): GameEventPromise;
+    /**
+     * 调整玩家的体力值
+     * @param { number } num
+     * @param { boolean } [popup]
+     * @returns { GameEventPromise }
+     */
+    changeHp(num: number, popup?: boolean): GameEventPromise;
+    /**
+     * 调整玩家的护甲值
+     * @param { number } [num]
+     * @param { "gain" | "lose" | "damage" | "null" } [type]
+     * @param { number } [limit] 护甲上限
+     * @returns { GameEventPromise }
+     */
+    changeHujia(num?: number, type?: "gain" | "lose" | "damage" | "null", limit?: number): GameEventPromise;
     getBuff(...args: any[]): this;
     getDebuff(...args: any[]): this;
-    dying(reason: any): import("../index.js").GameEventPromise;
-    die(reason: any): import("../index.js").GameEventPromise;
-    revive(hp: any, log: any): void;
+    /**
+     * 令玩家进入濒死状态
+     * @param { GameEvent | GameEventPromise } [reason]
+     * @returns { GameEventPromise }
+     */
+    dying(reason?: GameEvent | GameEventPromise): GameEventPromise;
+    /**
+     * 令玩家死亡
+     * @param { GameEvent | GameEventPromise } reason
+     * @returns { GameEventPromise }
+     */
+    die(reason: GameEvent | GameEventPromise): GameEventPromise;
+    /**
+     * 令玩家复活
+     * @param { number } [hp = 1]
+     * @param { boolean } [log]
+     */
+    revive(hp?: number, log?: boolean): void;
     isMad(): boolean;
+    /**
+     * 令玩家进入混乱状态
+     */
     goMad(end: any): void;
+    /**
+     * 解除玩家的混乱状态
+     */
     unMad(): void;
     tempHide(): void;
     addExpose(num: any): this;
-    equip(card: any, draw: any): import("../index.js").GameEventPromise;
-    addJudge(card: any, cards: any): import("../index.js").GameEventPromise;
+    equip(card: any, draw: any): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     /**
+     * 将一些牌置入到玩家的判定区
+     * @param { Card } card
+     * @param { Card[] } [cards]
+     * @returns { GameEventPromise }
+     */
+    addJudge(card: Card, cards?: Card[]): GameEventPromise;
+    /**
+     * 返回某些牌是否能进入玩家的判定区
+     *
+     * @overload
+     * @param { string } card
+     * @returns { boolean }
+     *
+     * @overload
+     * @param { Card } card
      * @returns { boolean }
      */
-    canAddJudge(card: any): boolean;
+    canAddJudge(card: string): boolean;
+    /**
+     * 返回某些牌是否能进入玩家的判定区
+     *
+     * @overload
+     * @param { string } card
+     * @returns { boolean }
+     *
+     * @overload
+     * @param { Card } card
+     * @returns { boolean }
+     */
+    canAddJudge(card: Card): boolean;
     addJudgeNext(card: any, unlimited: any): void;
-    judge(...args: any[]): import("../index.js").GameEventPromise;
-    turnOver(bool: any): import("../index.js").GameEventPromise;
+    judge(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    turnOver(bool: any): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     out(skill: any): void;
     outSkills: any[];
     in(skill: any): void;
-    link(bool: any): import("../index.js").GameEventPromise;
+    link(bool: any): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     skip(name: any): void;
     wait(callback: any): void;
     unwait(result: any): void;
     tempUnwait(result: any): void;
-    logSkill(name: any, targets: any, nature: any, logv: any): void;
+    /**
+     * @param { string | string[] } name
+     * @param { Player | Player[] } [targets]
+     * @param { boolean | string } [nature]
+     * @param { boolean } [logv]
+     */
+    logSkill(name: string | string[], targets?: Player | Player[], nature?: boolean | string, logv?: boolean): void;
     unprompt(): void;
     prompt(str: any, nature: any): void;
     prompt_old(name2: any, className: any): void;
-    popup(name: any, className: any, nobroadcast: any): void;
+    /**
+     *
+     * @param { string } name
+     * @param { string } className
+     * @param { Parameters<this["damagepop"]>[3] } [nobroadcast]
+     */
+    popup(name: string, className?: string, nobroadcast?: Parameters<this["damagepop"]>[3]): void;
     popup_old(name: any, className: any): HTMLDivElement;
     _popup(): void;
     showTimer(time: any): void;
     hideTimer(): void;
     markAuto(name: any, info: any): void;
     unmarkAuto(name: any, info: any): void;
-    getExpansions(tag: any): import("./card.js").Card[];
+    getExpansions(tag: any): import("noname-typings/nonameModules/noname/library/element/card.js").Card[];
     countExpansions(tag: any): number;
     hasExpansions(tag: any): boolean;
     setStorage(name: any, value: any, mark: any): any;
@@ -960,15 +1272,22 @@ export class Player extends HTMLDivElement {
     unmark(name: any, info: any): void;
     addLink(): void;
     removeLink(): void;
-    canUse(card: any, target: any, distance: any, includecard: any): any;
+    /**
+     * @param { string | Card | VCard } card
+     * @param { Player } target
+     * @param { boolean } [distance]
+     * @param { GameEventPromise | boolean } [includecard]
+     * @returns { boolean }
+     */
+    canUse(card: string | Card | VCard, target: Player, distance?: boolean, includecard?: GameEventPromise | boolean): boolean;
     hasUseTarget(card: any, distance: any, includecard: any): boolean;
     hasValueTarget(card: any, distance: any, includecard: any): boolean;
     getUseValue(card: any, distance: any, includecard: any): number;
     addSubPlayer(cfg: any): string;
     removeSubPlayer(name: any): void;
-    callSubPlayer(...args: any[]): import("../index.js").GameEventPromise;
-    toggleSubPlayer(...args: any[]): import("../index.js").GameEventPromise;
-    exitSubPlayer(remove: any): import("../index.js").GameEventPromise;
+    callSubPlayer(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    toggleSubPlayer(...args: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    exitSubPlayer(remove: any): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     getSubPlayers(tag: any): any[];
     addSkillTrigger(skills: any, hidden: any, triggeronly: any): this;
     _hookTrigger: any[];
@@ -976,16 +1295,16 @@ export class Player extends HTMLDivElement {
     removeSkillLog(skill: any, popup: any): this;
     addInvisibleSkill(skill: any): void;
     removeInvisibleSkill(skill: any, ...args: any[]): any;
-    addSkills(skill: any): import("../index.js").GameEventPromise;
-    removeSkills(skill: any): import("../index.js").GameEventPromise;
-    changeSkills(addSkill?: any[], removeSkill?: any[]): import("../index.js").GameEventPromise;
+    addSkills(skill: any): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    removeSkills(skill: any): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    changeSkills(addSkill?: any[], removeSkill?: any[]): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     addSkill(skill: any, checkConflict: any, nobroadcast: any, addToSkills: any): any;
-    addAdditionalSkills(skill: any, skillsToAdd: any, keep: any): import("../index.js").GameEventPromise;
+    addAdditionalSkills(skill: any, skillsToAdd: any, keep: any): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     addAdditionalSkill(skill: any, skillsToAdd: any, keep: any): this;
     $removeAdditionalSkills(skill: any, target: any): void;
     getRemovableAdditionalSkills(skill: any, target: any): string[];
     removeAdditionalSkill(skill: any, target: any): this;
-    removeAdditionalSkills(skill: any, target: any): import("../index.js").GameEventPromise;
+    removeAdditionalSkills(skill: any, target: any): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
     awakenSkill(skill: any, nounmark: any): this;
     restoreSkill(skill: any, nomark: any): this;
     disableSkill(skill: any, skills: any): this;
@@ -995,32 +1314,144 @@ export class Player extends HTMLDivElement {
     removeEquipTrigger(card: any): this;
     removeSkillTrigger(skills: any, triggeronly: any): this;
     removeSkill(skill: any, ...args: any[]): any;
-    addTempSkills(skillsToAdd: any, expire: any): import("../index.js").GameEventPromise;
-    addTempSkill(skill: any, expire: any, checkConflict: any): any;
+    addTempSkills(skillsToAdd: any, expire: any): import("./gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEvent.js").GameEvent & import("noname-typings/nonameModules/noname/library/element/gameEventPromise.js").GameEventPromise;
+    /**
+     * @overload
+     * @param { string } skill
+     * @param { SkillTrigger | string | (event:GameEventPromise, player:Player, name:string) => boolean } [expire]
+     * @param { boolean } [checkConflict]
+     *
+     * @overload
+     * @param { string[] } skill 技能名数组
+     * @param { SkillTrigger | string | (event:GameEventPromise, player:Player, name:string) => boolean } [expire]
+     * @param { boolean } [checkConflict]
+     */
+    addTempSkill(skill: string, expire?: string | SkillTrigger | ((event: GameEventPromise, player: Player, name: string) => boolean), checkConflict?: boolean): any;
+    /**
+     * @overload
+     * @param { string } skill
+     * @param { SkillTrigger | string | (event:GameEventPromise, player:Player, name:string) => boolean } [expire]
+     * @param { boolean } [checkConflict]
+     *
+     * @overload
+     * @param { string[] } skill 技能名数组
+     * @param { SkillTrigger | string | (event:GameEventPromise, player:Player, name:string) => boolean } [expire]
+     * @param { boolean } [checkConflict]
+     */
+    addTempSkill(skill: string[], expire?: string | SkillTrigger | ((event: GameEventPromise, player: Player, name: string) => boolean), checkConflict?: boolean): any;
     tempBanSkill(skill: any, expire: any, log: any): any;
-    isTempBanned(skill: any): boolean;
+    /**
+     * 返回技能是否暂时失效
+     * @param { string } skill 技能名
+     * @returns { boolean }
+     */
+    isTempBanned(skill: string): boolean;
     attitudeTo(target: any): any;
     clearSkills(all: any, ...args: any[]): string[];
     checkConflict(skill: any): void;
-    getHistory(key: any, filter: any, last: any): any;
-    checkHistory(key: any, filter: any, last: any): void;
-    hasHistory(key: any, filter: any, last: any): any;
-    getLastHistory(key: any, filter: any, last: any): any;
-    checkAllHistory(key: any, filter: any, last: any): void;
-    getAllHistory(key: any, filter: any, last: any): any[];
-    hasAllHistory(key: any, filter: any, last: any): boolean;
-    getLastUsed(num: any): any;
+    /**
+     * 快速获取一名角色当前轮次/前X轮次的历史
+     *
+     * 第一个参数填写获取的动作
+     *
+     * 第二个参数填写获取历史的筛选条件
+     *
+     * 第三个参数填写数字（不填默认为0），获取上X轮的历史（X为0则为本轮历史），第四个参数若为true，则获取从上X轮开始至现在
+     *
+     * 第四个参数若为true，则获取从上X轮开始至现在所有符合条件的历史
+     *
+     * 第五个参数填写event，获取此event之前所有符合条件的历史
+     *
+     * @param { string | function | number | boolean | object } map
+     */
+    getRoundHistory(key: any, filter: any, num: any, keep: any, last: any): any[];
+    /**
+     * @overload
+     * @returns { ActionHistory }
+     */
+    getHistory(): ActionHistory;
+    /**
+     * @template { keyof ActionHistory } T
+     * @overload
+     * @param { T } key
+     * @param { (event: GameEventPromise) => boolean } [filter]
+     * @param { GameEventPromise } [last]
+     * @returns { ActionHistory[T] }
+     */
+    getHistory<T extends keyof ActionHistory>(key: T, filter?: (event: GameEventPromise) => boolean, last?: GameEventPromise): ActionHistory[T];
+    /**
+     * @template { keyof ActionHistory } T
+     * @param { T } key
+     * @param { (event: GameEventPromise) => boolean } filter
+     * @param { GameEventPromise } [last]
+     */
+    checkHistory<T_1 extends keyof ActionHistory>(key: T_1, filter: (event: GameEventPromise) => boolean, last?: GameEventPromise): void;
+    /**
+     * @template { keyof ActionHistory } T
+     * @param { T } key
+     * @param { (event: GameEventPromise) => boolean } [filter]
+     * @param { GameEventPromise } [last]
+     * @returns { boolean }
+     */
+    hasHistory<T_2 extends keyof ActionHistory>(key: T_2, filter?: (event: GameEventPromise) => boolean, last?: GameEventPromise): boolean;
+    /**
+     * @template { keyof ActionHistory } T
+     * @overload
+     * @param { T } [key]
+     * @param { (event: GameEventPromise) => boolean } [filter]
+     * @param { GameEventPromise } [last]
+     * @returns { null | ActionHistory[T] | boolean }
+     */
+    getLastHistory<T_3 extends keyof ActionHistory>(key?: T_3, filter?: (event: GameEventPromise) => boolean, last?: GameEventPromise): boolean | ActionHistory[T_3];
+    /**
+     * @template { keyof ActionHistory } T
+     * @param { T } key
+     * @param { (event: GameEventPromise) => boolean } filter
+     * @param { GameEventPromise } [last]
+     */
+    checkAllHistory<T_4 extends keyof ActionHistory>(key: T_4, filter: (event: GameEventPromise) => boolean, last?: GameEventPromise): void;
+    /**
+     * @template { keyof ActionHistory } T
+     * @param { T } [key]
+     * @param { (event: GameEventPromise) => boolean } [filter]
+     * @param { GameEventPromise } [last]
+     * @returns { ActionHistory[T] }
+     */
+    getAllHistory<T_5 extends keyof ActionHistory>(key?: T_5, filter?: (event: GameEventPromise) => boolean, last?: GameEventPromise): ActionHistory[T_5];
+    /**
+     * @template { keyof ActionHistory } T
+     * @param { T } key
+     * @param { (event: GameEventPromise) => boolean } filter
+     * @param { GameEventPromise } [last]
+     * @returns { boolean }
+     */
+    hasAllHistory<T_6 extends keyof ActionHistory>(key: T_6, filter: (event: GameEventPromise) => boolean, last?: GameEventPromise): boolean;
+    getLastUsed(num: any): import("noname-typings/nonameModules/noname/library/index.js").GameEventPromise;
     getStat(key: any): any;
     getLastStat(key: any): any;
     queue(time: any): void;
     queueTimeout: NodeJS.Timeout;
     getCardUsable(card: any, pure: any): number;
-    getAttackRange(raw: any): number;
-    getEquipRange(cards: any): number;
+    /**
+     * 返回玩家的攻击距离
+     * @param { boolean } raw
+     * @returns { number }
+     */
+    getAttackRange(raw: boolean): number;
+    /**
+     * 返回一些牌的攻击距离
+     * @param { Card[] } cards
+     * @returns { number }
+     */
+    getEquipRange(cards: Card[]): number;
     getGlobalFrom(): number;
     getGlobalTo(): number;
+    /**
+     * 返回玩家的手牌上限
+     * @returns { number }
+     */
     getHandcardLimit(): number;
-    getEnemies(func: any): Player[];
+    getEnemies(func: any): import("noname-typings/nonameModules/noname/library/element/player.js").Player[];
     getFriends(func: any): any[];
     isEnemyOf(...args: any[]): boolean;
     isFriendOf(player: any): boolean;
@@ -1031,16 +1462,70 @@ export class Player extends HTMLDivElement {
     isDying(): boolean;
     isDamaged(): boolean;
     isHealthy(): any;
-    isMaxHp(only: any, raw: any): boolean;
-    isMinHp(only: any, raw: any): boolean;
-    isMaxCard(only: any): boolean;
-    isMinCard(only: any): boolean;
-    isMaxHandcard(only: any): boolean;
-    isMinHandcard(only: any): boolean;
-    isMaxEquip(only: any): boolean;
-    isMinEquip(only: any): boolean;
+    /**
+     * 判断玩家是否是场上体力最大的玩家
+     * @param { boolean } [only] 是否唯一
+     * @param { boolean } [raw]
+     * @returns { boolean }
+     */
+    isMaxHp(only?: boolean, raw?: boolean): boolean;
+    /**
+     * 判断玩家是否是场上体力最少的玩家
+     * @param { boolean } [only] 是否唯一
+     * @param { boolean } [raw]
+     * @returns { boolean }
+     */
+    isMinHp(only?: boolean, raw?: boolean): boolean;
+    /**
+     * 判断玩家是否是场上牌最多的玩家
+     * @param { boolean } [only] 是否唯一
+     * @returns { boolean }
+     */
+    isMaxCard(only?: boolean): boolean;
+    /**
+     * 判断玩家是否是场上牌最少的玩家
+     * @param { boolean } [only] 是否唯一
+     * @returns { boolean }
+     */
+    isMinCard(only?: boolean): boolean;
+    /**
+     * 判断玩家是否是场上手牌最多的玩家
+     * @param { boolean } [only] 是否唯一
+     * @returns { boolean }
+     */
+    isMaxHandcard(only?: boolean): boolean;
+    /**
+     * 判断玩家是否是场上手牌最少的玩家
+     * @param { boolean } [only] 是否唯一
+     * @returns { boolean }
+     */
+    isMinHandcard(only?: boolean): boolean;
+    /**
+     * 判断玩家是否是场上装备区牌最多的玩家
+     * @param { boolean } [only] 是否唯一
+     * @returns { boolean }
+     */
+    isMaxEquip(only?: boolean): boolean;
+    /**
+     * 判断玩家是否是场上装备区牌最少的玩家
+     * @param { boolean } [only] 是否唯一
+     * @returns { boolean }
+     */
+    isMinEquip(only?: boolean): boolean;
+    /**
+     * 返回玩家是否是横置状态
+     * @returns { boolean }
+     */
     isLinked(): boolean;
+    /**
+     * 返回玩家是否是翻面状态
+     * @returns { boolean }
+     */
     isTurnedOver(): boolean;
+    /**
+     * 返回玩家是否是被移出游戏
+     * @returns { boolean }
+     */
     isOut(): boolean;
     isMin(distance: any): boolean;
     isIn(): boolean;
@@ -1049,29 +1534,100 @@ export class Player extends HTMLDivElement {
     isOnline(): boolean;
     isOnline2(): boolean;
     isOffline(): boolean;
+    isMajor(): boolean;
+    isNotMajor(): boolean;
+    isMinor(nomajor: any): boolean;
     checkShow(skill: any, showonly: any): false | "main" | "vice";
-    needsToDiscard(add: any, filter: any, pure: any): number;
+    /**
+     *
+     * @param { number | Card[] | Card } [add]
+     * @param { (card?: Card, player?: Player) => boolean } [filter]
+     * @param { boolean } [pure]
+     */
+    needsToDiscard(add?: number | Card[] | Card, filter?: (card?: Card, player?: Player) => boolean, pure?: boolean): number;
     distanceTo(target: any, method: any): number;
     distanceFrom(target: any, method: any): number;
-    hasSkill(skill: any, arg2: any, arg3: any, arg4: any): boolean;
-    hasStockSkill(skill: any, arg1: any, arg2: any, arg3: any): boolean;
+    /**
+     * @param { string } skill
+     * @param { Parameters<this['getSkills']>[0] } arg2
+     * @param { Parameters<this['getSkills']>[1] } arg3
+     * @param { Parameters<this['getSkills']>[2] } arg4
+     * @returns { boolean }
+     */
+    hasSkill(skill: string, arg2: Parameters<this['getSkills']>[0], arg3: Parameters<this['getSkills']>[1], arg4: Parameters<this['getSkills']>[2]): boolean;
+    /**
+     * @param { string } skill
+     * @param { Parameters<this['getStockSkills']>[0] } arg1
+     * @param { Parameters<this['getStockSkills']>[1] } arg2
+     * @param { Parameters<this['getStockSkills']>[2] } arg3
+     * @returns { boolean }
+     */
+    hasStockSkill(skill: string, arg1: Parameters<this['getStockSkills']>[0], arg2: Parameters<this['getStockSkills']>[1], arg3: Parameters<this['getStockSkills']>[2]): boolean;
     isZhu2(): boolean;
     isInitFilter(tag: any): boolean;
-    hasZhuSkill(skill: any, player: any): boolean;
+    /**
+     *
+     * @param {string} skill
+     * @param {Player} [player]
+     */
+    hasZhuSkill(skill: string, player?: Player): boolean;
     hasGlobalTag(tag: any, arg: any): boolean;
-    hasSkillTag(tag: any, hidden: any, arg: any, globalskill: any): boolean;
-    hasJudge(name: any): boolean;
+    /**
+     * @param {string} tag
+     * @param {Parameters<this['getSkills']>[0]} [hidden]
+     * @param {Parameters<SkillAI['skillTagFilter']>[2]} [arg]
+     * @param {boolean} [globalskill]
+     */
+    hasSkillTag(tag: string, hidden?: Parameters<this['getSkills']>[0], arg?: [player: import("noname-typings/nonameModules/noname/library/element/player.js").Player, tag: string, arg: any][2], globalskill?: boolean): boolean;
+    /**
+     * 返回玩家是否有某个牌名的牌
+     *
+     * @overload
+     * @param { Card } name
+     * @returns { boolean }
+     *
+     * @overload
+     * @param { string } name
+     * @returns { boolean}
+     */
+    hasJudge(name: Card): boolean;
+    /**
+     * 返回玩家是否有某个牌名的牌
+     *
+     * @overload
+     * @param { Card } name
+     * @returns { boolean }
+     *
+     * @overload
+     * @param { string } name
+     * @returns { boolean}
+     */
+    hasJudge(name: string): boolean;
+    /**
+     * 返回玩家是否存在队友
+     * @returns { boolean }
+     */
     hasFriend(): boolean;
     hasUnknown(num: any): boolean;
     isUnknown(player: any): boolean;
     hasWuxie(info: any): boolean;
-    hasSha(respond: any, noauto: any): boolean;
+    /**
+     *
+     * @param {string|boolean} [respond]
+     * @param {boolean} [noauto]
+     */
+    hasSha(respond?: string | boolean, noauto?: boolean): boolean;
     hasShan(respond: any): boolean;
     mayHaveSha(viewer: any, type: any, ignore: any, rvt: any): number | boolean;
     mayHaveShan(viewer: any, type: any, ignore: any, rvt: any): number | boolean;
     hasCard(name: any, position: any): boolean;
-    getEquip(name: any): import("./card.js").Card;
-    getJudge(name: any): ChildNode;
+    getEquip(name: any): import("noname-typings/nonameModules/noname/library/element/card.js").Card;
+    /**
+     * 返回玩家判定区中的牌
+     * @param { string } [name]
+     * @returns { Card[] }
+     */
+    getJudge(name?: string): Card[];
     $drawAuto(cards: any, target: any): void;
     $draw(num: any, init: any, config: any): void;
     $compareMultiple(card1: any, targets: any, cards: any): void;
@@ -1102,9 +1658,27 @@ export class Player extends HTMLDivElement {
     $dust(): void;
     $recover(): void;
     $fullscreenpop(str: any, nature: any, avatar: any, broadcast: any): void;
-    $damagepop(num: any, nature: any, font: any, nobroadcast: any): void;
+    /**
+     *
+     * @param { number | string } num
+     * @param { string } [nature]
+     * @param { boolean } [font]
+     * @param { boolean } [nobroadcast]
+     */
+    $damagepop(num: number | string, nature?: string, font?: boolean, nobroadcast?: boolean): void;
     $damage(source: any, ...args: any[]): void;
     $die(): void;
     $dieflip(type: any): void;
     $phaseJudge(card: any): void;
 }
+export type ActionHistory = {
+    useCard: GameEventPromise[];
+    respond: GameEventPromise[];
+    skipped: GameEventPromise[];
+    lose: GameEventPromise[];
+    gain: GameEventPromise[];
+    sourceDamage: GameEventPromise[];
+    damage: GameEventPromise[];
+    custom: GameEventPromise[];
+    useSkill: GameEventPromise[];
+};

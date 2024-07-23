@@ -38,9 +38,9 @@ export class CacheContext {
     static _ensureMember(obj: any, key: any): any;
     static _wrapParametersToCacheKey(params: any): string;
     static _wrapParameterToCacheKey(param: any): any;
-    lib: typeof Library;
-    game: typeof Game;
-    get: typeof Get;
+    lib: import("../index.js").Library;
+    game: import("../../game/index.js").Game;
+    get: import("../../get/index.js").Get;
     sourceMap: Map<any, any>;
     storageMap: Map<any, any>;
     /**
@@ -59,6 +59,3 @@ export class CacheContext {
      */
     _createCacheProxy<T>(delegateObject: T): T;
 }
-import { Library } from "../index.js";
-import { Game } from "../../game/index.js";
-import { Get } from "../../get/index.js";

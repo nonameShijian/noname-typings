@@ -7,7 +7,11 @@ export class Button extends HTMLDivElement {
      * @param { Button } [button]
      */
     constructor(item: {}, type: "character" | "tdnodes" | "blank" | "card" | "vcard" | "characterx" | "player" | ((item: {}, type: Function, position?: HTMLDivElement | DocumentFragment, noClick?: true, button?: Button) => Button), position?: HTMLDivElement | DocumentFragment, noClick?: true, button?: Button);
+    /**
+     * @type { string | undefined }
+     */
+    buttonid: string | undefined;
     exclude(): void;
     get updateTransform(): (bool: any, delay: any) => void;
 }
-import { UI as ui } from '../../ui/index.js';
+import { ui } from "../../ui/index.js";

@@ -22,14 +22,14 @@ export class Dialog extends HTMLDivElement {
      * @param {*} [noclick]
      * @param { boolean } [zoom]
      */
-    add(item: string | HTMLDivElement | Card[] | Player[], noclick?: any, zoom?: boolean): string | HTMLDivElement | import("./player.js").Player[] | import("./card.js").Card[];
+    add(item: string | HTMLDivElement | Card[] | Player[], noclick?: any, zoom?: boolean): string | HTMLDivElement | import("noname-typings/nonameModules/noname/library/element/player.js").Player[] | import("noname-typings/nonameModules/noname/library/element/card.js").Card[];
     forcebutton: boolean;
     /**
      * @param { string } str
      * @param { boolean } [center]
      */
     addText(str: string, center?: boolean): this;
-    addSmall(item: any, noclick: any): string | HTMLDivElement | import("./player.js").Player[] | import("./card.js").Card[];
+    addSmall(item: any, noclick: any): string | HTMLDivElement | import("noname-typings/nonameModules/noname/library/element/player.js").Player[] | import("noname-typings/nonameModules/noname/library/element/card.js").Card[];
     addAuto(content: any): void;
     open(): this;
     _dragtransform: any;
